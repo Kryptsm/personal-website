@@ -1,17 +1,14 @@
 <script>
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/vue/20/solid";
-import samPhoto from "../assets/SamPhoto.jpeg";
-import dallasHallBackground from "../assets/DallasHallBackground.jpg";
-import Notification from "./Notification.vue";
+import samPhoto from "../../assets/SamPhoto.jpeg";
+import dallasHallBackground from "../../assets/DallasHallBackground.jpg";
+import Notification from "../shared/Notification.vue";
 
 export default {
 	components: {
 		Notification,
 		PhoneIcon,
 		EnvelopeIcon,
-	},
-	created() {
-		console.log("create app");
 	},
 	data() {
 		return {
@@ -96,9 +93,7 @@ export default {
 			</div>
 		</div>
 	</div>
-	<Notification
-		message="Don't call me."
-		:status="showNotif"
-		@reset-notif="showNotif = false"
-	></Notification>
+	<Notification :status="showNotif" @reset-notif="showNotif = false">
+		Don't call me.
+	</Notification>
 </template>
