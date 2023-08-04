@@ -1,8 +1,8 @@
 <script>
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/vue/20/solid";
-import samPhoto from "../../assets/SamPhoto.jpeg";
-import dallasHallBackground from "../../assets/DallasHallBackground.jpg";
-import Notification from "../shared/Notification.vue";
+import samPhoto from "../../../assets/SamPhoto.jpeg";
+import dallasHallBackground from "../../../assets/DallasHallBackground.jpg";
+import Notification from "../../shared/Notification.vue";
 
 export default {
 	components: {
