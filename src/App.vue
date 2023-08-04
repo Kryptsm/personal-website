@@ -1,16 +1,13 @@
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-import Header from "./components/Header.vue";
-import PersonalBanner from "./components/PersonalBanner.vue";
-import ProfileActions from "./components/ProfileActions.vue";
-import Notification from "./components/Notification.vue";
+import Header from "./components/shared/Header.vue";
+import PersonalBanner from "./components/personal/PersonalBanner.vue";
+import ProfileActions from "./components/personal/ProfileActions.vue";
 
 export default {
 	components: {
 		Header,
 		PersonalBanner,
 		ProfileActions,
-		Notification,
 	},
 	data() {
 		return {};
