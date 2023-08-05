@@ -5,7 +5,7 @@ export default {
 	data() {
 		return {
 			nodes: [],
-			width: 30,
+			width: 45,
 			height: 30,
 			computedWidth: "",
 			computedHeight: "",
@@ -134,6 +134,9 @@ export default {
 		},
 	},
 	created() {
+		if (window.innerWidth < 900) this.width = 35;
+		if (window.innerWidth < 750) this.width = 25;
+		if (window.innerWidth < 550) this.width = 15;
 		this.createNodes();
 		this.startTimeout();
 		this.computedWidth = `${100 / this.width}%`;
@@ -149,6 +152,12 @@ export default {
 	},
 	mounted() {
 		window.addEventListener("resize", () => {
+			let originalWidth = this.width;
+			if (window.innerWidth >= 900 && this.width != 45) this.width = 45;
+			if (window.innerWidth < 900) this.width = 35;
+			if (window.innerWidth < 750) this.width = 25;
+			if (window.innerWidth < 550) this.width = 15;
+			if (originalWidth != this.width) this.createNodes();
 			this.computedWidth = `${100 / this.width}%`;
 			this.computedHeight = "25px";
 		});
@@ -157,7 +166,7 @@ export default {
 </script>
 
 <template>
-	<div class="flowers">
+	<div class="flowers mx-auto max-w-7xl">
 		<div
 			v-for="(row, indexRow) in nodes"
 			class="flowersRow mx-auto flex max-w-7xl"
