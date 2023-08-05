@@ -10,8 +10,16 @@ export default {
 </script>
 
 <template>
-	<div class="alive" v-if="status" @click="$emit('update-node', x, y)"></div>
-	<div class="dead" v-if="!status" @click="$emit('update-node', x, y)"></div>
+	<div
+		class="alive flower"
+		v-if="status"
+		@click="$emit('update-node', x, y)"
+	></div>
+	<div
+		class="dead flower"
+		v-if="!status"
+		@click="$emit('update-node', x, y)"
+	></div>
 </template>
 
 <style scoped>
@@ -20,14 +28,14 @@ export default {
 }
 
 .dead {
-	background-color: gray;
+	background-color: rgb(85, 60, 13);
 	cursor: pointer;
 }
 
 .alive,
 .dead {
-	width: 49px;
-	height: 49px;
 	border: 1px solid black;
+	width: 100%;
+	height: 100%;
 }
 </style>
