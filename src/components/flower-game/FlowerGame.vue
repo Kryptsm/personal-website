@@ -1,7 +1,9 @@
 <script>
 import Flower from "./components/Flower.vue";
+import PlayButton from "../../assets/play.svg";
+import PauseButton from "../../assets/pause.svg";
 export default {
-	components: { Flower },
+	components: { Flower, PlayButton, PauseButton },
 	data() {
 		return {
 			nodes: [],
@@ -10,6 +12,7 @@ export default {
 			computedWidth: "",
 			computedHeight: "",
 			flowerTimeout: undefined,
+			playStatus: true,
 			rules: [
 				{
 					id: 1,
@@ -33,7 +36,7 @@ export default {
 				},
 				{
 					id: 5,
-					name: "Any dead flower with exactly one living neighbor has a chance to become a live flower, as if by generosity.",
+					name: "Any dead flower with exactly two living neighbors has a chance to become a live flower, as if by generosity.",
 					status: true,
 				},
 			],
@@ -46,7 +49,7 @@ export default {
 			for (let y = 0; y < this.height; y++) {
 				let newArray = [];
 				for (let x = 0; x < this.width; x++) {
-					newArray.push(Math.round(Math.random()));
+					newArray.push(this.getRandomInt(2));
 				}
 				this.nodes.push(newArray);
 			}
@@ -107,7 +110,7 @@ export default {
 						if (totalLivingNeighbors == 3 && this.rules[3].status)
 							newNodes[y][x] = 1;
 
-						//Any dead flower with exactly one living neighbor has a chance to become a live flower, as if by generosity.
+						//Any dead flower with exactly two living neighbors has a chance to become a live flower, as if by generosity.
 						if (
 							totalLivingNeighbors == 2 &&
 							this.getRandomInt(chance) == 0 &&
@@ -120,11 +123,14 @@ export default {
 			this.nodes = newNodes;
 		},
 		startTimeout() {
-			if (!this.flowerTimeout)
+			if (!this.flowerTimeout) {
+				this.playStatus = true;
 				this.flowerTimeout = setInterval(this.advanceStage, 75);
+			}
 		},
 		endTimeout() {
 			if (this.flowerTimeout) {
+				this.playStatus = false;
 				clearInterval(this.flowerTimeout);
 				this.flowerTimeout = undefined;
 			}
@@ -185,16 +191,31 @@ export default {
 			</div>
 		</div>
 		<fieldset class="info mx-auto max-w-7xl">
-			<div class="header-bar mx-auto flex justify-between">
-				<legend class="text-base font-semibold leading-6 text-gray-900">
+			<div class="header-bar mx-auto flex">
+				<legend class="text-base font-semibold leading-6 text-gray-900 mr-auto">
 					Rules
 				</legend>
-				<button
-					@click="createNodes()"
-					class="text-base font-semibold leading-6 text-gray-900"
-				>
-					Replant The Garden
-				</button>
+				<div class="pauseplay flex">
+					<PlayButton
+						v-if="!playStatus"
+						@click="startTimeout()"
+						class="mx-auto"
+					/>
+					<PauseButton
+						v-if="playStatus"
+						@click="endTimeout()"
+						class="mx-auto"
+					/>
+				</div>
+
+				<div class="replant flex">
+					<button
+						@click="createNodes()"
+						class="text-base font-semibold leading-6 text-gray-900 ml-auto"
+					>
+						Replant The Garden
+					</button>
+				</div>
 			</div>
 
 			<div
@@ -253,14 +274,25 @@ export default {
 		margin: 20px;
 
 		.header-bar {
-			button {
+			.replant button {
 				background-color: lightgreen;
-				padding: 5px 10px;
+				padding: 5px 20px;
 				border-radius: 8px;
 			}
 
 			legend {
 				padding-top: 5px;
+			}
+
+			.pauseplay svg {
+				cursor: pointer;
+				margin-top: 4px;
+			}
+
+			.replant,
+			legend,
+			.pauseplay {
+				width: 33%;
 			}
 		}
 
