@@ -1,174 +1,175 @@
-<script>
+<script setup>
 import Flower from "./components/Flower.vue";
 import PlayButton from "../../assets/play.svg";
 import PauseButton from "../../assets/pause.svg";
-export default {
-	components: { Flower, PlayButton, PauseButton },
-	data() {
-		return {
-			nodes: [],
-			width: 45,
-			height: 30,
-			computedWidth: "",
-			computedHeight: "",
-			flowerTimeout: undefined,
-			playStatus: true,
-			rules: [
-				{
-					id: 1,
-					name: "Any live flower with fewer than two live neighbours dies, as if by underpopulation.",
-					status: true,
-				},
-				{
-					id: 2,
-					name: "Any live flower with two or three live neighbours lives on to the next generation.",
-					status: true,
-				},
-				{
-					id: 3,
-					name: "Any live flower with more than three live neighbours dies, as if by overpopulation.",
-					status: true,
-				},
-				{
-					id: 4,
-					name: "Any dead flower with exactly three live neighbours becomes a live flower, as if by reproduction.",
-					status: true,
-				},
-				{
-					id: 5,
-					name: "Any dead flower with exactly two living neighbors has a chance to become a live flower, as if by generosity.",
-					status: true,
-				},
-			],
-		};
+import { useGetRandomInt } from "../../functions/math";
+import { ref, reactive, onMounted, onUnmounted } from "vue";
+
+const nodes = ref([]);
+const width = ref(45);
+const height = ref(30);
+const computedWidth = ref("");
+const computedHeight = ref("");
+const flowerTimeout = ref(undefined);
+const playStatus = ref(true);
+const rules = ref([
+	{
+		id: 1,
+		name: "Any live flower with fewer than two live neighbours dies, as if by underpopulation.",
+		status: true,
 	},
-	methods: {
-		createNodes() {
-			this.rules.forEach((e) => (e.status = true));
-			this.nodes = [];
-			for (let y = 0; y < this.height; y++) {
-				let newArray = [];
-				for (let x = 0; x < this.width; x++) {
-					newArray.push(this.getRandomInt(2));
-				}
-				this.nodes.push(newArray);
+	{
+		id: 2,
+		name: "Any live flower with two or three live neighbours lives on to the next generation.",
+		status: true,
+	},
+	{
+		id: 3,
+		name: "Any live flower with more than three live neighbours dies, as if by overpopulation.",
+		status: true,
+	},
+	{
+		id: 4,
+		name: "Any dead flower with exactly three live neighbours becomes a live flower, as if by reproduction.",
+		status: true,
+	},
+	{
+		id: 5,
+		name: "Any dead flower with exactly two living neighbors has a chance to become a live flower, as if by generosity.",
+		status: true,
+	},
+]);
+
+function createNodes() {
+	rules.value.forEach((e) => (e.status = true));
+	nodes.value = [];
+	for (let y = 0; y < height.value; y++) {
+		let newArray = [];
+		for (let x = 0; x < width.value; x++) {
+			newArray.push(useGetRandomInt(2));
+		}
+		nodes.value.push(newArray);
+	}
+}
+
+function updateNode(x, y) {
+	if (nodes.value[y][x]) nodes.value[y][x] = 0;
+	else nodes.value[y][x] = 1;
+}
+
+function advanceStage() {
+	let newNodes = JSON.parse(JSON.stringify(nodes.value));
+	for (let y = 0; y < height.value; y++) {
+		for (let x = 0; x < width.value; x++) {
+			let node = nodes.value[y][x];
+			let left = x ? nodes.value[y][x - 1] : 0;
+			let right = x < width.value - 1 ? nodes.value[y][x + 1] : 0;
+			let top = y ? nodes.value[y - 1][x] : 0;
+			let bottom = y < height.value - 1 ? nodes.value[y + 1][x] : 0;
+
+			let topLeft = x && y ? nodes.value[y - 1][x - 1] : 0;
+			let topRight = x < width.value - 1 && y ? nodes.value[y - 1][x + 1] : 0;
+			let bottomLeft =
+				x && y < height.value - 1 ? nodes.value[y + 1][x - 1] : 0;
+			let bottomRight =
+				x < width.value - 1 && y < height.value - 1
+					? nodes.value[y + 1][x + 1]
+					: 0;
+
+			let totalLivingNeighbors =
+				left +
+				right +
+				top +
+				bottom +
+				topLeft +
+				topRight +
+				bottomLeft +
+				bottomRight;
+
+			if (node) {
+				//Any live flower with fewer than two live neighbours dies, as if by underpopulation.
+				if (totalLivingNeighbors < 2 && rules.value[0].status)
+					newNodes[y][x] = 0;
+
+				//Any live flower with two or three live neighbours lives on to the next generation.
+				if (
+					(totalLivingNeighbors == 2 || totalLivingNeighbors == 3) &&
+					rules.value[1].status
+				)
+					newNodes[y][x] = 1;
+
+				//Any live flower with more than three live neighbours dies, as if by overpopulation.
+				if (totalLivingNeighbors > 3 && rules.value[2].status)
+					newNodes[y][x] = 0;
 			}
-		},
-		updateNode(x, y) {
-			if (this.nodes[y][x]) this.nodes[y][x] = 0;
-			else this.nodes[y][x] = 1;
-		},
-		advanceStage() {
-			let newNodes = JSON.parse(JSON.stringify(this.nodes));
-			for (let y = 0; y < this.height; y++) {
-				for (let x = 0; x < this.width; x++) {
-					let node = this.nodes[y][x];
-					let left = x ? this.nodes[y][x - 1] : 0;
-					let right = x < this.width - 1 ? this.nodes[y][x + 1] : 0;
-					let top = y ? this.nodes[y - 1][x] : 0;
-					let bottom = y < this.height - 1 ? this.nodes[y + 1][x] : 0;
 
-					let topLeft = x && y ? this.nodes[y - 1][x - 1] : 0;
-					let topRight = x < this.width - 1 && y ? this.nodes[y - 1][x + 1] : 0;
-					let bottomLeft =
-						x && y < this.height - 1 ? this.nodes[y + 1][x - 1] : 0;
-					let bottomRight =
-						x < this.width - 1 && y < this.height - 1
-							? this.nodes[y + 1][x + 1]
-							: 0;
+			if (!node) {
+				let chance = 20;
+				//Any dead flower with exactly three live neighbours becomes a live flower, as if by reproduction.
+				if (totalLivingNeighbors == 3 && rules.value[3].status)
+					newNodes[y][x] = 1;
 
-					let totalLivingNeighbors =
-						left +
-						right +
-						top +
-						bottom +
-						topLeft +
-						topRight +
-						bottomLeft +
-						bottomRight;
-
-					if (node) {
-						//Any live flower with fewer than two live neighbours dies, as if by underpopulation.
-						if (totalLivingNeighbors < 2 && this.rules[0].status)
-							newNodes[y][x] = 0;
-
-						//Any live flower with two or three live neighbours lives on to the next generation.
-						if (
-							(totalLivingNeighbors == 2 || totalLivingNeighbors == 3) &&
-							this.rules[1].status
-						)
-							newNodes[y][x] = 1;
-
-						//Any live flower with more than three live neighbours dies, as if by overpopulation.
-						if (totalLivingNeighbors > 3 && this.rules[2].status)
-							newNodes[y][x] = 0;
-					}
-
-					if (!node) {
-						let chance = 20;
-						//Any dead flower with exactly three live neighbours becomes a live flower, as if by reproduction.
-						if (totalLivingNeighbors == 3 && this.rules[3].status)
-							newNodes[y][x] = 1;
-
-						//Any dead flower with exactly two living neighbors has a chance to become a live flower, as if by generosity.
-						if (
-							totalLivingNeighbors == 2 &&
-							this.getRandomInt(chance) == 0 &&
-							this.rules[4].status
-						)
-							newNodes[y][x] = 1;
-					}
-				}
+				//Any dead flower with exactly two living neighbors has a chance to become a live flower, as if by generosity.
+				if (
+					totalLivingNeighbors == 2 &&
+					useGetRandomInt(chance) == 0 &&
+					rules.value[4].status
+				)
+					newNodes[y][x] = 1;
 			}
-			this.nodes = newNodes;
-		},
-		startTimeout() {
-			if (!this.flowerTimeout) {
-				this.playStatus = true;
-				this.flowerTimeout = setInterval(this.advanceStage, 75);
-			}
-		},
-		endTimeout() {
-			if (this.flowerTimeout) {
-				this.playStatus = false;
-				clearInterval(this.flowerTimeout);
-				this.flowerTimeout = undefined;
-			}
-		},
-		getRandomInt(max) {
-			return Math.floor(Math.random() * max);
-		},
-	},
-	created() {
-		if (window.innerWidth < 900) this.width = 35;
-		if (window.innerWidth < 750) this.width = 25;
-		if (window.innerWidth < 550) this.width = 15;
-		this.createNodes();
-		this.startTimeout();
-		this.computedWidth = `${100 / this.width}%`;
-		this.computedHeight = "25px";
-	},
-	computed: {
-		flowerStyles() {
-			return {
-				width: this.computedWidth,
-				height: this.computedHeight,
-			};
-		},
-	},
-	mounted() {
-		window.addEventListener("resize", () => {
-			let originalWidth = this.width;
-			if (window.innerWidth >= 900 && this.width != 45) this.width = 45;
-			if (window.innerWidth < 900) this.width = 35;
-			if (window.innerWidth < 750) this.width = 25;
-			if (window.innerWidth < 550) this.width = 15;
-			if (originalWidth != this.width) this.createNodes();
-			this.computedWidth = `${100 / this.width}%`;
-			this.computedHeight = "25px";
-		});
-	},
-};
+		}
+	}
+	nodes.value = newNodes;
+}
+
+function startTimeout() {
+	if (!flowerTimeout.value) {
+		playStatus.value = true;
+		flowerTimeout.value = setInterval(advanceStage, 75);
+	}
+}
+
+function endTimeout() {
+	if (flowerTimeout.value) {
+		playStatus.value = false;
+		clearInterval(flowerTimeout.value);
+		flowerTimeout.value = undefined;
+	}
+}
+
+function flowerStyles() {
+	return {
+		width: computedWidth.value,
+		height: computedHeight.value,
+	};
+}
+
+function resizeGarden() {
+	let originalWidth = width.value;
+	if (window.innerWidth >= 900 && width.value != 45) width.value = 45;
+	if (window.innerWidth < 900) width.value = 35;
+	if (window.innerWidth < 750) width.value = 25;
+	if (window.innerWidth < 550) width.value = 15;
+	if (originalWidth != width.value) createNodes();
+	computedWidth.value = `${100 / width.value}%`;
+	computedHeight.value = "25px";
+}
+
+onMounted(() => {
+	if (window.innerWidth < 900) width.value = 35;
+	if (window.innerWidth < 750) width.value = 25;
+	if (window.innerWidth < 550) width.value = 15;
+	createNodes();
+	startTimeout();
+	computedWidth.value = `${100 / width.value}%`;
+	computedHeight.value = "25px";
+
+	window.addEventListener("resize", resizeGarden);
+});
+
+onUnmounted(() => {
+	window.removeEventListener("resize", resizeGarden);
+});
 </script>
 
 <template>
@@ -180,7 +181,7 @@ export default {
 			<div
 				v-for="(col, indexCol) in row"
 				class="flowersCol"
-				:style="flowerStyles"
+				:style="flowerStyles()"
 			>
 				<Flower
 					:status="col"
