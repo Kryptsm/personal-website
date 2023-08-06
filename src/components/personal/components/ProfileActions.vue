@@ -10,46 +10,44 @@ import {
 
 const actions = [
 	{
-		title: "Request time off",
-		href: "#",
+		title: "LinkedIn",
+		href: "https://linkedin.com/in/kryptsm",
 		icon: ClockIcon,
 		iconForeground: "text-teal-700",
 		iconBackground: "bg-teal-50",
+		desc: "Where you can find any professional-based information on me, such as my educational history or employment.",
 	},
 	{
-		title: "Benefits",
-		href: "#",
+		title: "GitHub",
+		href: "https://github.com/Kryptsm",
 		icon: CheckBadgeIcon,
 		iconForeground: "text-purple-700",
 		iconBackground: "bg-purple-50",
+		desc: "Where you can find various code I've written. Only personal projects and some school work, so it is fairly sparsed. At work we tend to use Azure DevOps, and it is also not public.",
 	},
 	{
-		title: "Schedule a one-on-one",
-		href: "#",
+		title: "Instagram",
+		href: "https://instagram.com/kryptsm",
 		icon: UsersIcon,
 		iconForeground: "text-sky-700",
 		iconBackground: "bg-sky-50",
+		desc: "On a more personal note, follow me on instagram to see all the latest food I cook on my story.",
 	},
 	{
-		title: "Payroll",
-		href: "#",
+		title: "Discord",
+		href: "",
 		icon: BanknotesIcon,
 		iconForeground: "text-yellow-700",
 		iconBackground: "bg-yellow-50",
+		desc: "If you want to casually reach out to me, my username on Discord is Kryptsm. This is where I generally keep contact with friends.",
 	},
 	{
-		title: "Submit an expense",
-		href: "#",
+		title: "Steam",
+		href: "https://steamcommunity.com/id/kryptsm/",
 		icon: ReceiptRefundIcon,
 		iconForeground: "text-rose-700",
 		iconBackground: "bg-rose-50",
-	},
-	{
-		title: "Training",
-		href: "#",
-		icon: AcademicCapIcon,
-		iconForeground: "text-indigo-700",
-		iconBackground: "bg-indigo-50",
+		desc: "If you enjoy gaming, feel free to add me on Steam. I have a few other platforms as well, which generally are linked on my Discord.",
 	},
 ];
 </script>
@@ -83,21 +81,34 @@ const actions = [
 				</span>
 			</div>
 			<div class="mt-8">
-				<h3 class="text-base font-semibold leading-6 text-gray-900">
+				<h3
+					class="text-base font-semibold leading-6 text-gray-900"
+					v-if="action.href"
+				>
 					<a :href="action.href" class="focus:outline-none">
 						<!-- Extend touch target to entire panel -->
 						<span class="absolute inset-0" aria-hidden="true" />
 						{{ action.title }}
 					</a>
 				</h3>
+				<h3
+					class="text-base font-semibold leading-6 text-gray-900"
+					v-if="!action.href"
+				>
+					<a class="focus:outline-none">
+						<!-- Extend touch target to entire panel -->
+						<span class="absolute inset-0" aria-hidden="true" />
+						{{ action.title }}
+					</a>
+				</h3>
 				<p class="mt-2 text-sm text-gray-500">
-					Doloribus dolores nostrum quia qui natus officia quod et dolorem. Sit
-					repellendus qui ut at blanditiis et quo et molestiae.
+					{{ action.desc }}
 				</p>
 			</div>
 			<span
 				class="pointer-events-none absolute right-6 top-6 text-gray-300 group-hover:text-gray-400"
 				aria-hidden="true"
+				v-if="action.href"
 			>
 				<svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
 					<path
