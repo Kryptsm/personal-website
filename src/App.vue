@@ -1,14 +1,5 @@
-<script>
+<script setup>
 import Header from "./components/shared/Header.vue";
-
-export default {
-	components: {
-		Header,
-	},
-	data() {
-		return {};
-	},
-};
 </script>
 
 <template>

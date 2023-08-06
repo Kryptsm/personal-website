@@ -1,33 +1,23 @@
-<script>
-export default {
-	props: {
-		status: Number,
-		x: Number,
-		y: Number,
-	},
-	emits: ["update-node"],
-	methods: {
-		getRandomInt(max) {
-			return Math.floor(Math.random() * max);
-		},
-	},
-};
+<script setup>
+import { useGetRandomInt } from "../../../functions/math";
+const props = defineProps(["status", "x", "y"]);
+const emits = defineEmits(["update-node"]);
 </script>
 
 <template>
 	<div
 		class="flower"
 		:style="{
-			backgroundColor: `rgb(${getRandomInt(200) + 55}, ${
-				getRandomInt(200) + 55
-			}, ${getRandomInt(200) + 55})`,
+			backgroundColor: `rgb(${useGetRandomInt(200) + 55}, ${
+				useGetRandomInt(200) + 55
+			}, ${useGetRandomInt(200) + 55})`,
 		}"
 		v-if="status"
 		@click="$emit('update-node', x, y)"
 	></div>
 	<div
 		class="flower"
-		:class="'dead-' + getRandomInt(4)"
+		:class="'dead-' + useGetRandomInt(4)"
 		v-if="!status"
 		@click="$emit('update-node', x, y)"
 	></div>
