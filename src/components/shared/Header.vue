@@ -43,6 +43,12 @@ const mobileMenuOpen = ref(false);
 				>
 					Flower Game
 				</router-link>
+				<router-link
+					:to="{ name: 'maze-solver' }"
+					class="text-sm font-semibold leading-6 text-gray-900"
+				>
+					Maze Solver
+				</router-link>
 			</div>
 		</div>
 		<Dialog
@@ -89,6 +95,13 @@ const mobileMenuOpen = ref(false);
 								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
 							>
 								Flower Game
+							</router-link>
+							<router-link
+								:to="{ name: 'maze-solver' }"
+								@click="mobileMenuOpen = false"
+								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+							>
+								Maze Solver
 							</router-link>
 						</div>
 					</div>
