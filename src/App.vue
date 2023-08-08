@@ -1,27 +1,10 @@
-<script>
-import HelloWorld from "./components/HelloWorld.vue";
-import Header from "./components/Header.vue";
-import PersonalBanner from "./components/PersonalBanner.vue";
-import ProfileActions from "./components/ProfileActions.vue";
-import Notification from "./components/Notification.vue";
-
-export default {
-	components: {
-		Header,
-		PersonalBanner,
-		ProfileActions,
-		Notification,
-	},
-	data() {
-		return {};
-	},
-};
+<script setup>
+import Header from "./components/shared/Header.vue";
 </script>
 
 <template>
 	<Header />
-	<PersonalBanner />
-	<ProfileActions />
+	<router-view></router-view>
 </template>
 
 <style scoped></style>
