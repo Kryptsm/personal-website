@@ -44,6 +44,10 @@ function createNodes(status) {
 
 	//only recreate the entire nodes array if we don't already have one
 	if (status) {
+		nodes.value = [];
+		initialNodes.value = [];
+		tracker.value = [];
+		initialTracker.value = [];
 		for (let y = 0; y < height.value; y++) {
 			let newArray = [];
 			let trackerNewArray = [];
