@@ -123,5 +123,9 @@ const actions = [
 .profileActions {
 	padding-top: 30px;
 	box-shadow: none;
+
+	@media screen and (max-width: 640px) {
+		display: block;
+	}
 }
 </style>
