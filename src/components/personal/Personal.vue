@@ -4,8 +4,14 @@ import ProfileActions from "./components/ProfileActions.vue";
 </script>
 
 <template>
-	<PersonalBanner />
-	<ProfileActions />
+	<div class="personal">
+		<PersonalBanner />
+		<ProfileActions />
+	</div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.personal {
+	margin-bottom: 40px;
+}
+</style>
