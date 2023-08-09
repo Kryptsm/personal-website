@@ -19,6 +19,9 @@ const start = ref({ x: -1, y: -1 });
 const end = ref({ x: -1, y: -1 });
 const path = ref([]);
 
+const bubbleInterval = ref(0);
+const pathInterval = ref(0);
+
 const displayChoices = ref([
 	{
 		id: 1,
@@ -40,6 +43,16 @@ function createNodes(status) {
 	currentStep.value = 0;
 	currentBubbleLayer.value = [];
 	path.value = [];
+
+	if (bubbleInterval.value) {
+		clearInterval(bubbleInterval.value);
+		bubbleInterval.value = 0;
+	}
+
+	if (pathInterval.value) {
+		clearInterval(pathInterval.value);
+		pathInterval.value = 0;
+	}
 
 	//only recreate the entire nodes array if we don't already have one
 	if (status) {
@@ -243,11 +256,12 @@ function alreadyStoredStatus(arr, val) {
 function startTimeout(animation) {
 	if (animation) {
 		let result = 1;
-		let id = setInterval(function () {
+		bubbleInterval.value = setInterval(function () {
 			if (result) result = incrementBubble();
 			if (!result) {
 				console.log("Bubble interval cleared");
-				clearInterval(id);
+				clearInterval(bubbleInterval.value);
+				bubbleInterval.value = 0;
 
 				if (end.value.x == -1) setAllUnreachable();
 			}
@@ -276,7 +290,7 @@ function findPath(loc) {
 
 	if (displayChoices.value[1].status) {
 		//Set an interval to repeat the above process as long as the start hasn't been found as part of the path.
-		let id = setInterval(function () {
+		pathInterval.value = setInterval(function () {
 			if (nextNode.x != start.value.x || nextNode.y != start.value.y) {
 				nextNode = getNextPathNode(
 					nextNode,
@@ -289,7 +303,8 @@ function findPath(loc) {
 
 			if (nextNode.x == start.value.x && nextNode.y == start.value.y) {
 				console.log("Path interval cleared");
-				clearInterval(id);
+				clearInterval(pathInterval.value);
+				pathInterval.value = 0;
 			}
 		}, 150);
 	} else {
