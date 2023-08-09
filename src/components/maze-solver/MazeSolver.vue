@@ -34,7 +34,6 @@ const displayChoices = ref([
 
 //Creates the maze, as well as a same-size secondary array of arrays which we will use to track the path to the exit.
 function createNodes(status) {
-	tracker.value = [];
 	start.value = { x: -1, y: -1 };
 	end.value = { x: -1, y: -1 };
 	currentChoice.value = "start";
@@ -56,9 +55,9 @@ function createNodes(status) {
 				newArray.push(useGetRandomInt(3) == 0 ? 0 : 1);
 				trackerNewArray.push(0);
 			}
-			nodes.value.push(newArray);
+			nodes.value.push(JSON.parse(JSON.stringify(newArray)));
 			initialNodes.value.push(JSON.parse(JSON.stringify(newArray)));
-			tracker.value.push(trackerNewArray);
+			tracker.value.push(JSON.parse(JSON.stringify(trackerNewArray)));
 			initialTracker.value.push(JSON.parse(JSON.stringify(trackerNewArray)));
 		}
 	} else {
@@ -358,7 +357,7 @@ function setAllUnreachable() {
 				nodes.value[rowIndex][colIndex] = 0;
 		});
 	});
-	tracker.value = initialTracker.value;
+	tracker.value = JSON.parse(JSON.stringify(initialTracker.value));
 	currentStep.value = 0;
 }
 </script>
