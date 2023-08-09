@@ -1,12 +1,27 @@
 <script setup>
 import { useGetRandomInt } from "../../../functions/math";
 import { ref } from "vue";
-const props = defineProps(["status", "x", "y", "hoverStatus", "trackerNum"]);
+const props = defineProps([
+	"status",
+	"x",
+	"y",
+	"hoverStatus",
+	"trackerNum",
+	"topLeft",
+	"topRight",
+]);
 const emits = defineEmits(["select-choice"]);
 </script>
 
 <template>
-	<div class="tile wall" v-if="status == 0"></div>
+	<div class="tile wall" v-if="status == 0">
+		<span class="container top-left" v-if="topLeft"
+			><div class="internal"></div
+		></span>
+		<span class="container top-right" v-if="topRight"
+			><div class="internal"></div
+		></span>
+	</div>
 	<div
 		class="tile space"
 		:class="[
@@ -68,6 +83,34 @@ const emits = defineEmits(["select-choice"]);
 
 .wall {
 	background-color: rgb(35, 35, 35);
+	position: relative;
+
+	.container {
+		display: block;
+		position: absolute;
+
+		width: 40%;
+		height: 40%;
+		&.top-right {
+			transform: rotate(-45deg);
+			top: 0;
+			right: 0;
+		}
+
+		&.top-left {
+			transform: rotate(45deg);
+
+			top: 0;
+			left: 0;
+		}
+
+		.internal {
+			width: 100%;
+			height: 100%;
+			background-color: rgb(35, 35, 35);
+			transform: scaleX(3);
+		}
+	}
 }
 
 .tile {

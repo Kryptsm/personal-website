@@ -362,6 +362,7 @@ function getNextPathNode(loc, step) {
 	}
 }
 
+//Sets all the nodes that we are unable to reach (using a search for an exit without an exit) to be a wall
 function setAllUnreachable() {
 	nodes.value.forEach((row, rowIndex) => {
 		row.forEach((col, colIndex) => {
@@ -374,6 +375,45 @@ function setAllUnreachable() {
 	});
 	tracker.value = JSON.parse(JSON.stringify(initialTracker.value));
 	currentStep.value = 0;
+}
+
+//Returns the status of the node and what it should be (wall, space, bubble, etc)
+function getNodeStatus(indexRow, indexCol, colInfo) {
+	let result = colInfo;
+	//If we are displaying the bubble
+	if (displayChoices.value[0].status) {
+		//If the node in question has been tracked as part of the bubble, and its not part of the path, return 5 which indicates this node is a bubble node
+		if (
+			tracker.value[indexRow][indexCol] != 0 &&
+			currentStep.value &&
+			nodes.value[indexRow][indexCol] != 4
+		)
+			return 5;
+	}
+
+	//Checks to see if an empty tile is completely surrounded by walls. If it is, then we set it to also be a wall.
+	if (colInfo == 1) {
+		let surroundedStatus = true;
+		if (indexRow != 0 && nodes.value[indexRow - 1][indexCol] != 0)
+			surroundedStatus = false;
+		if (
+			indexRow != height.value - 1 &&
+			nodes.value[indexRow + 1][indexCol] != 0
+		)
+			surroundedStatus = false;
+		if (indexCol != 0 && nodes.value[indexRow][indexCol - 1] != 0)
+			surroundedStatus = false;
+		if (indexCol != width.value - 1 && nodes.value[indexRow][indexCol + 1 != 0])
+			surroundedStatus = false;
+
+		if (surroundedStatus) {
+			nodes.value[indexRow][indexCol] = 0;
+			return 0;
+		}
+	}
+
+	//If the node is not part of the bubble, return it as it already exists.
+	return colInfo;
 }
 </script>
 
@@ -403,19 +443,21 @@ function setAllUnreachable() {
 		<div v-for="(row, indexRow) in nodes" class="mazeRow">
 			<div v-for="(col, indexCol) in row" class="mazeCol" :style="tileStyles()">
 				<Tile
-					:status="
-						displayChoices[0].status
-							? tracker[indexRow][indexCol] != 0 &&
-							  currentStep &&
-							  nodes[indexRow][indexCol] != 4
-								? 5
-								: col
-							: col
-					"
+					:status="getNodeStatus(indexRow, indexCol, col)"
 					:x="indexCol"
 					:y="indexRow"
 					:hoverStatus="currentChoice"
 					:trackerNum="tracker[indexRow][indexCol]"
+					:top-left="
+						indexRow != 0 &&
+						indexCol != 0 &&
+						nodes[indexRow - 1][indexCol - 1] == 0
+					"
+					:top-right="
+						indexRow != 0 &&
+						indexCol != width - 1 &&
+						nodes[indexRow - 1][indexCol + 1] == 0
+					"
 					@select-choice="selectChoice"
 				></Tile>
 			</div>
