@@ -173,11 +173,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="flowers mx-auto max-w-7xl">
-		<div
-			v-for="(row, indexRow) in nodes"
-			class="flowersRow mx-auto flex max-w-7xl"
-		>
+	<div class="flowers">
+		<div v-for="(row, indexRow) in nodes" class="flowersRow">
 			<div
 				v-for="(col, indexCol) in row"
 				class="flowersCol"
@@ -191,7 +188,7 @@ onUnmounted(() => {
 				></Flower>
 			</div>
 		</div>
-		<fieldset class="info mx-auto max-w-7xl">
+		<fieldset class="info">
 			<div class="header-bar mx-auto flex">
 				<legend class="text-base font-semibold leading-6 text-gray-900 mr-auto">
 					Rules

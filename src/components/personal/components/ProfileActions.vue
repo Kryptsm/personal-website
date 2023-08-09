@@ -1,18 +1,17 @@
 <script setup>
 import {
-	AcademicCapIcon,
-	BanknotesIcon,
-	CheckBadgeIcon,
-	ClockIcon,
-	ReceiptRefundIcon,
-	UsersIcon,
+	LinkIcon,
+	CodeBracketIcon,
+	CameraIcon,
+	ChatBubbleBottomCenterTextIcon,
+	ComputerDesktopIcon,
 } from "@heroicons/vue/24/outline";
 
 const actions = [
 	{
 		title: "LinkedIn",
 		href: "https://linkedin.com/in/kryptsm",
-		icon: ClockIcon,
+		icon: LinkIcon,
 		iconForeground: "text-teal-700",
 		iconBackground: "bg-teal-50",
 		desc: "Where you can find any professional-based information on me, such as my educational history or employment.",
@@ -20,7 +19,7 @@ const actions = [
 	{
 		title: "GitHub",
 		href: "https://github.com/Kryptsm",
-		icon: CheckBadgeIcon,
+		icon: CodeBracketIcon,
 		iconForeground: "text-purple-700",
 		iconBackground: "bg-purple-50",
 		desc: "Where you can find various code I've written. Only personal projects and some school work, so it is fairly sparsed. At work we tend to use Azure DevOps, and it is also not public.",
@@ -28,7 +27,7 @@ const actions = [
 	{
 		title: "Instagram",
 		href: "https://instagram.com/kryptsm",
-		icon: UsersIcon,
+		icon: CameraIcon,
 		iconForeground: "text-sky-700",
 		iconBackground: "bg-sky-50",
 		desc: "On a more personal note, follow me on instagram to see all the latest food I cook on my story.",
@@ -36,7 +35,7 @@ const actions = [
 	{
 		title: "Discord",
 		href: "",
-		icon: BanknotesIcon,
+		icon: ChatBubbleBottomCenterTextIcon,
 		iconForeground: "text-yellow-700",
 		iconBackground: "bg-yellow-50",
 		desc: "If you want to casually reach out to me, my username on Discord is Kryptsm. This is where I generally keep contact with friends.",
@@ -44,7 +43,7 @@ const actions = [
 	{
 		title: "Steam",
 		href: "https://steamcommunity.com/id/kryptsm/",
-		icon: ReceiptRefundIcon,
+		icon: ComputerDesktopIcon,
 		iconForeground: "text-rose-700",
 		iconBackground: "bg-rose-50",
 		desc: "If you enjoy gaming, feel free to add me on Steam. I have a few other platforms as well, which generally are linked on my Discord.",
@@ -124,5 +123,9 @@ const actions = [
 .profileActions {
 	padding-top: 30px;
 	box-shadow: none;
+
+	@media screen and (max-width: 640px) {
+		display: block;
+	}
 }
 </style>
