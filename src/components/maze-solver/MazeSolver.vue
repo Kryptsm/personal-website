@@ -85,7 +85,7 @@ function selectChoice(x, y) {
 		nodes.value[y][x] = 2;
 		start.value = { x: x, y: y };
 		currentChoice.value = "end";
-		startTimeout(true);
+		startTimeout(false);
 	} else if (currentChoice.value == "end") {
 		nodes.value[y][x] = 3;
 		end.value = { x: x, y: y };

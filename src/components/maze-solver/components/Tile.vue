@@ -26,8 +26,8 @@ const emits = defineEmits(["select-choice"]);
 		class="tile bubble"
 		:style="{
 			backgroundColor: `rgb(${130 - trackerNum * 1.55}, ${
-				200 - trackerNum * 2.2
-			}, ${230 - trackerNum * 2})`,
+				220 - trackerNum * 2.2
+			}, ${255 - trackerNum * 2})`,
 		}"
 		v-if="status == 5"
 	></div>
