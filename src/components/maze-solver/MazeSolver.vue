@@ -85,11 +85,12 @@ function selectChoice(x, y) {
 		nodes.value[y][x] = 2;
 		start.value = { x: x, y: y };
 		currentChoice.value = "end";
+		startTimeout(true);
 	} else if (currentChoice.value == "end") {
 		nodes.value[y][x] = 3;
 		end.value = { x: x, y: y };
 		currentChoice.value = "none";
-		startTimeout();
+		startTimeout(displayChoices.value[0].status);
 	}
 }
 
@@ -121,7 +122,7 @@ function tileStyles() {
 //Increments the bubble search another layer outwards as it searches for the exit
 function incrementBubble() {
 	//If we haven't chosen a start or an end yet
-	if (start.value.x == -1 || end.value.x == -1) return 0;
+	if (start.value.x == -1) return 0;
 
 	let arr = [];
 	//First iteration, which uses the start position
@@ -141,7 +142,7 @@ function incrementBubble() {
 					nodes.value[e.y][e.x] != 3
 				) {
 					tracker.value[e.y][e.x] = currentStep.value;
-				} else if (n[e.y][e.x] == 3 && !returnVal) {
+				} else if (nodes.value[e.y][e.x] == 3 && !returnVal) {
 					//If we found the start, we start the path finding process and end this one
 					findPath({ x: e.x, y: e.y });
 					returnVal = true;
@@ -240,24 +241,27 @@ function alreadyStoredStatus(arr, val) {
 }
 
 //starts the bubble search process, not being instantaneous for design effect
-function startTimeout() {
-	if (displayChoices.value[0].status) {
+function startTimeout(animation) {
+	if (animation) {
 		let result = 1;
 		let id = setInterval(function () {
 			if (result) result = incrementBubble();
 			if (!result) {
 				console.log("Bubble interval cleared");
 				clearInterval(id);
+
+				if (end.value.x == -1) setAllUnreachable();
 			}
 		}, 150);
 	} else {
 		let result = 1;
 		let index = 0;
-		while (result && index < 500) {
+		while (result && index < 5000) {
 			result = incrementBubble();
 			index++;
 		}
-		console.log("Bubble while cleared");
+		if (end.value.x == -1) setAllUnreachable();
+		console.log("Bubble while cleared in " + index + " iterations");
 	}
 }
 
@@ -308,7 +312,7 @@ function findPath(loc) {
 			}
 			index++;
 		}
-		console.log("Path while cleared");
+		console.log("Path while cleared after " + index + " iteration(s)");
 	}
 }
 
@@ -343,6 +347,20 @@ function getNextPathNode(loc, step) {
 			return { x: loc.x + 1, y: loc.y };
 	}
 }
+
+function setAllUnreachable() {
+	nodes.value.forEach((row, rowIndex) => {
+		row.forEach((col, colIndex) => {
+			if (
+				tracker.value[rowIndex][colIndex] === 0 &&
+				nodes.value[rowIndex][colIndex] != 2
+			)
+				nodes.value[rowIndex][colIndex] = 0;
+		});
+	});
+	tracker.value = initialTracker.value;
+	currentStep.value = 0;
+}
 </script>
 
 <template>
@@ -355,9 +373,9 @@ function getNextPathNode(loc, step) {
 			set the exit.
 		</div>
 		<div class="body">
-			You may also click the "reset the maze" button to reset your starting and
-			stop positions. Note: It is possible to select a start and stop without a
-			solution!
+			When you select a starting position, all positions in the maze that are
+			unreachable from there will automatically become walls. You may also click
+			the "reset the maze" button to reset your starting and stop positions.
 		</div>
 		<div class="body">
 			You may also select some display options below. The first option shows how

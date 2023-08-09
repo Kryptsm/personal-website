@@ -67,11 +67,11 @@ const emits = defineEmits(["select-choice"]);
 }
 
 .wall {
-	background-color: black;
+	background-color: rgb(35, 35, 35);
 }
 
 .tile {
-	border: 1px solid black;
+	border: 1px solid rgb(35, 35, 35);
 	width: 100%;
 	height: 100%;
 }
