@@ -22,7 +22,7 @@ const path = ref([]);
 const displayChoices = ref([
 	{
 		id: 1,
-		name: "Show search progress. Will display blue cells during and after the search which indicates cells that we look at to try and find the exit.",
+		name: "Show search progress. Will display blue cells during and after the search which indicates cells that we look at to try and find the exit. The darker the cell, the farther away from the start it is.",
 		status: false,
 	},
 	{
@@ -362,9 +362,9 @@ function getNextPathNode(loc, step) {
 		<div class="body">
 			You may also select some display options below. The first option shows how
 			the program locates the end of the maze over time with an animation. The
-			blue cells indicate the ones we've visited to try and find the exit. The
-			second option makes the path instantly appear, by default it appears over
-			time.
+			blue cells indicate the ones we've visited to try and find the exit.
+			Darker cells are farther away from the start. The second option makes the
+			path instantly appear, by default it appears over time.
 		</div>
 	</div>
 	<div class="maze">
@@ -383,6 +383,7 @@ function getNextPathNode(loc, step) {
 					:x="indexCol"
 					:y="indexRow"
 					:hoverStatus="currentChoice"
+					:trackerNum="tracker[indexRow][indexCol]"
 					@select-choice="selectChoice"
 				></Tile>
 			</div>
@@ -465,7 +466,8 @@ function getNextPathNode(loc, step) {
 			visited yet. It keeps expanding outwards in this pattern, keeping track of
 			each cell it visits and how many turns it takes to reach the starting cell
 			from that cell. This results in it "bubbling out" as you can see if you
-			select Option 1 in the Display Options.
+			select Option 1 in the Display Options. The darker a cell gets, the
+			farther away from the start it is.
 		</div>
 		<div class="body">
 			Once the exit is found, we work our way backwards counting down to one. If
