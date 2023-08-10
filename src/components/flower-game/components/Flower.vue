@@ -8,9 +8,7 @@ const emits = defineEmits(["update-node"]);
 	<div
 		class="flower"
 		:style="{
-			backgroundColor: `rgb(${useGetRandomInt(200) + 55}, ${
-				useGetRandomInt(200) + 55
-			}, ${useGetRandomInt(200) + 55})`,
+			backgroundColor: `rgb(${0}, ${useGetRandomInt(56) + 100}, ${0})`,
 		}"
 		v-if="status"
 		@click="$emit('update-node', x, y)"

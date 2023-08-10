@@ -6,46 +6,61 @@ import {
 	ChatBubbleBottomCenterTextIcon,
 	ComputerDesktopIcon,
 } from "@heroicons/vue/24/outline";
+import InstagramIcon from "../../../assets/Instagram_Glyph_Gradient.png";
+import LinkedInIcon from "../../../assets/LI-In-Bug.png";
+import GitHubIcon from "../../../assets/github-mark.png";
+import DiscordIcon from "../../../assets/discord-mark-blue.png";
+import SteamIcon from "../../../assets/Steam_icon_logo.png";
 
 const actions = [
 	{
 		title: "LinkedIn",
 		href: "https://linkedin.com/in/kryptsm",
 		icon: LinkIcon,
+		image: LinkedInIcon,
 		iconForeground: "text-teal-700",
 		iconBackground: "bg-teal-50",
+		imgClasses: "LinkedInIcon",
 		desc: "Where you can find any professional-based information on me, such as my educational history or employment.",
 	},
 	{
 		title: "GitHub",
 		href: "https://github.com/Kryptsm",
 		icon: CodeBracketIcon,
+		image: GitHubIcon,
 		iconForeground: "text-purple-700",
 		iconBackground: "bg-purple-50",
+		imgClasses: "",
 		desc: "Where you can find various code I've written. Only personal projects and some school work, so it is fairly sparsed. At work we tend to use Azure DevOps, and it is also not public.",
 	},
 	{
 		title: "Instagram",
 		href: "https://instagram.com/kryptsm",
 		icon: CameraIcon,
+		image: InstagramIcon,
 		iconForeground: "text-sky-700",
-		iconBackground: "bg-sky-50",
-		desc: "On a more personal note, follow me on instagram to see all the latest food I cook on my story.",
+		iconBackground: "bg-yellow-50",
+		imgClasses: "",
+		desc: "On a more personal note, follow me on instagram to see what I am up to non-professional. Not super active, mostly just post food on my story!",
 	},
 	{
 		title: "Discord",
 		href: "",
 		icon: ChatBubbleBottomCenterTextIcon,
+		image: DiscordIcon,
 		iconForeground: "text-yellow-700",
-		iconBackground: "bg-yellow-50",
+		iconBackground: " bg-sky-50",
+		imgClasses: "DiscordIcon",
 		desc: "If you want to casually reach out to me, my username on Discord is Kryptsm. This is where I generally keep contact with friends.",
 	},
 	{
 		title: "Steam",
 		href: "https://steamcommunity.com/id/kryptsm/",
 		icon: ComputerDesktopIcon,
+		image: SteamIcon,
 		iconForeground: "text-rose-700",
 		iconBackground: "bg-rose-50",
+		imgClasses: "",
 		desc: "If you enjoy gaming, feel free to add me on Steam. I have a few other platforms as well, which generally are linked on my Discord.",
 	},
 ];
@@ -73,10 +88,14 @@ const actions = [
 					:class="[
 						action.iconBackground,
 						action.iconForeground,
-						'inline-flex rounded-lg p-3 ring-4 ring-white',
+						'inline-flex rounded-lg p-2 ring-4 ring-white',
 					]"
 				>
-					<component :is="action.icon" class="h-6 w-6" aria-hidden="true" />
+					<img
+						:src="action.image"
+						class="websiteIcon"
+						:class="[action.imgClasses]"
+					/>
 				</span>
 			</div>
 			<div class="mt-8">
@@ -126,6 +145,19 @@ const actions = [
 
 	@media screen and (max-width: 640px) {
 		display: block;
+	}
+
+	.websiteIcon {
+		width: 30px;
+		height: 30px;
+	}
+
+	.LinkedInIcon {
+		padding: 2px 0 3px 0;
+	}
+
+	.DiscordIcon {
+		padding: 3px 0;
 	}
 }
 </style>

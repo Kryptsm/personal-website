@@ -102,7 +102,7 @@ function advanceStage() {
 			}
 
 			if (!node) {
-				let chance = 20;
+				let chance = 40;
 				//Any dead flower with exactly three live neighbours becomes a live flower, as if by reproduction.
 				if (totalLivingNeighbors == 3 && rules.value[3].status)
 					newNodes[y][x] = 1;
@@ -123,7 +123,7 @@ function advanceStage() {
 function startTimeout() {
 	if (!flowerTimeout.value) {
 		playStatus.value = true;
-		flowerTimeout.value = setInterval(advanceStage, 75);
+		flowerTimeout.value = setInterval(advanceStage, 150);
 	}
 }
 
