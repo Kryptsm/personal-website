@@ -422,9 +422,8 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 		<div class="body">
 			The maze below is randomly generated, wherein each cell has a 1/3 chance
 			of being a wall. The black cells are walls, the white are empty spaces.
-			Hover over the cells to see a green cell, click to place the location you
-			want to start from. Then a red cell will appear, and click another cell to
-			set the exit.
+			Click the maze once on an empty space to place the start of the maze.
+			Click again to place the exit. The algorithm will automatically start.
 		</div>
 		<div class="body">
 			When you select a starting position, all positions in the maze that are
@@ -435,8 +434,8 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 			You may also select some display options below. The first option shows how
 			the program locates the end of the maze over time with an animation. The
 			blue cells indicate the ones we've visited to try and find the exit.
-			Darker cells are farther away from the start. The second option makes the
-			path instantly appear, by default it appears over time.
+			Darker cells are farther away from the start, relatively. The second
+			option makes the path instantly appear, by default it appears over time.
 		</div>
 	</div>
 	<div class="maze">
@@ -448,6 +447,7 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 					:y="indexRow"
 					:hoverStatus="currentChoice"
 					:trackerNum="tracker[indexRow][indexCol]"
+					:trackerTotal="currentStep"
 					:top-left="
 						indexRow != 0 &&
 						indexCol != 0 &&
