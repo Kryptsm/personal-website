@@ -53,14 +53,14 @@ export default {
 				<div
 					class="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1"
 				>
-					<div class="mt-10 min-w-0 flex-1 sm:hidden md:block name-and-work">
+					<div class="mt-13 min-w-0 flex-1 sm:hidden md:block name-and-work">
 						<h1 class="truncate text-2xl font-bold text-gray-900">
 							{{ profile.name }}
 						</h1>
 						<p>{{ profile.fields.title }}, {{ profile.fields.company }}</p>
 					</div>
 					<div
-						class="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-x-4 sm:space-y-0"
+						class="mt-13 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-x-4 sm:space-y-0"
 					>
 						<a
 							type="button"
