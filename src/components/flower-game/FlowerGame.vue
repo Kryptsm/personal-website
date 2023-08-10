@@ -8,8 +8,6 @@ import { ref, reactive, onMounted, onUnmounted } from "vue";
 const nodes = ref([]);
 const width = ref(45);
 const height = ref(30);
-const computedWidth = ref("");
-const computedHeight = ref("");
 const flowerTimeout = ref(undefined);
 const playStatus = ref(true);
 const rules = ref([
@@ -137,13 +135,6 @@ function endTimeout() {
 	}
 }
 
-function flowerStyles() {
-	return {
-		width: computedWidth.value,
-		height: computedHeight.value,
-	};
-}
-
 function resizeGarden() {
 	let originalWidth = width.value;
 	if (window.innerWidth >= 900 && width.value != 45) width.value = 45;
@@ -151,8 +142,6 @@ function resizeGarden() {
 	if (window.innerWidth < 750) width.value = 25;
 	if (window.innerWidth < 550) width.value = 15;
 	if (originalWidth != width.value) createNodes();
-	computedWidth.value = `${100 / width.value}%`;
-	computedHeight.value = "25px";
 }
 
 onMounted(() => {
@@ -161,8 +150,6 @@ onMounted(() => {
 	if (window.innerWidth < 550) width.value = 15;
 	createNodes();
 	startTimeout();
-	computedWidth.value = `${100 / width.value}%`;
-	computedHeight.value = "25px";
 
 	window.addEventListener("resize", resizeGarden);
 });
@@ -174,20 +161,16 @@ onUnmounted(() => {
 
 <template>
 	<div class="flowers">
-		<div v-for="(row, indexRow) in nodes" class="flowersRow">
-			<div
-				v-for="(col, indexCol) in row"
-				class="flowersCol"
-				:style="flowerStyles()"
-			>
+		<v-row v-for="(row, indexRow) in nodes" class="flowersRow">
+			<v-col v-for="(col, indexCol) in row" class="flowersCol">
 				<Flower
 					:status="col"
 					:x="indexCol"
 					:y="indexRow"
 					@update-node="updateNode"
 				></Flower>
-			</div>
-		</div>
+			</v-col>
+		</v-row>
 		<fieldset class="info">
 			<div class="header-bar mx-auto flex">
 				<legend class="text-base font-semibold leading-6 text-gray-900 mr-auto">
@@ -264,8 +247,16 @@ onUnmounted(() => {
 	}
 
 	.flowersRow {
-		display: flex;
-		width: 100%;
+		margin: 0 !important;
+		.flowersCol {
+			width: 100%;
+			height: 25px;
+			padding: 0 !important;
+		}
+	}
+
+	.flowersRow + .flowersRow {
+		margin-top: 0 !important;
 	}
 
 	.info {
