@@ -9,8 +9,6 @@ const initialTracker = ref([]);
 const tracker = ref([]);
 const width = ref(45);
 const height = ref(25);
-const computedWidth = ref("");
-const computedHeight = ref("");
 const currentChoice = ref("start");
 
 const currentStep = ref(0);
@@ -86,9 +84,8 @@ function resizeMaze() {
 	if (window.innerWidth < 900) width.value = 35;
 	if (window.innerWidth < 750) width.value = 25;
 	if (window.innerWidth < 550) width.value = 15;
+	console.log(width.value);
 	if (originalWidth != width.value) createNodes(true);
-	computedWidth.value = `${100 / width.value}%`;
-	computedHeight.value = "25px";
 }
 
 //Handles choosing the start and end points for the maze
@@ -112,8 +109,6 @@ onMounted(() => {
 	if (window.innerWidth < 750) width.value = 25;
 	if (window.innerWidth < 550) width.value = 15;
 	createNodes(true);
-	computedWidth.value = `${100 / width.value}%`;
-	computedHeight.value = "25px";
 
 	window.addEventListener("resize", resizeMaze);
 });
@@ -122,14 +117,6 @@ onMounted(() => {
 onUnmounted(() => {
 	window.removeEventListener("resize", resizeMaze);
 });
-
-//Returns the styling for the individual tiles
-function tileStyles() {
-	return {
-		width: computedWidth.value,
-		height: computedHeight.value,
-	};
-}
 
 //Increments the bubble search another layer outwards as it searches for the exit
 function incrementBubble() {
@@ -422,9 +409,8 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 		<div class="body">
 			The maze below is randomly generated, wherein each cell has a 1/3 chance
 			of being a wall. The black cells are walls, the white are empty spaces.
-			Hover over the cells to see a green cell, click to place the location you
-			want to start from. Then a red cell will appear, and click another cell to
-			set the exit.
+			Click the maze once on an empty space to place the start of the maze.
+			Click again to place the exit. The algorithm will automatically start.
 		</div>
 		<div class="body">
 			When you select a starting position, all positions in the maze that are
@@ -435,19 +421,20 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 			You may also select some display options below. The first option shows how
 			the program locates the end of the maze over time with an animation. The
 			blue cells indicate the ones we've visited to try and find the exit.
-			Darker cells are farther away from the start. The second option makes the
-			path instantly appear, by default it appears over time.
+			Darker cells are farther away from the start, relatively. The second
+			option makes the path instantly appear, by default it appears over time.
 		</div>
 	</div>
 	<div class="maze">
-		<div v-for="(row, indexRow) in nodes" class="mazeRow">
-			<div v-for="(col, indexCol) in row" class="mazeCol" :style="tileStyles()">
+		<v-row v-for="(row, indexRow) in nodes" class="mazeRow">
+			<v-col v-for="(col, indexCol) in row" class="mazeCol">
 				<Tile
 					:status="getNodeStatus(indexRow, indexCol, col)"
 					:x="indexCol"
 					:y="indexRow"
 					:hoverStatus="currentChoice"
 					:trackerNum="tracker[indexRow][indexCol]"
+					:trackerTotal="currentStep"
 					:top-left="
 						indexRow != 0 &&
 						indexCol != 0 &&
@@ -460,8 +447,8 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 					"
 					@select-choice="selectChoice"
 				></Tile>
-			</div>
-		</div>
+			</v-col>
+		</v-row>
 	</div>
 	<fieldset class="info">
 		<div class="header-bar mx-auto flex">
@@ -567,8 +554,16 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 .maze {
 	border: 1px solid black;
 	.mazeRow {
-		display: flex;
-		width: 100%;
+		margin: 0 !important;
+		.mazeCol {
+			width: 100%;
+			height: 25px;
+			padding: 0 !important;
+		}
+	}
+
+	.mazeRow + .mazeRow {
+		margin-top: 0 !important;
 	}
 }
 

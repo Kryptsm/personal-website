@@ -7,6 +7,7 @@ const props = defineProps([
 	"y",
 	"hoverStatus",
 	"trackerNum",
+	"trackerTotal",
 	"topLeft",
 	"topRight",
 ]);
@@ -40,9 +41,9 @@ const emits = defineEmits(["select-choice"]);
 	<div
 		class="tile bubble"
 		:style="{
-			backgroundColor: `rgb(${130 - trackerNum * 1.55}, ${
-				220 - trackerNum * 2.2
-			}, ${255 - trackerNum * 2})`,
+			backgroundColor: `rgb(${200 - 200 * (trackerNum / trackerTotal)}, ${
+				220 - 200 * (trackerNum / trackerTotal)
+			}, ${255 - 120 * (trackerNum / trackerTotal)})`,
 		}"
 		v-if="status == 5"
 	></div>
