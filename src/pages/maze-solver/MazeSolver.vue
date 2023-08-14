@@ -2,7 +2,6 @@
 import { useGetRandomInt } from "../../functions/math";
 import { ref, onMounted, onUnmounted } from "vue";
 import Tile from "./components/Tile.vue";
-import * as foodCmds from "../../functions/foodtracker/restaurants";
 
 const initialNodes = ref([]);
 const nodes = ref([]);
@@ -112,8 +111,6 @@ onMounted(() => {
 	createNodes(true);
 
 	window.addEventListener("resize", resizeMaze);
-
-	foodCmds.listRestaurants();
 });
 
 //Removes the event listener on unmounting

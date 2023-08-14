@@ -49,6 +49,12 @@ const mobileMenuOpen = ref(false);
 				>
 					Maze Solver
 				</router-link>
+				<router-link
+					:to="{ name: 'food-tracker' }"
+					class="text-sm font-semibold leading-6 text-gray-900"
+				>
+					Food Tracker
+				</router-link>
 			</div>
 		</div>
 		<Dialog
@@ -102,6 +108,13 @@ const mobileMenuOpen = ref(false);
 								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
 							>
 								Maze Solver
+							</router-link>
+							<router-link
+								:to="{ name: 'food-tracker' }"
+								@click="mobileMenuOpen = false"
+								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+							>
+								Food Tracker
 							</router-link>
 						</div>
 					</div>
