@@ -1,9 +1,10 @@
 import { createApp } from "vue";
 import "./style.css";
 import App from "./App.vue";
-import Personal from "./components/personal/Personal.vue";
-import FlowerGame from "./components/flower-game/FlowerGame.vue";
-import MazeSolver from "./components/maze-solver/MazeSolver.vue";
+import Personal from "./pages/personal/Personal.vue";
+import FlowerGame from "./pages/flower-game/FlowerGame.vue";
+import MazeSolver from "./pages/maze-solver/MazeSolver.vue";
+import FoodTracker from "./pages/food-tracker/FoodTracker.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 // Vuetify
@@ -36,6 +37,11 @@ const routes = [
 		path: "/maze-solver",
 		name: "maze-solver",
 		component: MazeSolver,
+	},
+	{
+		path: "/food-tracker",
+		name: "food-tracker",
+		component: FoodTracker,
 	},
 ];
 
