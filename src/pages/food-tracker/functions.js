@@ -11,6 +11,8 @@ export async function listRestaurants() {
 							date
 							id
 							name
+							coreName
+							side
 							restaurantID
 							_version
 							}
@@ -23,7 +25,7 @@ export async function listRestaurants() {
 				}`,
 	});
 	let restaurants = result.data.listRestaurants.items;
-	console.log("Restaurants: ", restaurants);
+	console.log("listRestaurants: ", restaurants);
 	return restaurants;
 }
 
@@ -35,6 +37,8 @@ export async function listMeals() {
 						date
 						id
 						name
+						coreName
+						side
 						restaurantID
 						_version
 						}
@@ -42,6 +46,6 @@ export async function listMeals() {
 				}`,
 	});
 	let meals = result.data.listMeals.items;
-	console.log("Meals: ", meals);
+	console.log("listMeals: ", meals);
 	return meals;
 }

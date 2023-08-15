@@ -2,163 +2,230 @@
 import { useGetRandomInt } from "../../functions/math";
 import { ref, onMounted } from "vue";
 import * as func from "./functions";
+import FutureSpongebob from "../../assets/FutureSpongebob.jpeg";
 
-// const days = ref([
-// 	{ date: "2023-07-30", events: [] },
-// 	{ date: "2023-07-31", events: [] },
-// 	{ date: "2023-08-01", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-02", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-03", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-04", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-05", isCurrentMonth: true, events: [] },
-// 	{
-// 		date: "2023-08-06",
-// 		isCurrentMonth: true,
-// 		events: [
-// 			{
-// 				id: 1,
-// 				name: "Design review",
-// 				time: "10AM",
-// 				datetime: "2023-08-03T10:00",
-// 				href: "#",
-// 			},
-// 			{
-// 				id: 2,
-// 				name: "Sales meeting",
-// 				time: "2PM",
-// 				datetime: "2023-08-03T14:00",
-// 				href: "#",
-// 			},
-// 		],
-// 	},
-// 	{ date: "2023-08-07", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-08", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-09", isCurrentMonth: true, events: [] },
-// 	{
-// 		date: "2023-08-10",
-// 		isCurrentMonth: true,
-// 		events: [
-// 			{
-// 				id: 3,
-// 				name: "Date night",
-// 				time: "6PM",
-// 				datetime: "2023-08-08T18:00",
-// 				href: "#",
-// 			},
-// 		],
-// 	},
-// 	{ date: "2023-08-11", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-12", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-13", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-14", isCurrentMonth: true, events: [] },
-// 	{
-// 		date: "2023-08-15",
-// 		isCurrentMonth: true,
-// 		events: [
-// 			{
-// 				id: 6,
-// 				name: "Sam's birthday party",
-// 				time: "2PM",
-// 				datetime: "2023-08-25T14:00",
-// 				href: "#",
-// 			},
-// 		],
-// 	},
-// 	{ date: "2023-08-16", isCurrentMonth: true, events: [], isToday: true },
-// 	{ date: "2023-08-17", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-18", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-19", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-20", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-21", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-22", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-23", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-24", isCurrentMonth: true, events: [] },
-// 	{
-// 		date: "2023-08-25",
-// 		isCurrentMonth: true,
-// 		isSelected: true,
-// 		events: [
-// 			{
-// 				id: 4,
-// 				name: "Maple syrup museum",
-// 				time: "3PM",
-// 				datetime: "2023-08-22T15:00",
-// 				href: "#",
-// 			},
-// 			{
-// 				id: 5,
-// 				name: "Hockey game",
-// 				time: "7PM",
-// 				datetime: "2023-08-22T19:00",
-// 				href: "#",
-// 			},
-// 		],
-// 	},
-// 	{ date: "2023-08-26", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-27", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-28", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-29", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-30", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-08-31", isCurrentMonth: true, events: [] },
-// 	{ date: "2023-09-01", events: [] },
-// 	{ date: "2023-09-02", events: [] },
-// 	{ date: "2023-09-03", events: [] },
-// 	{ date: "2023-09-04", events: [] },
-// 	{ date: "2023-09-05", events: [] },
-// 	{ date: "2023-09-06", events: [] },
-// 	{
-// 		date: "2023-09-07",
-// 		events: [
-// 			{
-// 				id: 7,
-// 				name: "Cinema with friends",
-// 				time: "9PM",
-// 				datetime: "2023-09-04T21:00",
-// 				href: "#",
-// 			},
-// 		],
-// 	},
-// 	{ date: "2023-09-08", events: [] },
-// 	{ date: "2023-09-09", events: [] },
-// ]);
-// const selectedDay = ref(days.value.find((day) => day.isSelected));
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "vue-chartjs";
 
-const restaurants = ref([]);
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 const daysOfTheWeek = ref([
-	{ name: "Sunday", date: undefined },
-	{ name: "Monday", date: undefined },
-	{ name: "Tuesday", date: undefined },
-	{ name: "Wednesday", date: undefined },
-	{ name: "Thursday", date: undefined },
-	{ name: "Friday", date: undefined },
-	{ name: "Saturday", date: undefined },
+	{
+		name: "Sunday",
+		date: undefined,
+		isToday: false,
+		isFuture: false,
+		meals: [],
+	},
+	{
+		name: "Monday",
+		date: undefined,
+		isToday: false,
+		isFuture: false,
+		meals: [],
+	},
+	{
+		name: "Tuesday",
+		date: undefined,
+		isToday: false,
+		isFuture: false,
+		meals: [],
+	},
+	{
+		name: "Wednesday",
+		date: undefined,
+		isToday: false,
+		isFuture: false,
+		meals: [],
+	},
+	{
+		name: "Thursday",
+		date: undefined,
+		isToday: false,
+		isFuture: false,
+		meals: [],
+	},
+	{
+		name: "Friday",
+		date: undefined,
+		isToday: false,
+		isFuture: false,
+		meals: [],
+	},
+	{
+		name: "Saturday",
+		date: undefined,
+		isToday: false,
+		isFuture: false,
+		meals: [],
+	},
 ]);
+const graphColors = ref([
+	"#52D726",
+	"#FFEC00",
+	"#FF7300",
+	"#FF0000",
+	"#007ED6",
+	"#7CDDDD",
+	"#963868",
+	"#727394",
+	"#853277",
+	"#A37730",
+]);
+const allMeals = ref([]);
+const allRestaurants = ref([]);
+const simplifiedNames = ref(false);
+
+const pieOptions = ref({
+	responsive: true,
+	maintainAspectRatio: true,
+});
 
 onMounted(() => {
-	const start = new Date();
-	const format = start.toISOString().split("T")[0];
-	console.log(start, format);
+	// var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
+	// let localDate = new Date(Date.now() - tzoffset);
+	// console.log("Date: ", localDate);
+	// var localISODate = localDate.toISOString().split("T")[0];
 
-	const offset = start.getTimezoneOffset();
-	console.log(offset);
-	// daysOfTheWeek.value.forEach(e => {
+	// console.log("ISO Date: ", localISODate);
 
-	// })
+	let date = new Date(); // Or the date you'd like converted.
+	let isoDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+		.toISOString()
+		.split("T")[0];
+	let currentDay = date.getDay();
+	console.log("Date: ", date);
+	console.log("ISO Date: ", isoDate);
+	console.log("Day: ", currentDay);
 
-	func.listRestaurants().then((result) => (restaurants.value = result));
-	func.listMeals().then((result) => addNewMeals(result));
+	daysOfTheWeek.value[currentDay].isToday = true;
+
+	daysOfTheWeek.value.forEach((e, index) => {
+		if (index > currentDay) {
+			let newDate = new Date(date);
+			newDate.setDate(newDate.getDate() + (index - currentDay));
+			let isoNewDate = new Date(
+				newDate.getTime() - newDate.getTimezoneOffset() * 60000
+			)
+				.toISOString()
+				.split("T")[0];
+
+			e.date = isoNewDate;
+			e.isFuture = true;
+		} else if (index == currentDay) {
+			e.date = isoDate;
+		} else if (index < currentDay) {
+			let newDate = new Date(date);
+			newDate.setDate(newDate.getDate() - (currentDay - index));
+			let isoNewDate = new Date(
+				newDate.getTime() - newDate.getTimezoneOffset() * 60000
+			)
+				.toISOString()
+				.split("T")[0];
+
+			e.date = isoNewDate;
+		}
+	});
+
+	func.listRestaurants().then((result) => {
+		allRestaurants.value = result;
+		getPieData(totalRestaurants(result));
+	});
+	func.listMeals().then((result) => {
+		addNewMeals(result);
+		allMeals.value = result;
+		getPieData(totalMeals(result));
+	});
 });
 
 function addNewMeals(meals) {
-	console.log(meals);
+	//console.log(meals);
+	meals.forEach((meal) => {
+		let day = daysOfTheWeek.value.find((day) => day.date == meal.date);
+		if (day) day.meals = [...day.meals, meal];
+	});
+}
+
+function getDayNum(isoDate) {
+	return isoDate ? isoDate.slice(8, 10) : undefined;
+}
+
+function totalMeals(items) {
+	let itemCounts = [];
+	items.forEach((item) => {
+		if (item.coreName) {
+			let existingTracker = itemCounts.find(
+				(count) => count.name === item.coreName
+			);
+
+			if (!existingTracker) {
+				itemCounts.push({ name: item.coreName, count: 1 });
+			} else if (existingTracker) {
+				existingTracker.count++;
+			}
+		}
+	});
+	console.log("Meal Counts: ", itemCounts);
+	return itemCounts;
+}
+
+function totalRestaurants(items) {
+	let itemCounts = [];
+	items.forEach((item) => {
+		itemCounts.push({ name: item.name, count: item.Meals.items.length });
+	});
+	console.log("Restaurant Counts: ", itemCounts);
+	return itemCounts;
+}
+
+function getPieData(itemCounts) {
+	let newData = { labels: [], datasets: [{ backgroundColor: [], data: [] }] };
+	itemCounts.forEach((item) => {
+		newData.labels = [...newData.labels, item.name];
+		newData.datasets[0].backgroundColor = [
+			...newData.datasets[0].backgroundColor,
+			graphColors.value[newData.datasets[0].backgroundColor.length],
+		];
+		newData.datasets[0].data = [...newData.datasets[0].data, item.count];
+	});
+
+	console.log(newData);
+	return newData;
 }
 </script>
 
 <template>
 	<div class="week-calendar">
 		<div class="day-card" v-for="day in daysOfTheWeek">
-			<div class="name">{{ day.name }}</div>
-			<div class="content">content</div>
+			<div class="name" :class="{ today: day.isToday }">
+				<div class="dayName">{{ day.name }}</div>
+			</div>
+			<div class="content">
+				<div class="dayNum">{{ getDayNum(day.date) }}</div>
+				<div v-if="!day.isFuture">
+					<div class="meal" v-for="meal in day.meals">
+						<span v-if="!simplifiedNames">{{ meal.name }}</span>
+						<span v-if="simplifiedNames">{{ meal.coreName }}</span>
+					</div>
+				</div>
+				<div v-if="!day.isToday && day.isFuture" class="future">
+					<img :src="FutureSpongebob" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<h6 class="graph-heading">Totals:</h6>
+	<div class="graph">
+		<div class="pie-container">
+			<p>Restaurants Visited</p>
+			<Pie
+				:data="getPieData(totalRestaurants(allRestaurants))"
+				:options="pieOptions"
+			/>
+		</div>
+		<div class="pie-container">
+			<p>Meals Eaten</p>
+			<Pie :data="getPieData(totalMeals(allMeals))" :options="pieOptions" />
 		</div>
 	</div>
 </template>
@@ -168,20 +235,40 @@ function addNewMeals(meals) {
 	display: flex;
 	justify-content: space-around;
 	width: 95%;
-	margin: auto;
+	margin: 15px auto;
 
 	.day-card {
 		border: 1px solid black;
 		width: 100%;
 		text-align: center;
 
+		.today {
+			background-color: #bee3f1;
+		}
+
 		.name {
 			padding: 12px 0;
+			border-radius: 0;
 		}
 
 		.content {
 			border-top: 1px solid black;
 			border-radius: 0;
+			position: relative;
+			padding: 25px 10px 10px 10px;
+			height: 140px;
+
+			.dayNum {
+				position: absolute;
+				top: 0;
+				left: 5px;
+			}
+
+			@media only screen and (max-width: 900px) {
+				.future {
+					display: none;
+				}
+			}
 		}
 	}
 
@@ -197,6 +284,25 @@ function addNewMeals(meals) {
 	:last-child {
 		border-top-right-radius: 6px;
 		border-bottom-right-radius: 6px;
+	}
+}
+
+.graph-heading {
+	width: 95%;
+	margin: auto;
+}
+
+.graph {
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+
+	.pie-container {
+		width: 40%;
+
+		p {
+			text-align: center;
+		}
 	}
 }
 </style>

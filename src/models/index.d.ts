@@ -45,6 +45,8 @@ type EagerMeal = {
   readonly name: string;
   readonly date: string;
   readonly restaurantID: string;
+  readonly coreName?: string | null;
+  readonly side?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -58,6 +60,8 @@ type LazyMeal = {
   readonly name: string;
   readonly date: string;
   readonly restaurantID: string;
+  readonly coreName?: string | null;
+  readonly side?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
