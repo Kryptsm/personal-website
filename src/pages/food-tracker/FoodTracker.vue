@@ -1,6 +1,6 @@
 <script setup>
 import { useGetRandomInt } from "../../functions/math";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import * as func from "./functions";
 import FutureSpongebob from "../../assets/FutureSpongebob.jpeg";
 
@@ -10,6 +10,7 @@ import { Pie } from "vue-chartjs";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const showWeeks = ref(3);
+const windowSize = ref(0);
 const daysOfTheWeek = ref([
 	{
 		name: "Sunday",
@@ -221,6 +222,17 @@ onMounted(() => {
 		addNewMeals(result);
 		allMeals.value = result;
 	});
+
+	windowSize.value = window.innerWidth;
+	window.addEventListener("resize", () => {
+		windowSize.value = window.innerWidth;
+	});
+});
+
+onUnmounted(() => {
+	window.removeEventListener("resize", () => {
+		windowSize.value = window.innerWidth;
+	});
 });
 
 //Adds all the meals passed in to their respective day object
@@ -316,38 +328,75 @@ function getPieData(itemCounts) {
 
 <template>
 	<div class="food-tracker">
-		<div class="week-calendar">
-			<div class="day-card" v-for="(day, index) in daysOfTheWeek">
-				<div class="name">
-					<div class="dayName">{{ day.name }}</div>
+		<div class="week-calendar" v-if="windowSize > 675">
+			<div class="day-titles">
+				<div class="day-card" v-for="(day, index) in daysOfTheWeek">
+					<div class="name">
+						<div class="day-name">{{ day.name }}</div>
+					</div>
 				</div>
-				<div class="previousWeeks" v-if="showWeeks > 1">
-					<div class="week" v-for="prevWeek in previousWeeks">
-						<div class="content">
-							<div class="dayNum">{{ getDayNum(prevWeek[index].date) }}</div>
-							<div>
-								<div class="meal" v-for="meal in prevWeek[index].meals">
-									<span v-if="!simplifiedNames">{{ meal.name }}</span>
-									<span v-if="simplifiedNames">{{ meal.coreName }}</span>
-								</div>
-							</div>
+			</div>
+
+			<div class="week" v-for="prevWeek in previousWeeks">
+				<div class="content" v-for="prevDay in prevWeek">
+					<div class="day-num">{{ getDayNum(prevDay.date) }}</div>
+					<div class="meals">
+						<div class="meal" v-for="meal in prevDay.meals">
+							<span v-if="!simplifiedNames && windowSize > 900">{{
+								meal.name
+							}}</span>
+							<span v-if="simplifiedNames || windowSize <= 900">{{
+								meal.coreName
+							}}</span>
 						</div>
 					</div>
 				</div>
-				<div class="content" :class="{ today: day.isToday }">
-					<div class="dayNum">{{ getDayNum(day.date) }}</div>
-					<div v-if="!day.isFuture">
+			</div>
+
+			<div class="week current-week">
+				<div
+					class="content"
+					v-for="day in daysOfTheWeek"
+					:class="{ today: day.isToday }"
+				>
+					<div class="day-num">{{ getDayNum(day.date) }}</div>
+					<div class="meals">
 						<div class="meal" v-for="meal in day.meals">
-							<span v-if="!simplifiedNames">{{ meal.name }}</span>
-							<span v-if="simplifiedNames">{{ meal.coreName }}</span>
+							<span v-if="!simplifiedNames && windowSize > 900">{{
+								meal.name
+							}}</span>
+							<span v-if="simplifiedNames || windowSize <= 900">{{
+								meal.coreName
+							}}</span>
 						</div>
 					</div>
-					<div v-if="!day.isToday && day.isFuture" class="future">
+					<div v-if="!day.isToday && day.isFuture" class="future-img">
 						<img :src="FutureSpongebob" />
 					</div>
 				</div>
 			</div>
 		</div>
+		<div class="week-calendar-mobile" v-if="windowSize <= 675">
+			<div class="day-mobile" v-for="(day, index) in daysOfTheWeek">
+				<div class="day-name">{{ day.name }}</div>
+				<div
+					class="content"
+					:class="{ today: day.isToday, future: day.isFuture }"
+				>
+					<div class="day-num">{{ getDayNum(day.date) }}</div>
+					<div class="meals">
+						<div class="meal" v-for="meal in day.meals">
+							<span v-if="!simplifiedNames">{{ meal.name }}</span>
+							<span v-if="simplifiedNames">{{ meal.coreName }}</span>
+						</div>
+					</div>
+					<div v-if="!day.isToday && day.isFuture" class="future-img">
+						<img :src="FutureSpongebob" />
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<h6 class="graph-heading">Statistics:</h6>
 		<div class="graph">
 			<div class="pie-container">
@@ -373,36 +422,65 @@ function getPieData(itemCounts) {
 .food-tracker {
 	margin: 0 0 35px 0;
 	.week-calendar {
-		display: flex;
-		justify-content: space-around;
 		width: 95%;
 		margin: 15px auto;
 
-		.day-card {
-			border: 1px solid black;
+		.day-titles {
+			display: flex;
+
+			.day-card {
+				border: 1px solid black;
+				border-bottom: none;
+				width: calc(100% / 7);
+				text-align: center;
+
+				.today {
+					background-color: #bee3f1 !important;
+				}
+
+				.name {
+					padding: 12px 0;
+					border-radius: 0;
+					background-color: rgb(238, 104, 104);
+					font-weight: 700;
+				}
+			}
+
+			:not(:last-child) {
+				border-right: none;
+			}
+
+			.day-card:first-child {
+				border-top-left-radius: 6px;
+
+				.name {
+					border-top-left-radius: 6px;
+				}
+			}
+
+			.day-card:last-child {
+				border-top-right-radius: 6px;
+
+				.name {
+					border-top-right-radius: 6px;
+				}
+			}
+		}
+
+		.week {
 			width: 100%;
-			text-align: center;
-
-			.today {
-				background-color: #bee3f1 !important;
-			}
-
-			.name {
-				padding: 12px 0;
-				border-radius: 0;
-				background-color: rgb(238, 104, 104);
-				font-weight: 700;
-			}
-
+			display: flex;
 			.content {
 				border-top: 1px solid black;
+				border-left: 1px solid black;
 				border-radius: 0;
 				position: relative;
 				padding: 25px 10px 10px 10px;
-				height: 140px;
+				width: calc(100% / 7);
+				min-height: 140px;
 				background-color: rgb(250, 250, 250);
 
-				.dayNum {
+				.day-num {
 					position: absolute;
 					top: 0;
 					left: 5px;
@@ -412,40 +490,101 @@ function getPieData(itemCounts) {
 					.future {
 						display: none;
 					}
+
+					.meals {
+						font-size: 14px;
+					}
 				}
 
 				.meal + .meal {
 					margin-top: 10px;
 				}
 			}
+
+			.content:last-child {
+				border-right: 1px solid black;
+			}
 		}
 
-		:first-child {
-			border-top-left-radius: 6px;
+		.current-week {
+			border-bottom: 1px solid black;
 			border-bottom-left-radius: 6px;
-
-			.name {
-				border-top-left-radius: 6px;
-			}
-
-			:last-child {
-				border-bottom-left-radius: 6px;
-			}
-		}
-
-		:not(:first-child) {
-			border-left: none;
-		}
-
-		:last-child {
-			border-top-right-radius: 6px;
 			border-bottom-right-radius: 6px;
 
-			.name {
-				border-top-right-radius: 6px;
+			.content:first-child {
+				border-bottom-left-radius: 6px;
 			}
 
-			:last-child {
+			.content:last-child {
+				border-bottom-right-radius: 6px;
+			}
+
+			.today {
+				background-color: rgb(217, 238, 246);
+			}
+		}
+	}
+
+	.week-calendar-mobile {
+		margin: 15px auto;
+		width: 90%;
+		.day-mobile {
+			.day-name {
+				text-align: center;
+				padding: 12px 0;
+				background-color: rgb(238, 104, 104);
+				font-weight: 700;
+				border: 1px solid black;
+			}
+
+			.content {
+				border-radius: 0;
+				border-left: 1px solid black;
+				border-right: 1px solid black;
+				position: relative;
+				padding: 25px 10px 10px 10px;
+				min-height: 140px;
+				background-color: rgb(250, 250, 250);
+
+				.day-num {
+					position: absolute;
+					top: 0;
+					left: 5px;
+				}
+
+				.meals {
+					.meal + .meal {
+						padding-top: 10px;
+					}
+				}
+
+				&.today {
+					background-color: rgb(217, 238, 246);
+				}
+
+				&.future {
+					padding: 0;
+					.future-img {
+						img {
+							max-height: 140px;
+							margin: auto;
+						}
+					}
+				}
+			}
+		}
+
+		.day-mobile:first-child {
+			.day-name {
+				border-top-left-radius: 6px;
+				border-top-right-radius: 6px;
+			}
+		}
+
+		.day-mobile:last-child {
+			.content {
+				border-bottom: 1px solid black;
+				border-bottom-left-radius: 6px;
 				border-bottom-right-radius: 6px;
 			}
 		}
@@ -466,6 +605,16 @@ function getPieData(itemCounts) {
 
 			p {
 				text-align: center;
+			}
+		}
+
+		@media only screen and (max-width: 850px) {
+			display: unset;
+
+			.pie-container {
+				width: 95%;
+				margin: auto;
+				padding-bottom: 15px;
 			}
 		}
 	}
