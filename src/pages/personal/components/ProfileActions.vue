@@ -21,7 +21,7 @@ const actions = [
 		iconForeground: "text-teal-700",
 		iconBackground: "bg-teal-50",
 		imgClasses: "LinkedInIcon",
-		desc: "Where you can find any professional-based information on me, such as my educational history or employment.",
+		desc: "Where you can find any professional-based information on me, such as my educational history or employment. I also list all the project I've worked on, with details about specific roles performed.",
 	},
 	{
 		title: "GitHub",
@@ -41,7 +41,7 @@ const actions = [
 		iconForeground: "text-sky-700",
 		iconBackground: "bg-yellow-50",
 		imgClasses: "",
-		desc: "On a more personal note, follow me on instagram to see what I am up to non-professional. Not super active, mostly just post food on my story!",
+		desc: "On a more personal note, follow me on instagram to see what I am up to non-professionally. Not super active, mostly just post food on my story!",
 	},
 	{
 		title: "Discord",
@@ -68,14 +68,14 @@ const actions = [
 
 <template>
 	<div
-		class="profileActions divide-y divide-gray-200 overflow-hidden rounded-lg shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0 px-4 sm:px-6 lg:px-8 mx-auto flex max-w-7xl"
+		class="profileActions divide-y divide-gray-200 overflow-hidden rounded-lg shadow sm:grid sm:grid-cols-3 sm:gap-px sm:divide-y-0 px-4 sm:px-6 lg:px-8 mx-auto flex max-w-7xl"
 	>
 		<div
 			v-for="(action, actionIdx) in actions"
 			:key="action.title"
 			:class="[
 				actionIdx === 0 ? 'rounded-tl-lg rounded-tr-lg sm:rounded-tr-none' : '',
-				actionIdx === 1 ? 'sm:rounded-tr-lg' : '',
+				actionIdx === 2 ? 'sm:rounded-tr-lg sm:rounded-br-lg' : '',
 				actionIdx === actions.length - 2 ? 'sm:rounded-bl-lg' : '',
 				actionIdx === actions.length - 1
 					? 'rounded-bl-lg rounded-br-lg sm:rounded-bl-none'
@@ -103,7 +103,7 @@ const actions = [
 					class="text-base font-semibold leading-6 text-gray-900"
 					v-if="action.href"
 				>
-					<a :href="action.href" class="focus:outline-none">
+					<a :href="action.href" class="focus:outline-none" target="_blank">
 						<!-- Extend touch target to entire panel -->
 						<span class="absolute inset-0" aria-hidden="true" />
 						{{ action.title }}
