@@ -13,6 +13,7 @@ export async function listRestaurants() {
 							name
 							coreName
 							side
+							isLeftovers
 							restaurantID
 							_version
 							}
@@ -38,6 +39,7 @@ export async function listMeals() {
 						id
 						name
 						coreName
+						isLeftovers
 						side
 						restaurantID
 						_version

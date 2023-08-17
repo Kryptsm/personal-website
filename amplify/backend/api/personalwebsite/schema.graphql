@@ -11,5 +11,6 @@ type Meal @model @auth(rules: [{allow: public}]) {
   restaurantID: ID! @index(name: "byRestaurant")
   coreName: String
   side: String
+  isLeftovers: Boolean
 }
  
