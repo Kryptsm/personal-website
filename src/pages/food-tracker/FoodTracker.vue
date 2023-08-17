@@ -91,6 +91,7 @@ const pieOptions = ref({
 });
 
 onMounted(() => {
+	//Creates objects that represent each previous week that is indicated we want shown.
 	for (let x = 0; x < showWeeks.value - 1; x++) {
 		previousWeeks.value = [
 			...previousWeeks.value,
@@ -155,16 +156,17 @@ onMounted(() => {
 		];
 	}
 
-	console.log("Previous Weeks: ", previousWeeks.value);
-
+	//Gets the current date in YYYY-MM-DD form, as well as the current day of the week
 	let date = new Date();
 	let isoDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
 		.toISOString()
 		.split("T")[0];
 	let currentDay = date.getDay();
 
+	//Sets the current day object to isToday
 	daysOfTheWeek.value.filter((e) => e.currentWeek)[currentDay].isToday = true;
 
+	//For each day of the week, we set up its date value in relation to today, and whether or not its in the future or not.
 	daysOfTheWeek.value.forEach((e, index) => {
 		if (index > currentDay) {
 			let newDate = new Date(date);
@@ -192,6 +194,7 @@ onMounted(() => {
 		}
 	});
 
+	//For all the previous weeks, sets their date in relation to today
 	previousWeeks.value.forEach((week, weekIndex) => {
 		week.forEach((day, dayIndex) => {
 			let distanceFromCurrentDay =
@@ -209,17 +212,18 @@ onMounted(() => {
 		});
 	});
 
+	//Gets the list of all restaurants visited and stores them
 	func.listRestaurants().then((result) => {
 		allRestaurants.value = result;
-		getPieData(totalRestaurants(result));
 	});
+	//Gets the list of all meals eaten and stores them, and adds them to the day that they were eaten for display
 	func.listMeals().then((result) => {
 		addNewMeals(result);
 		allMeals.value = result;
-		getPieData(totalMeals(result));
 	});
 });
 
+//Adds all the meals passed in to their respective day object
 function addNewMeals(meals) {
 	meals.forEach((meal) => {
 		let day = daysOfTheWeek.value.find((day) => day.date == meal.date);
@@ -230,10 +234,13 @@ function addNewMeals(meals) {
 	});
 }
 
+//Parses the ISO date (YYYY-MM-DD) passed in to just return the day (DD)
 function getDayNum(isoDate) {
 	return isoDate ? isoDate.slice(8, 10) : undefined;
 }
 
+//Totals each meal that I've eaten based on their core name (Counts the amount of times I've had Pizza)
+//Format: [{ name: "Pizza", count: 2 }, { name: "Chicken Wings", count: 6 }]
 function totalMeals(items) {
 	let itemCounts = [];
 	items.forEach((item) => {
@@ -252,6 +259,8 @@ function totalMeals(items) {
 	return itemCounts;
 }
 
+//Totals the sides I've eaten throughout the meals passed in.
+//Format: [{ name: "Fries", count: 2 }, { name: "None", count: 6 }]
 function totalSides(items) {
 	let itemCounts = [];
 	items.forEach((item) => {
@@ -278,6 +287,8 @@ function totalSides(items) {
 	return itemCounts;
 }
 
+//Totals the amount of times I've been to a specific restaurant, indicated by how many meals are stored within that restaurant
+//Format: [{ name: "Goff's", count: 2 }, { name: "Burger House", count: 6 }]
 function totalRestaurants(items) {
 	let itemCounts = [];
 	items.forEach((item) => {
@@ -286,6 +297,9 @@ function totalRestaurants(items) {
 	return itemCounts;
 }
 
+//Gets the pie data format from the "Totals" data format.
+//Totals format: [{ name: "Goff's", count: 2 }, { name: "Burger House", count: 6 }]
+//Pie format: { labels: ["Goff's", "Burger House"], datasets: [{ backgroundColor: ["#FFF", "#PPP"], data: [2, 6]}] }
 function getPieData(itemCounts) {
 	let newData = { labels: [], datasets: [{ backgroundColor: [], data: [] }] };
 	itemCounts.forEach((item) => {
