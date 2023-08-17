@@ -21,4 +21,7 @@ export default defineConfig({
 		},
 	},
 	plugins: [vue(), svgLoader()],
+	ssr: {
+		noExternal: ["chat.js/**"],
+	},
 });
