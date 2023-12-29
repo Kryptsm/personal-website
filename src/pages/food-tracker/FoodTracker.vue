@@ -342,7 +342,7 @@ function totalMeals(items) {
 			}
 		}
 	});
-	this.mealsPieData = itemCounts;
+	mealsPieData.value = itemCounts;
 	return itemCounts;
 }
 
@@ -379,7 +379,7 @@ function totalSides(items) {
 			}
 		}
 	});
-	this.sidesPieData = itemCounts;
+	sidesPieData.value = itemCounts;
 	return itemCounts;
 }
 
@@ -393,7 +393,7 @@ function totalRestaurants(items) {
 			count: item.Meals.items.filter((e) => e.isLeftovers !== true).length,
 		});
 	});
-	this.restaurantPieData = itemCounts;
+	restaurantPieData.value = itemCounts;
 	return itemCounts;
 }
 
@@ -421,8 +421,8 @@ function getPieData(itemCounts) {
 }
 
 function getRestaurant(id) {
-	if (!this.allRestaurants || !this.allRestaurants.length) return {};
-	return this.allRestaurants.find((restaurant) => restaurant.id === id);
+	if (!allRestaurants.value || !allRestaurants.value.length) return {};
+	return allRestaurants.value.find((restaurant) => restaurant.id === id);
 }
 
 const onClick = (event, data, ref) => {
