@@ -500,9 +500,9 @@ function flipNewMealModalStatus() {
 	<div class="food-tracker">
 		<div class="top-bar">
 			<div class="placeholder">
-				<button class="new-meal-btn" @click="newMealModalStatus = true">
+				<!-- <button class="new-meal-btn" @click="newMealModalStatus = true">
 					New Meal
-				</button>
+				</button> -->
 			</div>
 			<p class="month" v-if="months && date">{{ months[date.getMonth()] }}</p>
 			<span class="input-wrapper">
