@@ -12,10 +12,10 @@
       "AmplifyAppId": "d3gm1y2nvc6nu"
     },
     "categories": {
-      "auth": {
+      "api": {
         "personalwebsite": {}
       },
-      "api": {
+      "auth": {
         "personalwebsite": {}
       }
     }

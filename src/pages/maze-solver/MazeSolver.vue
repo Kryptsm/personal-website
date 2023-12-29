@@ -84,7 +84,6 @@ function resizeMaze() {
 	if (window.innerWidth < 900) width.value = 35;
 	if (window.innerWidth < 750) width.value = 25;
 	if (window.innerWidth < 550) width.value = 15;
-	console.log(width.value);
 	if (originalWidth != width.value) createNodes(true);
 }
 

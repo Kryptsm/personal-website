@@ -51,3 +51,29 @@ export async function listMeals() {
 	console.log("listMeals: ", meals);
 	return meals;
 }
+
+export async function createMeal(
+	name,
+	date,
+	restaurantID,
+	coreName,
+	isLeftovers,
+	side
+) {
+	const result = await API.graphql({
+		query: `
+			mutation MyMutation {
+  				createMeal(
+    				input: {name: ${name}, date: ${date}, restaurantID: ${restaurantID}, coreName: ${coreName}, isLeftovers: ${isLeftovers}, side: ${side}}
+  			) {
+    			coreName
+				date
+				isLeftovers
+				name
+				restaurantID
+				side
+			}
+			}
+		`,
+	});
+}

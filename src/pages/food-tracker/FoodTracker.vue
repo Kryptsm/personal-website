@@ -1,74 +1,45 @@
 <script setup>
 import { useGetRandomInt } from "../../functions/math";
+import MealModal from "./MealModal.vue";
+import NewMealModal from "./NewMealModal.vue";
 import { ref, onMounted, onUnmounted } from "vue";
 import * as func from "./functions";
 import FutureSpongebob from "../../assets/FutureSpongebob.jpeg";
 
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Pie } from "vue-chartjs";
+import {
+	Chart as ChartJS,
+	Title,
+	Tooltip,
+	Legend,
+	BarElement,
+	CategoryScale,
+	LinearScale,
+	ArcElement,
+} from "chart.js";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+import {
+	Pie,
+	getDatasetAtEvent,
+	getElementAtEvent,
+	getElementsAtEvent,
+} from "vue-chartjs";
 
-const showWeeks = ref(3);
+ChartJS.register(
+	ArcElement,
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend
+);
+
+const date = ref(new Date("2023/08/19"));
+const newMealModalStatus = ref(false);
+
+const showWeeks = ref(4);
 const windowSize = ref(0);
-const daysOfTheWeek = ref([
-	{
-		name: "Sunday",
-		date: undefined,
-		isToday: false,
-		isFuture: false,
-		currentWeek: true,
-		meals: [],
-	},
-	{
-		name: "Monday",
-		date: undefined,
-		isToday: false,
-		isFuture: false,
-		currentWeek: true,
-		meals: [],
-	},
-	{
-		name: "Tuesday",
-		date: undefined,
-		isToday: false,
-		isFuture: false,
-		currentWeek: true,
-		meals: [],
-	},
-	{
-		name: "Wednesday",
-		date: undefined,
-		isToday: false,
-		isFuture: false,
-		currentWeek: true,
-		meals: [],
-	},
-	{
-		name: "Thursday",
-		date: undefined,
-		isToday: false,
-		isFuture: false,
-		currentWeek: true,
-		meals: [],
-	},
-	{
-		name: "Friday",
-		date: undefined,
-		isToday: false,
-		isFuture: false,
-		currentWeek: true,
-		meals: [],
-	},
-	{
-		name: "Saturday",
-		date: undefined,
-		isToday: false,
-		isFuture: false,
-		currentWeek: true,
-		meals: [],
-	},
-]);
+const daysOfTheWeek = ref([]);
 const previousWeeks = ref([]);
 const graphColors = ref([
 	"#52D726",
@@ -91,8 +62,104 @@ const pieOptions = ref({
 	maintainAspectRatio: true,
 });
 
+const restaurantPieData = ref(null);
+const mealsPieData = ref(null);
+const sidesPieData = ref(null);
+
+const currentTimeout = ref(null);
+const months = ref([
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
+]);
+
 onMounted(() => {
+	initializeValues();
+	fetchValues();
+
+	windowSize.value = window.innerWidth;
+	window.addEventListener("resize", () => {
+		windowSize.value = window.innerWidth;
+	});
+});
+
+onUnmounted(() => {
+	window.removeEventListener("resize", () => {
+		windowSize.value = window.innerWidth;
+	});
+});
+
+function initializeValues() {
+	daysOfTheWeek.value = [
+		{
+			name: "Sunday",
+			date: undefined,
+			isToday: false,
+			isFuture: false,
+			currentWeek: true,
+			meals: [],
+		},
+		{
+			name: "Monday",
+			date: undefined,
+			isToday: false,
+			isFuture: false,
+			currentWeek: true,
+			meals: [],
+		},
+		{
+			name: "Tuesday",
+			date: undefined,
+			isToday: false,
+			isFuture: false,
+			currentWeek: true,
+			meals: [],
+		},
+		{
+			name: "Wednesday",
+			date: undefined,
+			isToday: false,
+			isFuture: false,
+			currentWeek: true,
+			meals: [],
+		},
+		{
+			name: "Thursday",
+			date: undefined,
+			isToday: false,
+			isFuture: false,
+			currentWeek: true,
+			meals: [],
+		},
+		{
+			name: "Friday",
+			date: undefined,
+			isToday: false,
+			isFuture: false,
+			currentWeek: true,
+			meals: [],
+		},
+		{
+			name: "Saturday",
+			date: undefined,
+			isToday: false,
+			isFuture: false,
+			currentWeek: true,
+			meals: [],
+		},
+	];
+
 	//Creates objects that represent each previous week that is indicated we want shown.
+	previousWeeks.value = [];
 	for (let x = 0; x < showWeeks.value - 1; x++) {
 		previousWeeks.value = [
 			...previousWeeks.value,
@@ -158,11 +225,12 @@ onMounted(() => {
 	}
 
 	//Gets the current date in YYYY-MM-DD form, as well as the current day of the week
-	let date = new Date();
-	let isoDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+	let isoDate = new Date(
+		date.value.getTime() - date.value.getTimezoneOffset() * 60000
+	)
 		.toISOString()
 		.split("T")[0];
-	let currentDay = date.getDay();
+	let currentDay = date.value.getDay();
 
 	//Sets the current day object to isToday
 	daysOfTheWeek.value.filter((e) => e.currentWeek)[currentDay].isToday = true;
@@ -170,7 +238,7 @@ onMounted(() => {
 	//For each day of the week, we set up its date value in relation to today, and whether or not its in the future or not.
 	daysOfTheWeek.value.forEach((e, index) => {
 		if (index > currentDay) {
-			let newDate = new Date(date);
+			let newDate = new Date(date.value);
 			newDate.setDate(newDate.getDate() + (index - currentDay));
 			let isoNewDate = new Date(
 				newDate.getTime() - newDate.getTimezoneOffset() * 60000
@@ -183,7 +251,7 @@ onMounted(() => {
 		} else if (index == currentDay) {
 			e.date = isoDate;
 		} else if (index < currentDay) {
-			let newDate = new Date(date);
+			let newDate = new Date(date.value);
 			newDate.setDate(newDate.getDate() - (currentDay - index));
 			let isoNewDate = new Date(
 				newDate.getTime() - newDate.getTimezoneOffset() * 60000
@@ -201,7 +269,7 @@ onMounted(() => {
 			let distanceFromCurrentDay =
 				7 - dayIndex + 7 * (showWeeks.value - 2 - weekIndex) + currentDay;
 
-			let newDate = new Date(date);
+			let newDate = new Date(date.value);
 			newDate.setDate(newDate.getDate() - distanceFromCurrentDay);
 			let isoNewDate = new Date(
 				newDate.getTime() - newDate.getTimezoneOffset() * 60000
@@ -213,27 +281,33 @@ onMounted(() => {
 		});
 	});
 
+	addNewMeals(allMeals.value);
+}
+
+function fetchValues() {
 	//Gets the list of all restaurants visited and stores them
 	func.listRestaurants().then((result) => {
-		allRestaurants.value = result;
+		let addedResult = [];
+		result.forEach((restaurant) => {
+			addedResult = [...addedResult, { ...restaurant, highlighted: false }];
+		});
+		allRestaurants.value = addedResult;
 	});
+
 	//Gets the list of all meals eaten and stores them, and adds them to the day that they were eaten for display
 	func.listMeals().then((result) => {
-		addNewMeals(result);
-		allMeals.value = result;
-	});
+		let addedResult = [];
+		result.forEach((meal) => {
+			addedResult = [
+				...addedResult,
+				{ ...meal, modalStatus: false, highlighted: false },
+			];
+		});
 
-	windowSize.value = window.innerWidth;
-	window.addEventListener("resize", () => {
-		windowSize.value = window.innerWidth;
+		addNewMeals(addedResult);
+		allMeals.value = addedResult;
 	});
-});
-
-onUnmounted(() => {
-	window.removeEventListener("resize", () => {
-		windowSize.value = window.innerWidth;
-	});
-});
+}
 
 //Adds all the meals passed in to their respective day object
 function addNewMeals(meals) {
@@ -268,7 +342,16 @@ function totalMeals(items) {
 			}
 		}
 	});
+	this.mealsPieData = itemCounts;
 	return itemCounts;
+}
+
+function totalSpecificMeal(name) {
+	let count = 0;
+	allMeals.value.forEach((meal) => {
+		if (meal.name === name) count++;
+	});
+	return count;
 }
 
 //Totals the sides I've eaten throughout the meals passed in.
@@ -296,6 +379,7 @@ function totalSides(items) {
 			}
 		}
 	});
+	this.sidesPieData = itemCounts;
 	return itemCounts;
 }
 
@@ -304,8 +388,12 @@ function totalSides(items) {
 function totalRestaurants(items) {
 	let itemCounts = [];
 	items.forEach((item) => {
-		itemCounts.push({ name: item.name, count: item.Meals.items.length });
+		itemCounts.push({
+			name: item.name,
+			count: item.Meals.items.filter((e) => e.isLeftovers !== true).length,
+		});
 	});
+	this.restaurantPieData = itemCounts;
 	return itemCounts;
 }
 
@@ -314,6 +402,12 @@ function totalRestaurants(items) {
 //Pie format: { labels: ["Goff's", "Burger House"], datasets: [{ backgroundColor: ["#FFF", "#PPP"], data: [2, 6]}] }
 function getPieData(itemCounts) {
 	let newData = { labels: [], datasets: [{ backgroundColor: [], data: [] }] };
+	itemCounts = itemCounts.sort((a, b) => {
+		if (a.count < b.count) return 1;
+		if (a.count > b.count) return -1;
+		return 0;
+	});
+	itemCounts = itemCounts.slice(0, 9);
 	itemCounts.forEach((item) => {
 		newData.labels = [...newData.labels, item.name];
 		newData.datasets[0].backgroundColor = [
@@ -322,12 +416,108 @@ function getPieData(itemCounts) {
 		];
 		newData.datasets[0].data = [...newData.datasets[0].data, item.count];
 	});
+
 	return newData;
+}
+
+function getRestaurant(id) {
+	if (!this.allRestaurants || !this.allRestaurants.length) return {};
+	return this.allRestaurants.find((restaurant) => restaurant.id === id);
+}
+
+const onClick = (event, data, ref) => {
+	const {
+		value: { chart },
+	} = ref == 1 ? chartRef1 : ref == 2 ? chartRef2 : chartRef3;
+
+	if (!chart) {
+		return;
+	}
+
+	elementAtEvent(
+		getElementAtEvent(chart, event),
+		JSON.parse(JSON.stringify(data))
+	);
+};
+
+const elementAtEvent = (element, data) => {
+	if (!element.length) return;
+
+	const { index } = element[0];
+
+	highlightItem(data[index].name);
+};
+
+function highlightItem(query) {
+	if (currentTimeout.value) clearTimeout(currentTimeout.value);
+
+	allRestaurants.value.forEach((restaurant) => {
+		if (restaurant.name == query) restaurant.highlighted = true;
+		else restaurant.highlighted = false;
+	});
+
+	allMeals.value.forEach((meal) => {
+		if (
+			meal.name == query ||
+			meal.side == query ||
+			meal.coreName == query ||
+			(query == "None" && !meal.side)
+		)
+			meal.highlighted = true;
+		else meal.highlighted = false;
+	});
+
+	currentTimeout.value = setTimeout(() => {
+		resetHighlights();
+	}, 3500);
+}
+
+function resetHighlights() {
+	allRestaurants.value.forEach((restaurant) => {
+		restaurant.highlighted = false;
+	});
+
+	allMeals.value.forEach((meal) => {
+		meal.highlighted = false;
+	});
+}
+
+const chartRef1 = ref(null);
+const chartRef2 = ref(null);
+const chartRef3 = ref(null);
+
+function handleDateChange(newDate) {
+	date.value = new Date(newDate.replace(/-/g, "/"));
+	initializeValues();
+}
+
+function flipNewMealModalStatus() {
+	newMealModalStatus.value = !newMealModalStatus.value;
 }
 </script>
 
 <template>
 	<div class="food-tracker">
+		<div class="top-bar">
+			<div class="placeholder">
+				<!-- <button class="new-meal-btn" @click="newMealModalStatus = true">
+					New Meal
+				</button> -->
+			</div>
+			<p class="month" v-if="months && date">{{ months[date.getMonth()] }}</p>
+			<span class="input-wrapper">
+				<input
+					type="date"
+					id="start"
+					name="trip-start"
+					:value="date.toISOString().split('T')[0]"
+					min="2022-01-01"
+					max="2024-12-31"
+					@input="handleDateChange($event.target.value)"
+				/>
+			</span>
+		</div>
+
 		<div class="week-calendar" v-if="windowSize > 675">
 			<div class="day-titles">
 				<div class="day-card" v-for="(day, index) in daysOfTheWeek">
@@ -341,13 +531,27 @@ function getPieData(itemCounts) {
 				<div class="content" v-for="prevDay in prevWeek">
 					<div class="day-num">{{ getDayNum(prevDay.date) }}</div>
 					<div class="meals">
-						<div class="meal" v-for="meal in prevDay.meals">
+						<div
+							class="meal"
+							v-for="meal in prevDay.meals"
+							v-on:click="meal.modalStatus = true"
+							:class="{
+								highlighted:
+									meal.highlighted ||
+									getRestaurant(meal.restaurantID).highlighted,
+							}"
+						>
 							<span v-if="!simplifiedNames && windowSize > 900">{{
 								meal.name
 							}}</span>
 							<span v-if="simplifiedNames || windowSize <= 900">{{
 								meal.coreName
 							}}</span>
+							<MealModal
+								:meal="meal"
+								:restaurant="getRestaurant(meal.restaurantID)"
+								:count="totalSpecificMeal(meal.name)"
+							></MealModal>
 						</div>
 					</div>
 				</div>
@@ -361,18 +565,30 @@ function getPieData(itemCounts) {
 				>
 					<div class="day-num">{{ getDayNum(day.date) }}</div>
 					<div class="meals">
-						<div class="meal" v-for="meal in day.meals">
+						<div
+							class="meal"
+							v-for="meal in day.meals"
+							v-on:click="meal.modalStatus = true"
+							:class="{
+								highlighted:
+									meal.highlighted ||
+									getRestaurant(meal.restaurantID).highlighted,
+							}"
+						>
 							<span v-if="!simplifiedNames && windowSize > 900">{{
 								meal.name
 							}}</span>
 							<span v-if="simplifiedNames || windowSize <= 900">{{
 								meal.coreName
 							}}</span>
+							<MealModal
+								:meal="meal"
+								:restaurant="getRestaurant(meal.restaurantID)"
+								:count="totalSpecificMeal(meal.name)"
+							></MealModal>
 						</div>
 					</div>
-					<div v-if="!day.isToday && day.isFuture" class="future-img">
-						<img :src="FutureSpongebob" />
-					</div>
+					<div v-if="!day.isToday && day.isFuture" class="future-img"></div>
 				</div>
 			</div>
 		</div>
@@ -390,9 +606,7 @@ function getPieData(itemCounts) {
 							<span v-if="simplifiedNames">{{ meal.coreName }}</span>
 						</div>
 					</div>
-					<div v-if="!day.isToday && day.isFuture" class="future-img">
-						<img :src="FutureSpongebob" />
-					</div>
+					<div v-if="!day.isToday && day.isFuture" class="future-img"></div>
 				</div>
 			</div>
 		</div>
@@ -402,25 +616,70 @@ function getPieData(itemCounts) {
 			<div class="pie-container">
 				<p>Restaurants Visited</p>
 				<Pie
+					ref="chartRef1"
 					:data="getPieData(totalRestaurants(allRestaurants))"
 					:options="pieOptions"
+					@click="onClick($event, restaurantPieData, 1)"
 				/>
 			</div>
 			<div class="pie-container">
 				<p>Meals Eaten</p>
-				<Pie :data="getPieData(totalMeals(allMeals))" :options="pieOptions" />
+				<Pie
+					ref="chartRef2"
+					:data="getPieData(totalMeals(allMeals))"
+					:options="pieOptions"
+					@click="onClick($event, mealsPieData, 2)"
+				/>
 			</div>
 			<div class="pie-container">
 				<p>Sides Eaten</p>
-				<Pie :data="getPieData(totalSides(allMeals))" :options="pieOptions" />
+				<Pie
+					ref="chartRef3"
+					:data="getPieData(totalSides(allMeals))"
+					:options="pieOptions"
+					@click="onClick($event, sidesPieData, 3)"
+				/>
 			</div>
 		</div>
+		<NewMealModal
+			:open="newMealModalStatus"
+			@close-modal="flipNewMealModalStatus"
+		></NewMealModal>
 	</div>
 </template>
 
 <style scoped lang="scss">
 .food-tracker {
 	margin: 0 0 35px 0;
+
+	.top-bar {
+		display: flex;
+		justify-content: space-between;
+		gap: 10px;
+		width: 95%;
+		margin: auto;
+		margin-top: 15px;
+		* {
+			width: 33%;
+		}
+
+		.month {
+			text-align: center;
+			font-size: 30px;
+		}
+
+		.input-wrapper {
+			display: flex;
+			input {
+				display: flex;
+				margin-left: auto;
+				align-self: center;
+				width: 50%;
+				border: 1px solid black;
+			}
+		}
+	}
+
 	.week-calendar {
 		width: 95%;
 		margin: 15px auto;
@@ -486,6 +745,30 @@ function getPieData(itemCounts) {
 					left: 5px;
 				}
 
+				.meals {
+					display: flex;
+					flex-direction: column;
+					.meal {
+						padding: 0 5px;
+						border: 1px solid green;
+						border-radius: 8px;
+						width: fit-content;
+
+						&.highlighted {
+							background-color: rgb(205, 248, 205);
+						}
+
+						&:hover {
+							background-color: rgb(205, 248, 205);
+							cursor: pointer;
+						}
+					}
+
+					.meal + .meal {
+						margin-top: 15px;
+					}
+				}
+
 				@media only screen and (max-width: 900px) {
 					.future {
 						display: none;
@@ -494,10 +777,6 @@ function getPieData(itemCounts) {
 					.meals {
 						font-size: 14px;
 					}
-				}
-
-				.meal + .meal {
-					margin-top: 10px;
 				}
 			}
 

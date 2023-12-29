@@ -79,6 +79,9 @@ export const getMeal = /* GraphQL */ `
       name
       date
       restaurantID
+      coreName
+      side
+      isLeftovers
       createdAt
       updatedAt
       _version
@@ -100,6 +103,9 @@ export const listMeals = /* GraphQL */ `
         name
         date
         restaurantID
+        coreName
+        side
+        isLeftovers
         createdAt
         updatedAt
         _version
@@ -131,6 +137,9 @@ export const syncMeals = /* GraphQL */ `
         name
         date
         restaurantID
+        coreName
+        side
+        isLeftovers
         createdAt
         updatedAt
         _version
@@ -164,6 +173,9 @@ export const mealsByRestaurantID = /* GraphQL */ `
         name
         date
         restaurantID
+        coreName
+        side
+        isLeftovers
         createdAt
         updatedAt
         _version
