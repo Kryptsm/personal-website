@@ -77,6 +77,9 @@ export const createMeal = /* GraphQL */ `
       name
       date
       restaurantID
+      coreName
+      side
+      isLeftovers
       createdAt
       updatedAt
       _version
@@ -96,6 +99,9 @@ export const updateMeal = /* GraphQL */ `
       name
       date
       restaurantID
+      coreName
+      side
+      isLeftovers
       createdAt
       updatedAt
       _version
@@ -115,6 +121,9 @@ export const deleteMeal = /* GraphQL */ `
       name
       date
       restaurantID
+      coreName
+      side
+      isLeftovers
       createdAt
       updatedAt
       _version
