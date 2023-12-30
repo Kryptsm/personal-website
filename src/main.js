@@ -67,21 +67,19 @@ const client = new SecretsManagerClient({
 
 let response;
 
-try {
-	response = await client.send(
+client
+	.send(
 		new GetSecretValueCommand({
 			SecretId: secret_name,
 			VersionStage: "AWSCURRENT", // VersionStage defaults to AWSCURRENT if unspecified
 		})
-	);
-} catch (error) {
-	// For a list of exceptions thrown, see
-	// https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-	throw error;
-}
+	)
+	.then((response) => {
+		console.log(response);
+	});
 
-const secret = response.SecretString;
-console.log(secret);
+// const secret = response.SecretString;
+// console.log(secret);
 
 // Your code goes here
 
