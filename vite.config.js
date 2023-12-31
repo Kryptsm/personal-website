@@ -24,4 +24,7 @@ export default defineConfig({
 	ssr: {
 		noExternal: ["chat.js/**"],
 	},
+	optimizeDeps: {
+		exclude: ["js-big-decimal"],
+	},
 });
