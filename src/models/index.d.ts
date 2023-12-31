@@ -6,6 +6,38 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection } from "@aws-amplify/
 
 
 
+type EagerUserInfo = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserInfo, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly lastQuery?: string | null;
+  readonly Meals?: (Meal | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyUserInfo = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserInfo, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly lastQuery?: string | null;
+  readonly Meals: AsyncCollection<Meal>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type UserInfo = LazyLoading extends LazyLoadingDisabled ? EagerUserInfo : LazyUserInfo
+
+export declare const UserInfo: (new (init: ModelInit<UserInfo>) => UserInfo) & {
+  copyOf(source: UserInfo, mutator: (draft: MutableModel<UserInfo>) => MutableModel<UserInfo> | void): UserInfo;
+}
+
 type EagerRestaurant = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Restaurant, 'id'>;
@@ -48,6 +80,7 @@ type EagerMeal = {
   readonly coreName?: string | null;
   readonly side?: string | null;
   readonly isLeftovers?: boolean | null;
+  readonly createdBy: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -64,6 +97,7 @@ type LazyMeal = {
   readonly coreName?: string | null;
   readonly side?: string | null;
   readonly isLeftovers?: boolean | null;
+  readonly createdBy: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -4,9 +4,10 @@ import { schema } from './schema';
 
 
 
-const { Restaurant, Meal } = initSchema(schema);
+const { UserInfo, Restaurant, Meal } = initSchema(schema);
 
 export {
+  UserInfo,
   Restaurant,
   Meal
 };

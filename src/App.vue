@@ -9,4 +9,8 @@ import Header from "./pages/shared/Header.vue";
 	</div>
 </template>
 
-<style scoped></style>
+<style>
+.authenticator {
+	margin-top: 30px;
+}
+</style>

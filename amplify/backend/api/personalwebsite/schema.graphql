@@ -1,3 +1,10 @@
+type UserInfo @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  lastQuery: AWSDateTime
+  Meals: [Meal] @hasMany(indexName: "byUserInfo", fields: ["id"])
+}
+
 type Restaurant @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
@@ -12,5 +19,6 @@ type Meal @model @auth(rules: [{allow: public}]) {
   coreName: String
   side: String
   isLeftovers: Boolean
+  createdBy: ID! @index(name: "byUserInfo")
 }
  
