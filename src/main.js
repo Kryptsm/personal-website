@@ -43,6 +43,10 @@ const routes = [
 		name: "food-tracker",
 		component: FoodTracker,
 	},
+	{
+		path: "/:pathMatch(.*)*",
+		redirect: "/",
+	},
 ];
 
 const router = createRouter({
