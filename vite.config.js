@@ -4,6 +4,7 @@ import svgLoader from "vite-svg-loader";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+	base: "/",
 	...(process.env.NODE_ENV === "development"
 		? {
 				define: {
