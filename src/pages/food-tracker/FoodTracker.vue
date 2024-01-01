@@ -38,7 +38,7 @@ ChartJS.register(
 	Legend
 );
 
-const date = ref(new Date("2023/12/30"));
+const date = ref(new Date("2024/01/01"));
 const newMealModalStatus = ref(false);
 
 const showWeeks = ref(4);
@@ -291,45 +291,47 @@ function initializeValues() {
 }
 
 function fetchValues() {
-	//Gets the list of all restaurants visited and stores them
-	func.listRestaurants().then((result) => {
-		let addedResult = [];
-		result.forEach((restaurant) => {
-			addedResult = [...addedResult, { ...restaurant, highlighted: false }];
-		});
-		allRestaurants.value = addedResult;
-
-		restaurantRecs.value = [
-			{
-				name: "Pecan Lodge",
-				link: "https://www.pecanlodge.com/",
-			},
-			{
-				name: "The Rustic",
-				link: "https://therustic.com/",
-			},
-			{
-				name: "Uchi",
-				link: "https://uchidallas.com/",
-			},
-			{
-				name: "Pappas Bros",
-			},
-			{
-				name: "Velvet Taco",
-				link: "https://www.velvettaco.com/",
-			},
-		];
-		// func.getRestaurantRecommendations(addedResult).then((result) => {
-		// 	console.log("result: ", result);
-		// });
-	});
-
 	//Gets the user we are currently signed in as from the database, then gets that users meals and stores them.
-	sharedfunc.fetchUser().then((result) => {
-		userInfo.value = result;
+	sharedfunc.fetchUser().then((user) => {
+		userInfo.value = user;
 
-		func.listUserMeals(result.id).then((meals) => {
+		//Gets the list of all restaurants visited and stores them
+		func.listRestaurants().then((restaurants) => {
+			let addedResult = [];
+			restaurants.forEach((restaurant) => {
+				addedResult = [...addedResult, { ...restaurant, highlighted: false }];
+			});
+			allRestaurants.value = addedResult;
+
+			restaurantRecs.value = [
+				{
+					name: "Pecan Lodge",
+					link: "https://www.pecanlodge.com/",
+				},
+				{
+					name: "The Rustic",
+					link: "https://therustic.com/",
+				},
+				{
+					name: "Uchi",
+					link: "https://uchidallas.com/",
+				},
+				{
+					name: "Pappas Bros",
+				},
+				{
+					name: "Velvet Taco",
+					link: "https://www.velvettaco.com/",
+				},
+			];
+
+			sharedfunc.updateUser(user, user.name, new Date().toISOString());
+			// func.getRestaurantRecommendations(addedResult).then((result) => {
+			// 	console.log("result: ", result);
+			// });
+		});
+
+		func.listUserMeals(user.id).then((meals) => {
 			let addedResult = [];
 			meals.forEach((meal) => {
 				addedResult = [
@@ -526,7 +528,15 @@ function handleDateChange(newDate) {
 	initializeValues();
 }
 
-function flipNewMealModalStatus() {
+function newMealModalClose(newMeal, newRestaurant) {
+	if (newRestaurant)
+		allRestaurants.value = [...allRestaurants.value, newRestaurant];
+
+	if (newMeal) {
+		allMeals.value = [...allMeals.value, newMeal];
+		addNewMeals([newMeal]);
+	}
+
 	newMealModalStatus.value = !newMealModalStatus.value;
 }
 </script>
@@ -556,15 +566,19 @@ function flipNewMealModalStatus() {
 					</div>
 				</div>
 				<div class="top-bar">
-					<div class="placeholder">
-						<!-- <button class="new-meal-btn" @click="newMealModalStatus = true">
-					New Meal
-				</button> -->
+					<div class="add-new w-33">
+						<button
+							type="button"
+							class="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto new-meal-btn"
+							@click="newMealModalStatus = true"
+						>
+							Add New Meal
+						</button>
 					</div>
-					<p class="month" v-if="months && date">
+					<p class="month w-33" v-if="months && date">
 						{{ months[date.getMonth()] }}
 					</p>
-					<span class="input-wrapper">
+					<span class="input-wrapper w-33">
 						<input
 							type="date"
 							id="start"
@@ -702,7 +716,9 @@ function flipNewMealModalStatus() {
 				</div>
 				<NewMealModal
 					:open="newMealModalStatus"
-					@close-modal="flipNewMealModalStatus"
+					:restaurants="allRestaurants"
+					:userInfo="userInfo"
+					@close-modal="newMealModalClose"
 				></NewMealModal>
 			</div>
 		</template>
@@ -752,8 +768,13 @@ function flipNewMealModalStatus() {
 		width: 95%;
 		margin: auto;
 		margin-top: 15px;
-		* {
+		w-33 {
 			width: 33%;
+		}
+
+		.add-new {
+			display: flex;
+			align-items: center;
 		}
 
 		.month {
