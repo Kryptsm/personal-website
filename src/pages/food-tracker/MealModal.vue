@@ -35,9 +35,46 @@
 								<div class="content">
 									<DialogTitle
 										as="h3"
-										class="text-base font-semibold leading-6 text-gray-900 title pt-3 pb-3"
-										>{{ meal.name }}
-										<span>{{ meal.date }}</span>
+										class="text-base font-semibold leading-6 text-gray-900 title"
+									>
+										<div class="name">{{ meal.name }}</div>
+										<div class="stars" v-if="meal.rating">
+											<div class="star-1">
+												<FilledStar
+													v-if="meal.rating >= 1"
+													class="filled-star"
+												/>
+												<StarIcon v-else />
+											</div>
+											<div class="star-2">
+												<FilledStar
+													v-if="meal.rating >= 2"
+													class="filled-star"
+												/>
+												<StarIcon v-else />
+											</div>
+											<div class="star-3">
+												<FilledStar
+													v-if="meal.rating >= 3"
+													class="filled-star"
+												/>
+												<StarIcon v-else />
+											</div>
+											<div class="star-4">
+												<FilledStar
+													v-if="meal.rating >= 4"
+													class="filled-star"
+												/>
+												<StarIcon v-else />
+											</div>
+											<div class="star-5">
+												<FilledStar
+													v-if="meal.rating >= 5"
+													class="filled-star"
+												/>
+												<StarIcon v-else />
+											</div>
+										</div>
 									</DialogTitle>
 									<div class="mt-2 body">
 										<p>I've had this meal {{ count }} time(s).</p>
@@ -45,6 +82,7 @@
 										<p><span>Core Meal:</span> {{ meal.coreName }}</p>
 										<p><span>Side:</span> {{ meal.side ?? "None" }}</p>
 										<span v-if="meal.isLeftovers">Leftovers</span>
+										<span>{{ meal.date }}</span>
 									</div>
 								</div>
 							</div>
@@ -74,7 +112,8 @@ import {
 	TransitionChild,
 	TransitionRoot,
 } from "@headlessui/vue";
-import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/vue/24/outline";
+import { StarIcon } from "@heroicons/vue/24/outline";
+import { StarIcon as FilledStar } from "@heroicons/vue/24/solid";
 
 const props = defineProps(["meal", "restaurant", "count"]);
 </script>
@@ -89,13 +128,27 @@ const props = defineProps(["meal", "restaurant", "count"]);
 		width: 100%;
 		.title {
 			border-bottom: 1px solid black;
-			padding: 0 16px;
 			display: flex;
 			justify-content: space-between;
 			gap: 10px;
 
-			span {
+			.name {
+				padding: 12px 16px;
+			}
+
+			.stars {
+				padding-right: 16px;
+				display: flex;
 				white-space: nowrap;
+				align-items: center;
+				svg {
+					width: 25px;
+					height: 25px;
+				}
+
+				.filled-star {
+					color: gold;
+				}
 			}
 		}
 

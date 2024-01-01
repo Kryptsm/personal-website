@@ -24,6 +24,7 @@ export async function listRestaurants() {
 								side
 								restaurantID
 								createdBy
+								rating
 								_version
 							}
 						}
@@ -53,6 +54,7 @@ export async function createRestaurant(name) {
 							name
 							restaurantID
 							side
+							rating
 							_version
 						}
 					}
@@ -80,6 +82,7 @@ export async function listMeals() {
 							side
 							restaurantID
 							createdBy
+							rating
 							_version
 						}
 					}
@@ -102,6 +105,7 @@ export async function listUserMeals(username) {
 							name
 							restaurantID
 							side
+							rating
 							_version
 						}
 					}
@@ -119,13 +123,14 @@ export async function createMeal(
 	coreName,
 	isLeftovers,
 	side,
-	createdBy
+	createdBy,
+	rating
 ) {
 	const result = await client.graphql({
 		query: `
 			mutation CreateMeal {
 				createMeal(
-					input: {name: "${name}", date: "${date}", restaurantID: "${restaurantID}", createdBy: "${createdBy}", isLeftovers: ${isLeftovers}, coreName: "${coreName}", side: "${side}"}
+					input: {name: "${name}", date: "${date}", restaurantID: "${restaurantID}", createdBy: "${createdBy}", isLeftovers: ${isLeftovers}, coreName: "${coreName}", side: "${side}", rating: ${rating}}
 				) {
 					coreName
 					createdBy
@@ -135,6 +140,7 @@ export async function createMeal(
 					name
 					restaurantID
 					side
+					rating
 					_version
 				}
 			}

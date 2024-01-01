@@ -236,6 +236,56 @@
 													</Switch>
 												</div>
 											</div>
+
+											<div class="sm:col-span-3 rating">
+												<label
+													for="stars"
+													class="block text-sm font-medium leading-6 text-gray-900"
+													>Rating</label
+												>
+												<div class="stars">
+													<div class="star-1">
+														<FilledStar
+															v-if="form.rating >= 1"
+															@click="setRating(1)"
+															class="filled-star"
+														/>
+														<StarIcon v-else @click="setRating(1)" />
+													</div>
+													<div class="star-2">
+														<FilledStar
+															v-if="form.rating >= 2"
+															@click="setRating(2)"
+															class="filled-star"
+														/>
+														<StarIcon v-else @click="setRating(2)" />
+													</div>
+													<div class="star-3">
+														<FilledStar
+															v-if="form.rating >= 3"
+															@click="setRating(3)"
+															class="filled-star"
+														/>
+														<StarIcon v-else @click="setRating(3)" />
+													</div>
+													<div class="star-4">
+														<FilledStar
+															v-if="form.rating >= 4"
+															@click="setRating(4)"
+															class="filled-star"
+														/>
+														<StarIcon v-else @click="setRating(4)" />
+													</div>
+													<div class="star-5">
+														<FilledStar
+															v-if="form.rating >= 5"
+															@click="setRating(5)"
+															class="filled-star"
+														/>
+														<StarIcon v-else @click="setRating(5)" />
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -273,8 +323,8 @@ import {
 	TransitionChild,
 	TransitionRoot,
 } from "@headlessui/vue";
-import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/vue/24/outline";
-import { PhotoIcon, UserCircleIcon } from "@heroicons/vue/24/solid";
+import { StarIcon } from "@heroicons/vue/24/outline";
+import { StarIcon as FilledStar } from "@heroicons/vue/24/solid";
 import * as func from "./functions";
 
 import { Switch } from "@headlessui/vue";
@@ -289,6 +339,7 @@ const form = ref({
 	date: null,
 	restaurantID: null,
 	newRestaurantName: null,
+	rating: null,
 });
 
 const props = defineProps(["open", "restaurants", "userInfo"]);
@@ -296,6 +347,10 @@ const emit = defineEmits(["closeModal"]);
 
 function closeModal() {
 	emit("closeModal");
+}
+
+function setRating(number) {
+	form.value.rating = number;
 }
 
 function searchForRestaurant(name) {
@@ -333,7 +388,8 @@ function submit() {
 					form.value.coreName,
 					enabled.value === true ? true : false,
 					form.value.sideName,
-					props.userInfo.id
+					props.userInfo.id,
+					form.value.rating
 				)
 				.then((newMeal) => {
 					emit("closeModal", newMeal);
@@ -350,7 +406,8 @@ function submit() {
 							form.value.coreName,
 							enabled.value === true ? true : false,
 							form.value.sideName,
-							props.userInfo.id
+							props.userInfo.id,
+							form.value.rating
 						)
 						.then((newMeal) => {
 							emit("closeModal", newMeal, newRestaurant);
@@ -366,7 +423,8 @@ function submit() {
 				form.value.coreName,
 				enabled.value === true ? true : false,
 				form.value.sideName,
-				props.userInfo.id
+				props.userInfo.id,
+				form.value.rating
 			)
 			.then((newMeal) => {
 				emit("closeModal", newMeal);
@@ -422,6 +480,22 @@ function submit() {
 			.slider {
 				margin-left: 2px;
 				margin-top: 2px;
+			}
+
+			.rating {
+				.stars {
+					margin-top: 5px;
+					display: flex;
+					svg {
+						width: 30px;
+						height: 30px;
+						cursor: pointer;
+					}
+
+					.filled-star {
+						color: gold;
+					}
+				}
 			}
 		}
 	}
