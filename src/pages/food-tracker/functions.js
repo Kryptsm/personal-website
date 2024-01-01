@@ -16,14 +16,15 @@ export async function listRestaurants() {
 						items {
 						Meals(filter: {_deleted: {ne: true}}) {
 							items {
-							date
-							id
-							name
-							coreName
-							side
-							isLeftovers
-							restaurantID
-							_version
+								date
+								id
+								name
+								coreName
+								isLeftovers
+								side
+								restaurantID
+								createdBy
+								_version
 							}
 						}
 						id
@@ -34,8 +35,36 @@ export async function listRestaurants() {
 				}`,
 	});
 	let restaurants = result.data.listRestaurants.items;
-	console.log("listRestaurants: ", restaurants);
 	return restaurants;
+}
+
+export async function createRestaurant(name) {
+	const result = await client.graphql({
+		query: `
+			mutation CreateRestaurant {
+				createRestaurant(input: {name: "${name}"}) {
+					Meals {
+						items {
+							coreName
+							createdBy
+							date
+							id
+							isLeftovers
+							name
+							restaurantID
+							side
+							_version
+						}
+					}
+					id
+					name
+					_version
+				}
+			}
+		`,
+	});
+
+	return result.data.createRestaurant;
 }
 
 export async function listMeals() {
@@ -50,14 +79,13 @@ export async function listMeals() {
 							isLeftovers
 							side
 							restaurantID
-							_version
 							createdBy
+							_version
 						}
 					}
 				}`,
 	});
 	let meals = result.data.listMeals.items;
-	console.log("listMeals: ", meals);
 	return meals;
 }
 
@@ -66,21 +94,21 @@ export async function listUserMeals(username) {
 		query: `query ListUserMeals {
 					listMeals(filter: {_deleted: {ne: true}, createdBy: {eq: "${username}"}}) {
 						items {
-						coreName
-						createdBy
-						date
-						id
-						isLeftovers
-						name
-						restaurantID
-						side
+							coreName
+							createdBy
+							date
+							id
+							isLeftovers
+							name
+							restaurantID
+							side
+							_version
 						}
 					}
 				}`,
 	});
 
 	let meals = result.data.listMeals.items;
-	console.log("listUserMeals: ", meals);
 	return meals;
 }
 
@@ -90,24 +118,30 @@ export async function createMeal(
 	restaurantID,
 	coreName,
 	isLeftovers,
-	side
+	side,
+	createdBy
 ) {
 	const result = await client.graphql({
 		query: `
-			mutation MyMutation {
-  				createMeal(
-    				input: {name: ${name}, date: ${date}, restaurantID: ${restaurantID}, coreName: ${coreName}, isLeftovers: ${isLeftovers}, side: ${side}}
-  			) {
-    			coreName
-				date
-				isLeftovers
-				name
-				restaurantID
-				side
-			}
+			mutation CreateMeal {
+				createMeal(
+					input: {name: "${name}", date: "${date}", restaurantID: "${restaurantID}", createdBy: "${createdBy}", isLeftovers: ${isLeftovers}, coreName: "${coreName}", side: "${side}"}
+				) {
+					coreName
+					createdBy
+					date
+					id
+					isLeftovers
+					name
+					restaurantID
+					side
+					_version
+				}
 			}
 		`,
 	});
+
+	return result.data.createMeal;
 }
 
 export async function getRestaurantRecommendations(restaurants) {

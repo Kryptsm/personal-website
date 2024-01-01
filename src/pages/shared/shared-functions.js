@@ -15,6 +15,7 @@ export async function fetchUser() {
                         id
                         name
                         lastQuery
+                        _version
                     }
                 }
             }
@@ -25,10 +26,8 @@ export async function fetchUser() {
 
 	if (!accounts.length) {
 		const userResult = await createUser(username);
-		console.log("userInfo: ", userResult);
 		return userResult;
 	} else {
-		console.log("userInfo: ", accounts[0]);
 		return accounts[0];
 	}
 }
@@ -47,4 +46,21 @@ export async function createUser(username) {
 	});
 
 	return result.data.createUserInfo;
+}
+
+export async function updateUser(user, username, lastQuery) {
+	const result = await client.graphql({
+		query: `
+            mutation UpdateUserInfo {
+                updateUserInfo(input: {id: "${user.id}", lastQuery: "${lastQuery}", name: "${username}", _version: ${user._version}}) {
+                        _version
+                        id
+                        lastQuery
+                        name
+                    }
+                }
+        `,
+	});
+
+	return result.data.updateUserInfo;
 }
