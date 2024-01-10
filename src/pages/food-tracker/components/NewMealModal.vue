@@ -325,7 +325,7 @@ import {
 } from "@headlessui/vue";
 import { StarIcon } from "@heroicons/vue/24/outline";
 import { StarIcon as FilledStar } from "@heroicons/vue/24/solid";
-import * as func from "./functions";
+import * as func from "../functions/functions";
 
 import { Switch } from "@headlessui/vue";
 
@@ -503,8 +503,9 @@ function submit() {
 	.buttons {
 		padding: 0 16px 16px 16px;
 		display: flex;
-		justify-content: end;
+		justify-content: flex-end;
 		gap: 16px;
 	}
 }
 </style>
+./functions/functions

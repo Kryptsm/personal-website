@@ -5,6 +5,7 @@ import Personal from "./pages/personal/Personal.vue";
 import FlowerGame from "./pages/flower-game/FlowerGame.vue";
 import MazeSolver from "./pages/maze-solver/MazeSolver.vue";
 import FoodTracker from "./pages/food-tracker/FoodTracker.vue";
+import Statistics from "./pages/food-tracker/components/Statistics.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 // Vuetify
@@ -42,6 +43,11 @@ const routes = [
 		path: "/food-tracker",
 		name: "food-tracker",
 		component: FoodTracker,
+	},
+	{
+		path: "/food-tracker/statistics",
+		name: "food-tracker/statistics",
+		component: Statistics,
 	},
 	{
 		path: "/:pathMatch(.*)*",

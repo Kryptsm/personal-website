@@ -1,7 +1,15 @@
 <script setup>
 import { ref } from "vue";
-import { Dialog, DialogPanel } from "@headlessui/vue";
+import {
+	Dialog,
+	DialogPanel,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuItems,
+} from "@headlessui/vue";
 import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
+import { ChevronDownIcon } from "@heroicons/vue/20/solid";
 
 const mobileMenuOpen = ref(false);
 </script>
@@ -30,7 +38,7 @@ const mobileMenuOpen = ref(false);
 					<Bars3Icon class="h-6 w-6" aria-hidden="true" />
 				</button>
 			</div>
-			<div class="hidden lg:flex lg:gap-x-12">
+			<div class="hidden lg:flex lg:gap-x-12 link-parent">
 				<router-link
 					:to="{ name: 'personal' }"
 					class="text-sm font-semibold leading-6 text-gray-900"
@@ -49,12 +57,59 @@ const mobileMenuOpen = ref(false);
 				>
 					Maze Solver
 				</router-link>
-				<router-link
-					:to="{ name: 'food-tracker' }"
-					class="text-sm font-semibold leading-6 text-gray-900"
-				>
-					Food Tracker
-				</router-link>
+				<Menu as="div" class="relative inline-block text-left">
+					<div>
+						<MenuButton
+							class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+						>
+							Food Tracker
+							<ChevronDownIcon
+								class="-mr-1 h-5 w-5 text-gray-400"
+								aria-hidden="true"
+							/>
+						</MenuButton>
+					</div>
+
+					<transition
+						enter-active-class="transition ease-out duration-100"
+						enter-from-class="transform opacity-0 scale-95"
+						enter-to-class="transform opacity-100 scale-100"
+						leave-active-class="transition ease-in duration-75"
+						leave-from-class="transform opacity-100 scale-100"
+						leave-to-class="transform opacity-0 scale-95"
+					>
+						<MenuItems
+							class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+						>
+							<div class="py-1">
+								<MenuItem v-slot="{ active }">
+									<router-link
+										href="#"
+										:to="{ name: 'food-tracker' }"
+										:class="[
+											active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+											'block px-4 py-2 text-sm',
+										]"
+									>
+										Calendar
+									</router-link>
+								</MenuItem>
+								<MenuItem v-slot="{ active }">
+									<router-link
+										href="#"
+										:to="{ name: 'food-tracker/statistics' }"
+										:class="[
+											active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+											'block px-4 py-2 text-sm',
+										]"
+									>
+										Statistics
+									</router-link>
+								</MenuItem>
+							</div>
+						</MenuItems>
+					</transition>
+				</Menu>
 			</div>
 		</div>
 		<Dialog
@@ -114,7 +169,14 @@ const mobileMenuOpen = ref(false);
 								@click="mobileMenuOpen = false"
 								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
 							>
-								Food Tracker
+								Food Tracker: Calendar
+							</router-link>
+							<router-link
+								:to="{ name: 'food-tracker/statistics' }"
+								@click="mobileMenuOpen = false"
+								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+							>
+								Food Tracker: Statistics
 							</router-link>
 						</div>
 					</div>
@@ -123,3 +185,14 @@ const mobileMenuOpen = ref(false);
 		</Dialog>
 	</header>
 </template>
+
+<style scoped>
+.link-parent {
+	display: flex;
+	align-items: center;
+
+	@media only screen and (max-width: 1023px) {
+		display: none;
+	}
+}
+</style>
