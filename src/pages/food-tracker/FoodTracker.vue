@@ -1,78 +1,30 @@
 <script setup>
 import { useGetRandomInt } from "../../functions/math";
 import { ref, onMounted, onUnmounted } from "vue";
-import * as func from "./functions";
+import * as func from "./functions/functions.js";
 import * as sharedfunc from "../shared/shared-functions";
 import FutureSpongebob from "../../assets/FutureSpongebob.jpeg";
-import MealModal from "./MealModal.vue";
-import NewMealModal from "./NewMealModal.vue";
+import MealModal from "./components/MealModal.vue";
+import NewMealModal from "./components/NewMealModal.vue";
+import Statistics from "./components/Statistics.vue";
 import { Authenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/vue/20/solid";
 
-import {
-	Chart as ChartJS,
-	Title,
-	Tooltip,
-	Legend,
-	BarElement,
-	CategoryScale,
-	LinearScale,
-	ArcElement,
-} from "chart.js";
-
-import {
-	Pie,
-	getDatasetAtEvent,
-	getElementAtEvent,
-	getElementsAtEvent,
-} from "vue-chartjs";
-
-ChartJS.register(
-	ArcElement,
-	CategoryScale,
-	LinearScale,
-	BarElement,
-	Title,
-	Tooltip,
-	Legend
-);
-
-const date = ref(new Date("2024/01/01"));
+const date = ref(new Date("2024/01/10"));
 const newMealModalStatus = ref(false);
 
 const showWeeks = ref(4);
 const windowSize = ref(0);
 const daysOfTheWeek = ref([]);
 const previousWeeks = ref([]);
-const graphColors = ref([
-	"#52D726",
-	"#FF7300",
-	"#007ED6",
-	"#7CDDDD",
-	"#FFEC00",
-	"#963868",
-	"#727394",
-	"#853277",
-	"#A37730",
-	"#FF0000",
-]);
+
 const allMeals = ref([]);
 const allRestaurants = ref([]);
 const restaurantRecs = ref([]);
 const simplifiedNames = ref(false);
 const userInfo = ref();
 
-const pieOptions = ref({
-	responsive: true,
-	maintainAspectRatio: true,
-});
-
-const restaurantPieData = ref(null);
-const mealsPieData = ref(null);
-const sidesPieData = ref(null);
-
-const currentTimeout = ref(null);
 const months = ref([
 	"January",
 	"February",
@@ -105,62 +57,42 @@ onUnmounted(() => {
 });
 
 function initializeValues() {
+	let initialDay = {
+		date: undefined,
+		isToday: false,
+		isFuture: false,
+		currentWeek: true,
+		meals: [],
+	};
+
 	daysOfTheWeek.value = [
 		{
 			name: "Sunday",
-			date: undefined,
-			isToday: false,
-			isFuture: false,
-			currentWeek: true,
-			meals: [],
+			...initialDay,
 		},
 		{
 			name: "Monday",
-			date: undefined,
-			isToday: false,
-			isFuture: false,
-			currentWeek: true,
-			meals: [],
+			...initialDay,
 		},
 		{
 			name: "Tuesday",
-			date: undefined,
-			isToday: false,
-			isFuture: false,
-			currentWeek: true,
-			meals: [],
+			...initialDay,
 		},
 		{
 			name: "Wednesday",
-			date: undefined,
-			isToday: false,
-			isFuture: false,
-			currentWeek: true,
-			meals: [],
+			...initialDay,
 		},
 		{
 			name: "Thursday",
-			date: undefined,
-			isToday: false,
-			isFuture: false,
-			currentWeek: true,
-			meals: [],
+			...initialDay,
 		},
 		{
 			name: "Friday",
-			date: undefined,
-			isToday: false,
-			isFuture: false,
-			currentWeek: true,
-			meals: [],
+			...initialDay,
 		},
 		{
 			name: "Saturday",
-			date: undefined,
-			isToday: false,
-			isFuture: false,
-			currentWeek: true,
-			meals: [],
+			...initialDay,
 		},
 	];
 
@@ -172,59 +104,38 @@ function initializeValues() {
 			[
 				{
 					name: "Sunday",
-					date: undefined,
-					isToday: false,
-					isFuture: false,
+					...initialDay,
 					currentWeek: false,
-					meals: [],
 				},
 				{
 					name: "Monday",
-					date: undefined,
-					isToday: false,
-					isFuture: false,
+					...initialDay,
 					currentWeek: false,
-					meals: [],
 				},
 				{
 					name: "Tuesday",
-					date: undefined,
-					isToday: false,
-					isFuture: false,
+					...initialDay,
 					currentWeek: false,
-					meals: [],
 				},
 				{
 					name: "Wednesday",
-					date: undefined,
-					isToday: false,
-					isFuture: false,
+					...initialDay,
 					currentWeek: false,
-					meals: [],
 				},
 				{
 					name: "Thursday",
-					date: undefined,
-					isToday: false,
-					isFuture: false,
+					...initialDay,
 					currentWeek: false,
-					meals: [],
 				},
 				{
 					name: "Friday",
-					date: undefined,
-					isToday: false,
-					isFuture: false,
+					...initialDay,
 					currentWeek: false,
-					meals: [],
 				},
 				{
 					name: "Saturday",
-					date: undefined,
-					isToday: false,
-					isFuture: false,
+					...initialDay,
 					currentWeek: false,
-					meals: [],
 				},
 			],
 		];
@@ -362,27 +273,6 @@ function getDayNum(isoDate) {
 	return isoDate ? isoDate.slice(8, 10) : undefined;
 }
 
-//Totals each meal that I've eaten based on their core name (Counts the amount of times I've had Pizza)
-//Format: [{ name: "Pizza", count: 2 }, { name: "Chicken Wings", count: 6 }]
-function totalMeals(items) {
-	let itemCounts = [];
-	items.forEach((item) => {
-		if (item.coreName) {
-			let existingTracker = itemCounts.find(
-				(count) => count.name === item.coreName
-			);
-
-			if (!existingTracker) {
-				itemCounts.push({ name: item.coreName, count: 1 });
-			} else if (existingTracker) {
-				existingTracker.count++;
-			}
-		}
-	});
-	mealsPieData.value = itemCounts;
-	return itemCounts;
-}
-
 function totalSpecificMeal(name) {
 	let count = 0;
 	allMeals.value.forEach((meal) => {
@@ -391,137 +281,10 @@ function totalSpecificMeal(name) {
 	return count;
 }
 
-//Totals the sides I've eaten throughout the meals passed in.
-//Format: [{ name: "Fries", count: 2 }, { name: "None", count: 6 }]
-function totalSides(items) {
-	let itemCounts = [];
-	items.forEach((item) => {
-		if (item.side) {
-			let existingTracker = itemCounts.find(
-				(count) => count.name === item.side
-			);
-
-			if (!existingTracker) {
-				itemCounts.push({ name: item.side, count: 1 });
-			} else if (existingTracker) {
-				existingTracker.count++;
-			}
-		} else {
-			let existingTracker = itemCounts.find((count) => count.name === "None");
-
-			if (!existingTracker) {
-				itemCounts.push({ name: "None", count: 1 });
-			} else if (existingTracker) {
-				existingTracker.count++;
-			}
-		}
-	});
-	sidesPieData.value = itemCounts;
-	return itemCounts;
-}
-
-//Totals the amount of times I've been to a specific restaurant, indicated by how many meals are stored within that restaurant
-//Format: [{ name: "Goff's", count: 2 }, { name: "Burger House", count: 6 }]
-function totalRestaurants(items) {
-	let itemCounts = [];
-	items.forEach((item) => {
-		itemCounts.push({
-			name: item.name,
-			count: item.Meals.items.filter((e) => e.isLeftovers !== true).length,
-		});
-	});
-	restaurantPieData.value = itemCounts;
-	return itemCounts;
-}
-
-//Gets the pie data format from the "Totals" data format.
-//Totals format: [{ name: "Goff's", count: 2 }, { name: "Burger House", count: 6 }]
-//Pie format: { labels: ["Goff's", "Burger House"], datasets: [{ backgroundColor: ["#FFF", "#PPP"], data: [2, 6]}] }
-function getPieData(itemCounts) {
-	let newData = { labels: [], datasets: [{ backgroundColor: [], data: [] }] };
-	itemCounts = itemCounts.sort((a, b) => {
-		if (a.count < b.count) return 1;
-		if (a.count > b.count) return -1;
-		return 0;
-	});
-	itemCounts = itemCounts.slice(0, 7);
-	itemCounts.forEach((item) => {
-		newData.labels = [...newData.labels, item.name];
-		newData.datasets[0].backgroundColor = [
-			...newData.datasets[0].backgroundColor,
-			graphColors.value[newData.datasets[0].backgroundColor.length],
-		];
-		newData.datasets[0].data = [...newData.datasets[0].data, item.count];
-	});
-
-	return newData;
-}
-
 function getRestaurant(id) {
 	if (!allRestaurants.value || !allRestaurants.value.length) return {};
 	return allRestaurants.value.find((restaurant) => restaurant.id === id);
 }
-
-const onClick = (event, data, ref) => {
-	const {
-		value: { chart },
-	} = ref == 1 ? chartRef1 : ref == 2 ? chartRef2 : chartRef3;
-
-	if (!chart) {
-		return;
-	}
-
-	elementAtEvent(
-		getElementAtEvent(chart, event),
-		JSON.parse(JSON.stringify(data))
-	);
-};
-
-const elementAtEvent = (element, data) => {
-	if (!element.length) return;
-
-	const { index } = element[0];
-
-	highlightItem(data[index].name);
-};
-
-function highlightItem(query) {
-	if (currentTimeout.value) clearTimeout(currentTimeout.value);
-
-	allRestaurants.value.forEach((restaurant) => {
-		if (restaurant.name == query) restaurant.highlighted = true;
-		else restaurant.highlighted = false;
-	});
-
-	allMeals.value.forEach((meal) => {
-		if (
-			meal.name == query ||
-			meal.side == query ||
-			meal.coreName == query ||
-			(query == "None" && !meal.side)
-		)
-			meal.highlighted = true;
-		else meal.highlighted = false;
-	});
-
-	currentTimeout.value = setTimeout(() => {
-		resetHighlights();
-	}, 3500);
-}
-
-function resetHighlights() {
-	allRestaurants.value.forEach((restaurant) => {
-		restaurant.highlighted = false;
-	});
-
-	allMeals.value.forEach((meal) => {
-		meal.highlighted = false;
-	});
-}
-
-const chartRef1 = ref(null);
-const chartRef2 = ref(null);
-const chartRef3 = ref(null);
 
 function handleDateChange(newDate) {
 	date.value = new Date(newDate.replace(/-/g, "/"));
@@ -551,16 +314,17 @@ function newMealModalClose(newMeal, newRestaurant) {
 					</h6>
 					<div class="rec-container">
 						<a
-							v-for="(rec, index) in restaurantRecs"
+							v-for="(rec, index) in windowSize >= 675
+								? restaurantRecs
+								: restaurantRecs.slice(0, 3)"
 							class="rec"
 							:href="rec.link"
 							target="_blank"
-						>
-							{{ rec.name }}
+							>{{ rec.name }}
 							<ArrowTopRightOnSquareIcon
 								class="h-5 w-5 text-gray-600"
 								aria-hidden="true"
-								v-if="rec.link"
+								v-if="rec.link && windowSize >= 800"
 							/>
 						</a>
 					</div>
@@ -683,37 +447,11 @@ function newMealModalClose(newMeal, newRestaurant) {
 						</div>
 					</div>
 				</div>
-
-				<h6 class="graph-heading">Statistics:</h6>
-				<div class="graph">
-					<div class="pie-container">
-						<p>Restaurants Visited</p>
-						<Pie
-							ref="chartRef1"
-							:data="getPieData(totalRestaurants(allRestaurants))"
-							:options="pieOptions"
-							@click="onClick($event, restaurantPieData, 1)"
-						/>
-					</div>
-					<div class="pie-container">
-						<p>Meals Eaten</p>
-						<Pie
-							ref="chartRef2"
-							:data="getPieData(totalMeals(allMeals))"
-							:options="pieOptions"
-							@click="onClick($event, mealsPieData, 2)"
-						/>
-					</div>
-					<div class="pie-container">
-						<p>Sides Eaten</p>
-						<Pie
-							ref="chartRef3"
-							:data="getPieData(totalSides(allMeals))"
-							:options="pieOptions"
-							@click="onClick($event, sidesPieData, 3)"
-						/>
-					</div>
-				</div>
+				<Statistics
+					v-if="allMeals && allRestaurants"
+					:meals="allMeals"
+					:restaurants="allRestaurants"
+				></Statistics>
 				<NewMealModal
 					:open="newMealModalStatus"
 					:restaurants="allRestaurants"
@@ -739,15 +477,22 @@ function newMealModalClose(newMeal, newRestaurant) {
 		margin: auto;
 		margin-top: 15px;
 
+		@media only screen and (max-width: 675px) {
+			width: 90%;
+		}
+
 		.rec-container {
 			display: flex;
 			width: 100%;
+
+			.hidden {
+				display: none !important;
+			}
 
 			.rec {
 				padding: 10px 10px 10px 20px;
 				border: 1px solid black;
 				border-radius: 8px;
-				width: 15%;
 				text-align: center;
 				justify-content: space-between;
 				background-color: white;
@@ -756,6 +501,12 @@ function newMealModalClose(newMeal, newRestaurant) {
 
 				svg {
 					margin-top: 1px;
+					margin-left: 5px;
+					align-self: center;
+				}
+
+				@media only screen and (max-width: 800px) {
+					padding-right: 20px;
 				}
 			}
 		}
@@ -764,12 +515,14 @@ function newMealModalClose(newMeal, newRestaurant) {
 	.top-bar {
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		gap: 10px;
 		width: 95%;
 		margin: auto;
 		margin-top: 15px;
-		w-33 {
-			width: 33%;
+
+		@media only screen and (max-width: 675px) {
+			width: 90%;
 		}
 
 		.add-new {
@@ -780,6 +533,14 @@ function newMealModalClose(newMeal, newRestaurant) {
 		.month {
 			text-align: center;
 			font-size: 30px;
+
+			@media only screen and (max-width: 900px) {
+				font-size: 25px;
+			}
+
+			@media only screen and (max-width: 675px) {
+				font-size: 20px;
+			}
 		}
 
 		.input-wrapper {
@@ -788,8 +549,8 @@ function newMealModalClose(newMeal, newRestaurant) {
 				display: flex;
 				margin-left: auto;
 				align-self: center;
-				width: 50%;
-				border: 1px solid black;
+				border: 1px solid #c9c9c9;
+				border-radius: 8px;
 			}
 		}
 	}
