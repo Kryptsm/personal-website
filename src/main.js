@@ -8,6 +8,11 @@ import FoodTracker from "./pages/food-tracker/FoodTracker.vue";
 import Statistics from "./pages/food-tracker/components/Statistics.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
+//Vue3-Tour
+import Vue3Tour from "vue3-tour";
+
+import "vue3-tour/dist/vue3-tour.css";
+
 // Vuetify
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
@@ -63,5 +68,6 @@ const router = createRouter({
 const app = createApp(App);
 app.use(router);
 app.use(vuetify);
+app.use(Vue3Tour);
 
 app.mount("#app");

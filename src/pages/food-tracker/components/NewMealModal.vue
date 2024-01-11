@@ -387,7 +387,7 @@ function submit() {
 					parsedMatch.id,
 					form.value.coreName,
 					enabled.value === true ? true : false,
-					form.value.sideName ? form.value.sideName : "",
+					form.value.sideName ?? "",
 					props.userInfo.id,
 					form.value.rating
 				)
@@ -405,7 +405,7 @@ function submit() {
 							newRestaurant.id,
 							form.value.coreName,
 							enabled.value === true ? true : false,
-							form.value.sideName,
+							form.value.sideName ?? "",
 							props.userInfo.id,
 							form.value.rating
 						)
@@ -422,7 +422,7 @@ function submit() {
 				form.value.restaurantID,
 				form.value.coreName,
 				enabled.value === true ? true : false,
-				form.value.sideName,
+				form.value.sideName ?? "",
 				props.userInfo.id,
 				form.value.rating
 			)

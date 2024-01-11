@@ -16,12 +16,16 @@ const emits = defineEmits(["select-choice"]);
 
 <template>
 	<div class="tile wall" v-if="status == 0">
-		<span class="container top-left" v-if="topLeft"
-			><div class="internal"></div
-		></span>
-		<span class="container top-right" v-if="topRight"
-			><div class="internal"></div
-		></span>
+		<span class="container top-left" v-if="topLeft">
+			<div class="div">
+				<div class="div-inner"></div>
+			</div>
+		</span>
+		<span class="container top-right" v-if="topRight">
+			<div class="div">
+				<div class="div-inner"></div>
+			</div>
+		</span>
 	</div>
 	<div
 		class="tile space"
@@ -90,26 +94,49 @@ const emits = defineEmits(["select-choice"]);
 		display: block;
 		position: absolute;
 
-		width: 40%;
-		height: 40%;
+		// width: 40%;
+		// height: 40%;
 		&.top-right {
 			transform: rotate(-45deg);
-			top: 0;
-			right: 0;
+			top: -13.75px;
+			right: -13.75px;
 		}
 
 		&.top-left {
 			transform: rotate(45deg);
 
-			top: 0;
-			left: 0;
+			top: -13.75px;
+			left: -13.75px;
 		}
 
-		.internal {
-			width: 100%;
-			height: 100%;
-			background-color: rgb(35, 35, 35);
-			transform: scaleX(3);
+		.div {
+			position: relative;
+			overflow: hidden;
+			padding: 6.25px 0;
+			transform: scaleX(1.5);
+		}
+
+		.div-inner {
+			position: relative;
+			background: rgb(35, 35, 35);
+			height: 12.5px;
+		}
+
+		.div-inner:before,
+		.div-inner:after {
+			box-shadow: 0 0 0 12.5px rgb(35, 35, 35);
+			border-radius: 100%;
+			position: absolute;
+			height: 85px; /* You can change height to increase or decrease concave radius */
+			content: "";
+			right: -20%;
+			left: -20%;
+			top: 100%;
+		}
+
+		.div-inner:after {
+			bottom: 100%;
+			top: auto;
 		}
 	}
 }

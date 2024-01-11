@@ -40,6 +40,13 @@ export const schema = {
                         ]
                     }
                 },
+                "mazeFTUE": {
+                    "name": "mazeFTUE",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -287,5 +294,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "17428fd1fda30e1f2f02a909dd093cd8"
+    "version": "36c8258a234222d044d02929984ff79b"
 };

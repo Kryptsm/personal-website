@@ -15,6 +15,7 @@ type EagerUserInfo = {
   readonly name: string;
   readonly lastQuery?: string | null;
   readonly Meals?: (Meal | null)[] | null;
+  readonly mazeFTUE?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -28,6 +29,7 @@ type LazyUserInfo = {
   readonly name: string;
   readonly lastQuery?: string | null;
   readonly Meals: AsyncCollection<Meal>;
+  readonly mazeFTUE?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

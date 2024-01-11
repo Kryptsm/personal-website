@@ -1,6 +1,7 @@
 <script setup>
 import { useGetRandomInt } from "../../functions/math";
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, getCurrentInstance } from "vue";
+import * as userFunctions from "../../functions/user-functions";
 import Tile from "./components/Tile.vue";
 
 const initialNodes = ref([]);
@@ -30,6 +31,80 @@ const displayChoices = ref([
 		id: 2,
 		name: "Show path discovery animation. A light green path that appears once the end has been found successfully. Represents the fastest possible path from start to end. This will remove the animation but the path will still appear.",
 		status: true,
+	},
+]);
+
+const tours = ref();
+const tourSteps = ref([
+	{
+		target: ".maze-container", // We're using document.querySelector() under the hood
+		header: {
+			title: "The Maze",
+		},
+		content: `Welcome to Maze Solver! This is the maze. Black squares are the 'walls' and white spaces are 'spaces'.`,
+		params: {
+			placement: "top",
+		},
+	},
+	{
+		target: ".maze-container", // We're using document.querySelector() under the hood
+		header: {
+			title: "The Maze Pt. 2",
+		},
+		content: `The maze is randomly generated every time you refresh the page, with each tile having a roughly 1/3 chance to be a wall.`,
+		params: {
+			placement: "top",
+		},
+	},
+	{
+		target: ".newmaze-btn", // We're using document.querySelector() under the hood
+		header: {
+			title: "New Maze",
+		},
+		content: `This will regenerate the maze, randomly generating all the tiles again.`,
+		params: {
+			placement: "bottom",
+		},
+	},
+	{
+		target: ".resetmaze-btn", // We're using document.querySelector() under the hood
+		header: {
+			title: "Reset the Maze",
+		},
+		content: `This button resets the maze, removing any progress towards finding the exit. However, the walls and spaces stay where they are.`,
+		params: {
+			placement: "bottom",
+		},
+	},
+	{
+		target: ".maze-container", // We're using document.querySelector() under the hood
+		header: {
+			title: "Starting",
+		},
+		content: `To start solving the maze, click on a tile to turn it green, representing where you want the starting position to be. All empty spaces on the maze that are unreachable from that spot are turned into walls.`,
+		params: {
+			placement: "bottom",
+		},
+	},
+	{
+		target: ".maze-container", // We're using document.querySelector() under the hood
+		header: {
+			title: "Ending",
+		},
+		content: `Finally, click another spot to turn it red, indicating where you want the end of the maze to be. You'll notice the solving will begin automatically!`,
+		params: {
+			placement: "bottom",
+		},
+	},
+	{
+		target: ".display-options", // We're using document.querySelector() under the hood
+		header: {
+			title: "Display Options",
+		},
+		content: `You also have some display options here to change how the maze looks. Option 2 is selected by default.`,
+		params: {
+			placement: "top",
+		},
 	},
 ]);
 
@@ -110,12 +185,31 @@ onMounted(() => {
 	createNodes(true);
 
 	window.addEventListener("resize", resizeMaze);
+
+	const internalInstance = getCurrentInstance();
+	const $tours = internalInstance.appContext.config.globalProperties.$tours;
+	tours.value = $tours;
+
+	fetchValues();
 });
 
 //Removes the event listener on unmounting
 onUnmounted(() => {
 	window.removeEventListener("resize", resizeMaze);
 });
+
+function fetchValues() {
+	userFunctions.fetchUser().then((user) => {
+		if (user && !user.mazeFTUE) {
+			startTour();
+			userFunctions.updateUser(user, user.name, user.lastQuery, true);
+		}
+	});
+}
+
+function startTour() {
+	tours.value.myTour.start();
+}
 
 //Increments the bubble search another layer outwards as it searches for the exit
 function incrementBubble() {
@@ -404,58 +498,41 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 </script>
 
 <template>
-	<div class="info">
-		<div class="body">
-			The maze below is randomly generated, wherein each cell has a 1/3 chance
-			of being a wall. The black cells are walls, the white are empty spaces.
-			Click the maze once on an empty space to place the start of the maze.
-			Click again to place the exit. The algorithm will automatically start.
+	<section class="maze-container">
+		<div class="maze">
+			<v-row v-for="(row, indexRow) in nodes" class="mazeRow">
+				<v-col v-for="(col, indexCol) in row" class="mazeCol">
+					<Tile
+						:status="getNodeStatus(indexRow, indexCol, col)"
+						:x="indexCol"
+						:y="indexRow"
+						:hoverStatus="currentChoice"
+						:trackerNum="tracker[indexRow][indexCol]"
+						:trackerTotal="currentStep"
+						:top-left="
+							indexRow != 0 &&
+							indexCol != 0 &&
+							nodes[indexRow - 1][indexCol - 1] == 0
+						"
+						:top-right="
+							indexRow != 0 &&
+							indexCol != width - 1 &&
+							nodes[indexRow - 1][indexCol + 1] == 0
+						"
+						@select-choice="selectChoice"
+					></Tile>
+				</v-col>
+			</v-row>
 		</div>
-		<div class="body">
-			When you select a starting position, all positions in the maze that are
-			unreachable from there will automatically become walls. You may also click
-			the "reset the maze" button to reset your starting and stop positions.
-		</div>
-		<div class="body">
-			You may also select some display options below. The first option shows how
-			the program locates the end of the maze over time with an animation. The
-			blue cells indicate the ones we've visited to try and find the exit.
-			Darker cells are farther away from the start, relatively. The second
-			option makes the path instantly appear, by default it appears over time.
-		</div>
-	</div>
-	<div class="maze">
-		<v-row v-for="(row, indexRow) in nodes" class="mazeRow">
-			<v-col v-for="(col, indexCol) in row" class="mazeCol">
-				<Tile
-					:status="getNodeStatus(indexRow, indexCol, col)"
-					:x="indexCol"
-					:y="indexRow"
-					:hoverStatus="currentChoice"
-					:trackerNum="tracker[indexRow][indexCol]"
-					:trackerTotal="currentStep"
-					:top-left="
-						indexRow != 0 &&
-						indexCol != 0 &&
-						nodes[indexRow - 1][indexCol - 1] == 0
-					"
-					:top-right="
-						indexRow != 0 &&
-						indexCol != width - 1 &&
-						nodes[indexRow - 1][indexCol + 1] == 0
-					"
-					@select-choice="selectChoice"
-				></Tile>
-			</v-col>
-		</v-row>
-	</div>
+	</section>
+
 	<fieldset class="info">
 		<div class="header-bar mx-auto flex">
 			<legend class="text-base font-semibold leading-6 text-gray-900 mr-auto">
 				Display Options
 			</legend>
 
-			<div class="newmaze flex">
+			<div class="newmaze flex newmaze-btn">
 				<button
 					@click="createNodes(true)"
 					class="text-base font-semibold leading-6 text-gray-900 ml-auto"
@@ -464,7 +541,7 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 				</button>
 			</div>
 
-			<div class="newmaze flex">
+			<div class="newmaze flex resetmaze-btn">
 				<button
 					@click="createNodes(false)"
 					class="text-base font-semibold leading-6 text-gray-900 ml-auto"
@@ -475,7 +552,7 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 		</div>
 
 		<div
-			class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200 body"
+			class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200 body display-options"
 		>
 			<div
 				v-for="(rule, ruleId) in displayChoices"
@@ -501,11 +578,11 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 				</div>
 			</div>
 		</div>
-		<div class="body">
+		<div class="body" id="v-step-0">
 			From a more computer science point of view, here is a longer explanation
 			of how it works:
 		</div>
-		<div class="body">
+		<div class="body" id="v-step-1">
 			Essentially, this program uses a breadth first search in order to locate
 			the ending of a maze without actually knowing where the ending is.
 			Additionally, it works without the assumption that the ending is against a
@@ -513,7 +590,7 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 			random generation, walls can be floating, so a simple "follow the left
 			handed wall until the exit" strategy is non-viable.
 		</div>
-		<div class="body">
+		<div class="body" id="v-step-2">
 			So, my program essentially just tracks each cell and how long it takes to
 			get from every cell back to the start. It expands outwards, so that it
 			marks all the cells that would take 1 turn to move back to the start
@@ -547,22 +624,26 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 			code to accomplish it.
 		</div>
 	</fieldset>
+	<v-tour name="myTour" :steps="tourSteps"></v-tour>
 </template>
 
 <style scoped lang="scss">
-.maze {
-	border: 1px solid black;
-	.mazeRow {
-		margin: 0 !important;
-		.mazeCol {
-			width: 100%;
-			height: 25px;
-			padding: 0 !important;
+.maze-container {
+	padding-top: 30px;
+	.maze {
+		border: 1px solid black;
+		.mazeRow {
+			margin: 0 !important;
+			.mazeCol {
+				width: 100%;
+				height: 25px;
+				padding: 0 !important;
+			}
 		}
-	}
 
-	.mazeRow + .mazeRow {
-		margin-top: 0 !important;
+		.mazeRow + .mazeRow {
+			margin-top: 0 !important;
+		}
 	}
 }
 
