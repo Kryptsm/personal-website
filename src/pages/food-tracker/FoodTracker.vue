@@ -490,7 +490,7 @@ function newMealModalClose(newMeal, newRestaurant) {
 			}
 
 			.rec {
-				padding: 10px 10px 10px 20px;
+				padding: 10px 20px 10px 20px;
 				border: 1px solid black;
 				border-radius: 8px;
 				text-align: center;
@@ -503,10 +503,6 @@ function newMealModalClose(newMeal, newRestaurant) {
 					margin-top: 1px;
 					margin-left: 5px;
 					align-self: center;
-				}
-
-				@media only screen and (max-width: 800px) {
-					padding-right: 20px;
 				}
 			}
 		}

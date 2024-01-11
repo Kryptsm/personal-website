@@ -37,44 +37,10 @@
 										as="h3"
 										class="text-base font-semibold leading-6 text-gray-900 title"
 									>
-										<div class="name">{{ meal.name }}</div>
-										<div class="stars" v-if="meal.rating">
-											<div class="star-1">
-												<FilledStar
-													v-if="meal.rating >= 1"
-													class="filled-star"
-												/>
-												<StarIcon v-else />
-											</div>
-											<div class="star-2">
-												<FilledStar
-													v-if="meal.rating >= 2"
-													class="filled-star"
-												/>
-												<StarIcon v-else />
-											</div>
-											<div class="star-3">
-												<FilledStar
-													v-if="meal.rating >= 3"
-													class="filled-star"
-												/>
-												<StarIcon v-else />
-											</div>
-											<div class="star-4">
-												<FilledStar
-													v-if="meal.rating >= 4"
-													class="filled-star"
-												/>
-												<StarIcon v-else />
-											</div>
-											<div class="star-5">
-												<FilledStar
-													v-if="meal.rating >= 5"
-													class="filled-star"
-												/>
-												<StarIcon v-else />
-											</div>
+										<div class="name">
+											{{ meal.name }}
 										</div>
+										<Stars :rating="meal.rating"></Stars>
 									</DialogTitle>
 									<div class="mt-2 body">
 										<p>I've had this meal {{ count }} time(s).</p>
@@ -112,8 +78,7 @@ import {
 	TransitionChild,
 	TransitionRoot,
 } from "@headlessui/vue";
-import { StarIcon } from "@heroicons/vue/24/outline";
-import { StarIcon as FilledStar } from "@heroicons/vue/24/solid";
+import Stars from "../../shared/Stars.vue";
 
 const props = defineProps(["meal", "restaurant", "count"]);
 </script>
@@ -134,21 +99,6 @@ const props = defineProps(["meal", "restaurant", "count"]);
 
 			.name {
 				padding: 12px 16px;
-			}
-
-			.stars {
-				padding-right: 16px;
-				display: flex;
-				white-space: nowrap;
-				align-items: center;
-				svg {
-					width: 25px;
-					height: 25px;
-				}
-
-				.filled-star {
-					color: gold;
-				}
 			}
 		}
 
