@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted, onUpdated } from "vue";
 import * as func from "../functions/functions.js";
 import * as graphfunctions from "../functions/graph-functions.js";
-import * as sharedfunc from "../../shared/shared-functions";
+import * as userFunctions from "../../../functions/user-functions.js";
 import Stars from "../../shared/Stars.vue";
 
 import {
@@ -71,7 +71,7 @@ onUnmounted(() => {
 
 function fetchValues() {
 	//Gets the user we are currently signed in as from the database, then gets that users meals and stores them.
-	sharedfunc.fetchUser().then((user) => {
+	userFunctions.fetchUser().then((user) => {
 		userInfo.value = user;
 
 		//Gets the list of all restaurants visited and stores them
@@ -411,3 +411,4 @@ const chartRef3 = ref(null);
 	}
 }
 </style>
+../../../functions/shared-functions.js ../../../functions/user-functions.js

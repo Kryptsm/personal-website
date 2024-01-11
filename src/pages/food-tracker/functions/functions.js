@@ -130,7 +130,8 @@ export async function createMeal(
 		query: `
 			mutation CreateMeal {
 				createMeal(
-					input: {name: "${name}", date: "${date}", restaurantID: "${restaurantID}", createdBy: "${createdBy}", isLeftovers: ${isLeftovers}, coreName: "${coreName}", side: "${side}", rating: ${rating}}
+					input: {name: "${name}", date: "${date}", restaurantID: "${restaurantID}", createdBy: "${createdBy}", isLeftovers: ${isLeftovers}, coreName: "${coreName}", 
+						side: "${side ?? ""}", rating: ${rating}}
 				) {
 					coreName
 					createdBy
