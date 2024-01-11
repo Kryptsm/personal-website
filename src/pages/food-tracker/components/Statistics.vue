@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted, onUpdated } from "vue";
 import * as func from "../functions/functions.js";
 import * as graphfunctions from "../functions/graph-functions.js";
 import * as sharedfunc from "../../shared/shared-functions";
+import Stars from "../../shared/Stars.vue";
 
 import {
 	Chart as ChartJS,
@@ -96,6 +97,12 @@ function fetchValues() {
 	});
 }
 
+function getRestaurant(id) {
+	let list = nested.value ? props.restaurants : allRestaurants.value;
+	if (!list || !list.length) return {};
+	return list.find((restaurant) => restaurant.id === id);
+}
+
 //Totals each meal that I've eaten based on their core name (Counts the amount of times I've had Pizza)
 //Format: [{ name: "Pizza", count: 2 }, { name: "Chicken Wings", count: 6 }]
 function totalMeals(items) {
@@ -186,12 +193,15 @@ const elementAtEvent = (element, data) => {
 function highlightItem(query) {
 	if (currentTimeout.value) clearTimeout(currentTimeout.value);
 
-	props.restaurants?.forEach((restaurant) => {
+	let restaurantList = nested.value ? props.restaurants : allRestaurants.value;
+	let mealList = nested.value ? props.meals : allMeals.value;
+
+	restaurantList?.forEach((restaurant) => {
 		if (restaurant.name == query) restaurant.highlighted = true;
 		else restaurant.highlighted = false;
 	});
 
-	props.meals?.forEach((meal) => {
+	mealList?.forEach((meal) => {
 		if (
 			meal.name == query ||
 			meal.side == query ||
@@ -208,11 +218,14 @@ function highlightItem(query) {
 }
 
 function resetHighlights() {
-	props.restaurants?.forEach((restaurant) => {
+	let restaurantList = nested.value ? props.restaurants : allRestaurants.value;
+	let mealList = nested.value ? props.meals : allMeals.value;
+
+	restaurantList?.forEach((restaurant) => {
 		restaurant.highlighted = false;
 	});
 
-	props.meals?.forEach((meal) => {
+	mealList?.forEach((meal) => {
 		meal.highlighted = false;
 	});
 }
@@ -223,72 +236,177 @@ const chartRef3 = ref(null);
 </script>
 
 <template>
-	<div class="graph">
-		<div class="pie-container">
-			<p>Restaurants Visited</p>
-			<Pie
-				ref="chartRef1"
-				:data="
-					graphfunctions.getPieData(
-						totalRestaurants(nested ? props.restaurants : allRestaurants)
-					)
-				"
-				:options="pieOptions"
-				@click="nested ? onClick($event, restaurantPieData, 1) : () => {}"
-			/>
+	<section class="statistics">
+		<div class="graph">
+			<div class="pie-container">
+				<p>Restaurants Visited</p>
+				<Pie
+					ref="chartRef1"
+					:data="
+						graphfunctions.getPieData(
+							totalRestaurants(nested ? props.restaurants : allRestaurants)
+						)
+					"
+					:options="pieOptions"
+					@click="onClick($event, restaurantPieData, 1)"
+				/>
+			</div>
+			<div class="pie-container">
+				<p>Meals Eaten</p>
+				<Pie
+					ref="chartRef2"
+					:data="
+						graphfunctions.getPieData(
+							totalMeals(nested ? props.meals : allMeals)
+						)
+					"
+					:options="pieOptions"
+					@click="onClick($event, mealsPieData, 2)"
+				/>
+			</div>
+			<div class="pie-container">
+				<p>Sides Eaten</p>
+				<Pie
+					ref="chartRef3"
+					:data="
+						graphfunctions.getPieData(
+							totalSides(nested ? props.meals : allMeals)
+						)
+					"
+					:options="pieOptions"
+					@click="onClick($event, sidesPieData, 3)"
+				/>
+			</div>
 		</div>
-		<div class="pie-container">
-			<p>Meals Eaten</p>
-			<Pie
-				ref="chartRef2"
-				:data="
-					graphfunctions.getPieData(totalMeals(nested ? props.meals : allMeals))
-				"
-				:options="pieOptions"
-				@click="nested ? onClick($event, mealsPieData, 2) : () => {}"
-			/>
+		<div class="table" v-if="!nested && allMeals?.length">
+			<div class="mt-8 flow-root">
+				<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+					<div
+						class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
+					>
+						<div
+							class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg"
+						>
+							<table class="min-w-full divide-y divide-gray-300">
+								<thead class="bg-gray-50">
+									<tr>
+										<th
+											scope="col"
+											class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+										>
+											Name
+										</th>
+										<th
+											scope="col"
+											class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+										>
+											Restaurant
+										</th>
+										<th
+											scope="col"
+											class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+										>
+											Date
+										</th>
+										<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+											<span class="sr-only">Rating</span>
+										</th>
+										<!-- <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+											<span class="sr-only">Edit</span>
+										</th> -->
+									</tr>
+								</thead>
+								<tbody class="divide-y divide-gray-200 bg-white">
+									<tr
+										v-for="meal in nested ? props.meals : allMeals"
+										:key="meal ? meal.id : 0"
+										:class="{
+											highlighted:
+												meal.highlighted ||
+												getRestaurant(meal.restaurantID).highlighted,
+										}"
+									>
+										<td
+											class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+										>
+											{{ meal.name }}
+										</td>
+										<td
+											class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+										>
+											{{ getRestaurant(meal.restaurantID).name }}
+										</td>
+										<td
+											class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+										>
+											{{ meal.date }}
+										</td>
+										<td
+											class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+										>
+											<Stars :rating="meal.rating"></Stars>
+										</td>
+										<!-- <td
+											class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+										>
+											<a href="#" class="text-indigo-600 hover:text-indigo-900"
+												>Edit<span class="sr-only"
+													>, {{ meal.coreName }}</span
+												></a
+											>
+										</td> -->
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="pie-container">
-			<p>Sides Eaten</p>
-			<Pie
-				ref="chartRef3"
-				:data="
-					graphfunctions.getPieData(totalSides(nested ? props.meals : allMeals))
-				"
-				:options="pieOptions"
-				@click="nested ? onClick($event, sidesPieData, 3) : () => {}"
-			/>
-		</div>
-	</div>
+	</section>
 </template>
 
 <style scoped lang="scss">
-.graph-heading {
-	width: 95%;
-	margin: auto;
-}
+.statistics {
+	margin: 0 10px 80px 10px;
+	display: grid;
+	.graph-heading {
+		width: 95%;
+		margin: auto;
+	}
 
-.graph {
-	display: flex;
-	justify-content: space-around;
-	width: 100%;
-	margin-top: 20px;
+	.graph {
+		display: flex;
+		justify-content: space-around;
+		width: 100%;
+		margin-top: 20px;
 
-	.pie-container {
-		width: 40%;
+		.pie-container {
+			width: 40%;
 
-		p {
-			text-align: center;
+			p {
+				text-align: center;
+			}
+		}
+
+		@media only screen and (max-width: 900px) {
+			display: unset;
+
+			.pie-container {
+				width: 95%;
+				margin: auto;
+				padding-bottom: 15px;
+			}
 		}
 	}
 
-	@media only screen and (max-width: 900px) {
-		display: unset;
+	.table {
+		margin-top: 20px;
+		justify-self: center;
 
-		.pie-container {
-			width: 95%;
-			margin: auto;
-			padding-bottom: 15px;
+		.highlighted {
+			border: 1px solid lightcoral;
+			background-color: rgb(247, 235, 235);
 		}
 	}
 }
