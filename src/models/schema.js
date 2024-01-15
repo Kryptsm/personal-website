@@ -47,6 +47,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "foodTrackerFTUE": {
+                    "name": "foodTrackerFTUE",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -294,5 +301,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "36c8258a234222d044d02929984ff79b"
+    "version": "1ea1bea8051fb0449872d893db654313"
 };
