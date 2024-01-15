@@ -38,20 +38,6 @@ const rules = ref([
 	},
 ]);
 
-onMounted(() => {
-	if (window.innerWidth < 900) width.value = 35;
-	if (window.innerWidth < 750) width.value = 25;
-	if (window.innerWidth < 550) width.value = 15;
-	createNodes();
-	startTimeout();
-
-	window.addEventListener("resize", resizeGarden);
-});
-
-onUnmounted(() => {
-	window.removeEventListener("resize", resizeGarden);
-});
-
 function createNodes() {
 	rules.value.forEach((e) => (e.status = true));
 	nodes.value = [];
@@ -157,6 +143,20 @@ function resizeGarden() {
 	if (window.innerWidth < 550) width.value = 15;
 	if (originalWidth != width.value) createNodes();
 }
+
+onMounted(() => {
+	if (window.innerWidth < 900) width.value = 35;
+	if (window.innerWidth < 750) width.value = 25;
+	if (window.innerWidth < 550) width.value = 15;
+	createNodes();
+	startTimeout();
+
+	window.addEventListener("resize", resizeGarden);
+});
+
+onUnmounted(() => {
+	window.removeEventListener("resize", resizeGarden);
+});
 </script>
 
 <template>
@@ -236,7 +236,6 @@ function resizeGarden() {
 
 <style scoped lang="scss">
 .flowers {
-	margin-top: 20px;
 	.buttons {
 		button {
 			border: 1px solid lightgray;

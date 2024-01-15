@@ -99,14 +99,14 @@ const emits = defineEmits(["select-choice"]);
 		&.top-right {
 			transform: rotate(-45deg);
 			top: -13.75px;
-			right: -14.5px;
+			right: -13.75px;
 		}
 
 		&.top-left {
 			transform: rotate(45deg);
 
 			top: -13.75px;
-			left: -14.5px;
+			left: -13.75px;
 		}
 
 		.div {

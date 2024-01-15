@@ -237,124 +237,116 @@ const chartRef3 = ref(null);
 
 <template>
 	<section class="statistics">
-		<div class="no-data-container" v-if="nested ? false : !allMeals?.length">
-			You do not have any meal data on your account yet. Head to the Calendar
-			part of the Food Tracker application to add some!
-		</div>
-		<div
-			class="data-container"
-			v-if="nested ? props.meals?.length : allMeals?.length"
-		>
-			<div class="graph">
-				<div class="pie-container">
-					<p>Restaurants Visited</p>
-					<Pie
-						ref="chartRef1"
-						:data="
-							graphfunctions.getPieData(
-								totalRestaurants(nested ? props.restaurants : allRestaurants)
-							)
-						"
-						:options="pieOptions"
-						@click="onClick($event, restaurantPieData, 1)"
-					/>
-				</div>
-				<div class="pie-container">
-					<p>Meals Eaten</p>
-					<Pie
-						ref="chartRef2"
-						:data="
-							graphfunctions.getPieData(
-								totalMeals(nested ? props.meals : allMeals)
-							)
-						"
-						:options="pieOptions"
-						@click="onClick($event, mealsPieData, 2)"
-					/>
-				</div>
-				<div class="pie-container">
-					<p>Sides Eaten</p>
-					<Pie
-						ref="chartRef3"
-						:data="
-							graphfunctions.getPieData(
-								totalSides(nested ? props.meals : allMeals)
-							)
-						"
-						:options="pieOptions"
-						@click="onClick($event, sidesPieData, 3)"
-					/>
-				</div>
+		<div class="graph">
+			<div class="pie-container">
+				<p>Restaurants Visited</p>
+				<Pie
+					ref="chartRef1"
+					:data="
+						graphfunctions.getPieData(
+							totalRestaurants(nested ? props.restaurants : allRestaurants)
+						)
+					"
+					:options="pieOptions"
+					@click="onClick($event, restaurantPieData, 1)"
+				/>
 			</div>
-			<div class="table" v-if="!nested && allMeals?.length">
-				<div class="mt-8 flow-root">
-					<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+			<div class="pie-container">
+				<p>Meals Eaten</p>
+				<Pie
+					ref="chartRef2"
+					:data="
+						graphfunctions.getPieData(
+							totalMeals(nested ? props.meals : allMeals)
+						)
+					"
+					:options="pieOptions"
+					@click="onClick($event, mealsPieData, 2)"
+				/>
+			</div>
+			<div class="pie-container">
+				<p>Sides Eaten</p>
+				<Pie
+					ref="chartRef3"
+					:data="
+						graphfunctions.getPieData(
+							totalSides(nested ? props.meals : allMeals)
+						)
+					"
+					:options="pieOptions"
+					@click="onClick($event, sidesPieData, 3)"
+				/>
+			</div>
+		</div>
+		<div class="table" v-if="!nested && allMeals?.length">
+			<div class="mt-8 flow-root">
+				<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+					<div
+						class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
+					>
 						<div
-							class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
+							class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg"
 						>
-							<div
-								class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg"
-							>
-								<table class="min-w-full divide-y divide-gray-300">
-									<thead class="bg-gray-50">
-										<tr>
-											<th
-												scope="col"
-												class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-											>
-												Name
-											</th>
-											<th
-												scope="col"
-												class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-											>
-												Restaurant
-											</th>
-											<th
-												scope="col"
-												class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-											>
-												Date
-											</th>
-											<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-												<span class="sr-only">Rating</span>
-											</th>
-											<!-- <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+							<table class="min-w-full divide-y divide-gray-300">
+								<thead class="bg-gray-50">
+									<tr>
+										<th
+											scope="col"
+											class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+										>
+											Name
+										</th>
+										<th
+											scope="col"
+											class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+										>
+											Restaurant
+										</th>
+										<th
+											scope="col"
+											class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+										>
+											Date
+										</th>
+										<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+											<span class="sr-only">Rating</span>
+										</th>
+										<!-- <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
 											<span class="sr-only">Edit</span>
 										</th> -->
-										</tr>
-									</thead>
-									<tbody class="divide-y divide-gray-200 bg-white">
-										<tr
-											v-for="meal in nested ? props.meals : allMeals"
-											:key="meal ? meal.id : 0"
-											:class="{
-												highlighted:
-													meal.highlighted ||
-													getRestaurant(meal.restaurantID).highlighted,
-											}"
+									</tr>
+								</thead>
+								<tbody class="divide-y divide-gray-200 bg-white">
+									<tr
+										v-for="meal in nested ? props.meals : allMeals"
+										:key="meal ? meal.id : 0"
+										:class="{
+											highlighted:
+												meal.highlighted ||
+												getRestaurant(meal.restaurantID).highlighted,
+										}"
+									>
+										<td
+											class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
 										>
-											<td
-												class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
-											>
-												{{ meal.name }}
-											</td>
-											<td
-												class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-											>
-												{{ getRestaurant(meal.restaurantID).name }}
-											</td>
-											<td
-												class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-											>
-												{{ meal.date }}
-											</td>
-											<td
-												class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-											>
-												<Stars :rating="meal.rating"></Stars>
-											</td>
-											<!-- <td
+											{{ meal.name }}
+										</td>
+										<td
+											class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+										>
+											{{ getRestaurant(meal.restaurantID).name }}
+										</td>
+										<td
+											class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+										>
+											{{ meal.date }}
+										</td>
+										<td
+											class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+										>
+											<Stars :rating="meal.rating"></Stars>
+										</td>
+										<!-- <td
 											class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
 										>
 											<a href="#" class="text-indigo-600 hover:text-indigo-900"
@@ -363,10 +355,9 @@ const chartRef3 = ref(null);
 												></a
 											>
 										</td> -->
-										</tr>
-									</tbody>
-								</table>
-							</div>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -379,54 +370,43 @@ const chartRef3 = ref(null);
 .statistics {
 	margin: 0 10px 80px 10px;
 	display: grid;
-
-	.no-data-container {
+	.graph-heading {
+		width: 95%;
 		margin: auto;
-		margin-top: 60px;
-		max-width: 600px;
-		text-align: center;
-		font-size: 20px;
 	}
 
-	.data-container {
-		.graph-heading {
-			width: 95%;
-			margin: auto;
+	.graph {
+		display: flex;
+		justify-content: space-around;
+		width: 100%;
+		margin-top: 20px;
+
+		.pie-container {
+			width: 40%;
+
+			p {
+				text-align: center;
+			}
 		}
 
-		.graph {
-			display: flex;
-			justify-content: space-around;
-			width: 100%;
-			margin-top: 20px;
+		@media only screen and (max-width: 900px) {
+			display: unset;
 
 			.pie-container {
-				width: 40%;
-
-				p {
-					text-align: center;
-				}
-			}
-
-			@media only screen and (max-width: 900px) {
-				display: unset;
-
-				.pie-container {
-					width: 95%;
-					margin: auto;
-					padding-bottom: 15px;
-				}
+				width: 95%;
+				margin: auto;
+				padding-bottom: 15px;
 			}
 		}
+	}
 
-		.table {
-			margin-top: 20px;
-			margin: auto;
+	.table {
+		margin-top: 20px;
+		justify-self: center;
 
-			.highlighted {
-				border: 1px solid lightcoral;
-				background-color: rgb(247, 235, 235);
-			}
+		.highlighted {
+			border: 1px solid lightcoral;
+			background-color: rgb(247, 235, 235);
 		}
 	}
 }

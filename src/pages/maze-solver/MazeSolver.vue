@@ -108,46 +108,6 @@ const tourSteps = ref([
 	},
 ]);
 
-//Manages the creation of the MazeSolver, setting the width properly for screen size, creates the maze, and adds an event listener.
-onMounted(() => {
-	if (window.innerWidth < 900) width.value = 35;
-	if (window.innerWidth < 750) width.value = 25;
-	if (window.innerWidth < 550) width.value = 15;
-	createNodes(true);
-
-	window.addEventListener("resize", resizeMaze);
-
-	const internalInstance = getCurrentInstance();
-	const $tours = internalInstance.appContext.config.globalProperties.$tours;
-	tours.value = $tours;
-
-	fetchValues();
-});
-
-//Removes the event listener on unmounting
-onUnmounted(() => {
-	window.removeEventListener("resize", resizeMaze);
-});
-
-function fetchValues() {
-	userFunctions.fetchUser().then((user) => {
-		if (user && !user.mazeFTUE) {
-			startTour();
-			userFunctions.updateUser(
-				user,
-				user.name,
-				user.lastQuery,
-				true,
-				user.foodTrackerFTUE
-			);
-		}
-	});
-}
-
-function startTour() {
-	tours.value.mazeTour.start();
-}
-
 //Creates the maze, as well as a same-size secondary array of arrays which we will use to track the path to the exit.
 function createNodes(status) {
 	start.value = { x: -1, y: -1 };
@@ -215,6 +175,40 @@ function selectChoice(x, y) {
 		currentChoice.value = "none";
 		startTimeout(displayChoices.value[0].status);
 	}
+}
+
+//Manages the creation of the MazeSolver, setting the width properly for screen size, creates the maze, and adds an event listener.
+onMounted(() => {
+	if (window.innerWidth < 900) width.value = 35;
+	if (window.innerWidth < 750) width.value = 25;
+	if (window.innerWidth < 550) width.value = 15;
+	createNodes(true);
+
+	window.addEventListener("resize", resizeMaze);
+
+	const internalInstance = getCurrentInstance();
+	const $tours = internalInstance.appContext.config.globalProperties.$tours;
+	tours.value = $tours;
+
+	fetchValues();
+});
+
+//Removes the event listener on unmounting
+onUnmounted(() => {
+	window.removeEventListener("resize", resizeMaze);
+});
+
+function fetchValues() {
+	userFunctions.fetchUser().then((user) => {
+		if (user && !user.mazeFTUE) {
+			startTour();
+			userFunctions.updateUser(user, user.name, user.lastQuery, true);
+		}
+	});
+}
+
+function startTour() {
+	tours.value.myTour.start();
 }
 
 //Increments the bubble search another layer outwards as it searches for the exit
@@ -630,7 +624,7 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 			code to accomplish it.
 		</div>
 	</fieldset>
-	<v-tour name="mazeTour" :steps="tourSteps"></v-tour>
+	<v-tour name="myTour" :steps="tourSteps"></v-tour>
 </template>
 
 <style scoped lang="scss">

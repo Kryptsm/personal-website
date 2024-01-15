@@ -16,7 +16,6 @@ export async function fetchUser() {
                         name
                         lastQuery
                         mazeFTUE
-                        foodTrackerFTUE
                         _version
                     }
                 }
@@ -43,7 +42,6 @@ export async function createUser(username) {
                     lastQuery
                     name
                     mazeFTUE
-                    foodTrackerFTUE
                 }
             }
         `,
@@ -52,23 +50,16 @@ export async function createUser(username) {
 	return result.data.createUserInfo;
 }
 
-export async function updateUser(
-	user,
-	username,
-	lastQuery,
-	mazeFTUE,
-	foodTrackerFTUE
-) {
+export async function updateUser(user, username, lastQuery, mazeFTUE) {
 	const result = await client.graphql({
 		query: `
             mutation UpdateUserInfo {
-                updateUserInfo(input: {id: "${user.id}", lastQuery: "${lastQuery}", name: "${username}", _version: ${user._version}, mazeFTUE: ${mazeFTUE}, foodTrackerFTUE: ${foodTrackerFTUE}}) {
+                updateUserInfo(input: {id: "${user.id}", lastQuery: "${lastQuery}", name: "${username}", _version: ${user._version}, mazeFTUE: ${mazeFTUE}}) {
                         _version
                         id
                         lastQuery
                         name
                         mazeFTUE
-                        foodTrackerFTUE
                     }
                 }
         `,
