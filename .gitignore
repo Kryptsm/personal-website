@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+*.env
 
 # Editor directories and files
 .vscode/*
@@ -44,5 +46,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-
-.env
