@@ -3,6 +3,7 @@ import { useGetRandomInt } from "../../../functions/math";
 import { ref } from "vue";
 const props = defineProps([
 	"status",
+	"adjacentPathStatus",
 	"x",
 	"y",
 	"hoverStatus",
@@ -41,7 +42,27 @@ const emits = defineEmits(["select-choice"]);
 	></div>
 	<div class="tile start" v-if="status == 2"></div>
 	<div class="tile end" v-if="status == 3"></div>
-	<div class="tile path" v-if="status == 4"></div>
+	<div
+		class="tile path"
+		v-if="status == 4"
+		:style="{
+			backgroundColor: `rgb(${200 - 200 * (trackerNum / trackerTotal)}, ${
+				220 - 200 * (trackerNum / trackerTotal)
+			}, ${255 - 120 * (trackerNum / trackerTotal)})`,
+		}"
+	>
+		<div
+			class="center-tile"
+			v-if="
+				(!adjacentPathStatus.north || !adjacentPathStatus.south) &&
+				(!adjacentPathStatus.west || !adjacentPathStatus.east)
+			"
+		></div>
+		<div class="north-path adjacent" v-if="adjacentPathStatus.north"></div>
+		<div class="south-path adjacent" v-if="adjacentPathStatus.south"></div>
+		<div class="west-path adjacent" v-if="adjacentPathStatus.west"></div>
+		<div class="east-path adjacent" v-if="adjacentPathStatus.east"></div>
+	</div>
 	<div
 		class="tile bubble"
 		:style="{
@@ -75,7 +96,51 @@ const emits = defineEmits(["select-choice"]);
 }
 
 .path {
-	background-color: yellowgreen;
+	background-color: white;
+	position: relative;
+
+	.adjacent {
+		width: 6px;
+		height: calc(50% + 2px);
+		background-color: yellowgreen;
+		z-index: 2;
+		position: absolute;
+	}
+
+	.center-tile {
+		width: 6px;
+		height: 6px;
+		position: absolute;
+		left: calc(50% - 2px);
+		top: calc(50% - 3px);
+		background-color: yellowgreen;
+		z-index: 2;
+	}
+
+	.north-path {
+		top: -1px;
+		left: calc(50% - 2px);
+	}
+
+	.west-path,
+	.east-path {
+		height: calc(50% + 4px);
+		top: calc(25% - 2px);
+		transform: rotate(90deg);
+	}
+
+	.west-path {
+		left: 3px;
+	}
+
+	.south-path {
+		left: calc(50% - 2px);
+		top: calc(50% - 1px);
+	}
+
+	.east-path {
+		left: calc(75% - 3px);
+	}
 }
 
 .space,
@@ -93,6 +158,7 @@ const emits = defineEmits(["select-choice"]);
 	.container {
 		display: block;
 		position: absolute;
+		z-index: 2;
 
 		// width: 40%;
 		// height: 40%;
