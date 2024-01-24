@@ -155,8 +155,8 @@ function createNodes(status) {
 //Resizes the maze for different screen sizes
 function resizeMaze() {
 	let originalWidth = width.value;
-	if (window.innerWidth >= 900 && width.value != 45) width.value = 45;
-	if (window.innerWidth < 900) width.value = 35;
+	if (window.innerWidth >= 1000 && width.value != 45) width.value = 45;
+	if (window.innerWidth < 1000) width.value = 35;
 	if (window.innerWidth < 750) width.value = 25;
 	if (window.innerWidth < 550) width.value = 15;
 	if (originalWidth != width.value) createNodes(true);
@@ -179,7 +179,7 @@ function selectChoice(x, y) {
 
 //Manages the creation of the MazeSolver, setting the width properly for screen size, creates the maze, and adds an event listener.
 onMounted(() => {
-	if (window.innerWidth < 900) width.value = 35;
+	if (window.innerWidth < 1000) width.value = 35;
 	if (window.innerWidth < 750) width.value = 25;
 	if (window.innerWidth < 550) width.value = 15;
 	createNodes(true);
@@ -483,7 +483,7 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 			surroundedStatus = false;
 		if (indexCol != 0 && nodes.value[indexRow][indexCol - 1] != 0)
 			surroundedStatus = false;
-		if (indexCol != width.value - 1 && nodes.value[indexRow][indexCol + 1 != 0])
+		if (indexCol != width.value - 1 && nodes.value[indexRow][indexCol + 1] != 0)
 			surroundedStatus = false;
 
 		if (surroundedStatus) {
@@ -495,6 +495,48 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 	//If the node is not part of the bubble, return it as it already exists.
 	return colInfo;
 }
+
+function getAdjacentNodePathStatus(indexRow, indexCol, colInfo) {
+	if (colInfo != 4) return;
+
+	let sidesHolder = {
+		north: false,
+		west: false,
+		east: false,
+		south: false,
+	};
+
+	if (
+		indexRow != 0 &&
+		(nodes.value[indexRow - 1][indexCol] == 4 ||
+			nodes.value[indexRow - 1][indexCol] == 3 ||
+			nodes.value[indexRow - 1][indexCol] == 2)
+	)
+		sidesHolder.north = true;
+	if (
+		indexRow != height.value - 1 &&
+		(nodes.value[indexRow + 1][indexCol] == 4 ||
+			nodes.value[indexRow + 1][indexCol] == 3 ||
+			nodes.value[indexRow + 1][indexCol] == 2)
+	)
+		sidesHolder.south = true;
+	if (
+		indexCol != 0 &&
+		(nodes.value[indexRow][indexCol - 1] == 4 ||
+			nodes.value[indexRow][indexCol - 1] == 3 ||
+			nodes.value[indexRow][indexCol - 1] == 2)
+	)
+		sidesHolder.west = true;
+	if (
+		indexCol != width.value - 1 &&
+		(nodes.value[indexRow][indexCol + 1] == 4 ||
+			nodes.value[indexRow][indexCol + 1] == 3 ||
+			nodes.value[indexRow][indexCol + 1] == 2)
+	)
+		sidesHolder.east = true;
+
+	return sidesHolder;
+}
 </script>
 
 <template>
@@ -504,6 +546,9 @@ function getNodeStatus(indexRow, indexCol, colInfo) {
 				<v-col v-for="(col, indexCol) in row" class="mazeCol">
 					<Tile
 						:status="getNodeStatus(indexRow, indexCol, col)"
+						:adjacent-path-status="
+							getAdjacentNodePathStatus(indexRow, indexCol, col)
+						"
 						:x="indexCol"
 						:y="indexRow"
 						:hoverStatus="currentChoice"
