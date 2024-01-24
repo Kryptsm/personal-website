@@ -217,40 +217,6 @@ function selectChoice(x, y) {
 	}
 }
 
-//Manages the creation of the MazeSolver, setting the width properly for screen size, creates the maze, and adds an event listener.
-onMounted(() => {
-	if (window.innerWidth < 1000) width.value = 35;
-	if (window.innerWidth < 750) width.value = 25;
-	if (window.innerWidth < 550) width.value = 15;
-	createNodes(true);
-
-	window.addEventListener("resize", resizeMaze);
-
-	const internalInstance = getCurrentInstance();
-	const $tours = internalInstance.appContext.config.globalProperties.$tours;
-	tours.value = $tours;
-
-	fetchValues();
-});
-
-//Removes the event listener on unmounting
-onUnmounted(() => {
-	window.removeEventListener("resize", resizeMaze);
-});
-
-function fetchValues() {
-	userFunctions.fetchUser().then((user) => {
-		if (user && !user.mazeFTUE) {
-			startTour();
-			userFunctions.updateUser(user, user.name, user.lastQuery, true);
-		}
-	});
-}
-
-function startTour() {
-	tours.value.myTour.start();
-}
-
 //Increments the bubble search another layer outwards as it searches for the exit
 function incrementBubble() {
 	//If we haven't chosen a start or an end yet
@@ -604,6 +570,7 @@ function getAdjacentNodePathStatus(indexRow, indexCol, colInfo) {
 							indexCol != width - 1 &&
 							nodes[indexRow - 1][indexCol + 1] == 0
 						"
+						:show-bubble="displayChoices[0].status"
 						@select-choice="selectChoice"
 					></Tile>
 				</v-col>

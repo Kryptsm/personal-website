@@ -11,6 +11,7 @@ const props = defineProps([
 	"trackerTotal",
 	"topLeft",
 	"topRight",
+	"showBubble",
 ]);
 const emits = defineEmits(["select-choice"]);
 </script>
@@ -45,11 +46,15 @@ const emits = defineEmits(["select-choice"]);
 	<div
 		class="tile path"
 		v-if="status == 4"
-		:style="{
-			backgroundColor: `rgb(${200 - 200 * (trackerNum / trackerTotal)}, ${
-				220 - 200 * (trackerNum / trackerTotal)
-			}, ${255 - 120 * (trackerNum / trackerTotal)})`,
-		}"
+		:style="
+			showBubble
+				? {
+						backgroundColor: `rgb(${200 - 200 * (trackerNum / trackerTotal)}, ${
+							220 - 200 * (trackerNum / trackerTotal)
+						}, ${255 - 120 * (trackerNum / trackerTotal)})`,
+				  }
+				: ''
+		"
 	>
 		<div
 			class="center-tile"
