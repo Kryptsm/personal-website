@@ -374,160 +374,172 @@ function newMealModalClose(newMeal, newRestaurant) {
 </script>
 
 <template>
-	<section class="food-tracker">
-		<section v-if="restaurantRecs?.length" class="recs">
-			<h6 class="title">Restaurant Recommendations Based on your History:</h6>
-			<div class="rec-container">
-				<a
-					v-for="(rec, index) in windowSize >= 675
-						? restaurantRecs
-						: restaurantRecs.slice(0, 3)"
-					class="rec"
-					:href="rec.link"
-					target="_blank"
-					>{{ rec.name }}
-					<ArrowTopRightOnSquareIcon
-						class="h-5 w-5 text-gray-600"
-						aria-hidden="true"
-						v-if="rec.link && windowSize >= 800"
-					/>
-				</a>
-			</div>
-		</section>
-		<section class="calendar-section">
-			<header class="top-bar">
-				<div class="add-new w-33">
-					<button
-						type="button"
-						class="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto new-meal-btn"
-						@click="newMealModalStatus = true"
-					>
-						Add New Meal
-					</button>
-				</div>
-				<p class="month w-33" v-if="months && date">
-					{{ months[date.getMonth()] }}
-				</p>
-				<span class="input-wrapper w-33">
-					<input
-						type="date"
-						id="start"
-						name="trip-start"
-						:value="date.toISOString().split('T')[0]"
-						min="2022-01-01"
-						max="2024-12-31"
-						@input="handleDateChange($event.target.value)"
-					/>
-				</span>
-			</header>
+	<Authenticator>
+		<template v-slot="{ user, signOut }">
+			<section class="food-tracker">
+				<!-- <section v-if="restaurantRecs?.length" class="recs">
+					<h6 class="title">
+						Restaurant Recommendations Based on your History:
+					</h6>
+					<div class="rec-container">
+						<a
+							v-for="(rec, index) in windowSize >= 675
+								? restaurantRecs
+								: restaurantRecs.slice(0, 3)"
+							class="rec"
+							:href="rec.link"
+							target="_blank"
+							>{{ rec.name }}
+							<ArrowTopRightOnSquareIcon
+								class="h-5 w-5 text-gray-600"
+								aria-hidden="true"
+								v-if="rec.link && windowSize >= 800"
+							/>
+						</a>
+					</div>
+				</section> -->
+				<section class="calendar-section">
+					<header class="top-bar">
+						<div class="add-new w-33">
+							<button
+								type="button"
+								class="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto new-meal-btn"
+								@click="newMealModalStatus = true"
+							>
+								Add New Meal
+							</button>
+						</div>
+						<p class="month w-33" v-if="months && date">
+							{{ months[date.getMonth()] }}
+						</p>
+						<span class="input-wrapper w-33">
+							<input
+								type="date"
+								id="start"
+								name="trip-start"
+								:value="date.toISOString().split('T')[0]"
+								min="2022-01-01"
+								max="2024-12-31"
+								@input="handleDateChange($event.target.value)"
+							/>
+						</span>
+					</header>
 
-			<div class="week-calendar" v-if="windowSize > 675">
-				<div class="day-titles">
-					<div class="day-card" v-for="(day, index) in daysOfTheWeek">
-						<div class="name">
+					<div class="week-calendar" v-if="windowSize > 675">
+						<div class="day-titles">
+							<div class="day-card" v-for="(day, index) in daysOfTheWeek">
+								<div class="name">
+									<div class="day-name">{{ day.name }}</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="week" v-for="prevWeek in previousWeeks">
+							<div class="content" v-for="prevDay in prevWeek">
+								<div class="day-num">{{ getDayNum(prevDay.date) }}</div>
+								<div class="meals">
+									<div
+										class="meal"
+										v-for="meal in prevDay.meals"
+										v-on:click="meal.modalStatus = true"
+										:class="{
+											highlighted:
+												meal.highlighted ||
+												getRestaurant(meal.restaurantID).highlighted,
+										}"
+									>
+										<span v-if="!simplifiedNames && windowSize > 900">{{
+											meal.name
+										}}</span>
+										<span v-if="simplifiedNames || windowSize <= 900">{{
+											meal.coreName
+										}}</span>
+										<MealModal
+											:meal="meal"
+											:restaurant="getRestaurant(meal.restaurantID)"
+											:count="totalSpecificMeal(meal.name)"
+										></MealModal>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="week current-week">
+							<div
+								class="content"
+								v-for="day in daysOfTheWeek"
+								:class="{ today: day.isToday }"
+							>
+								<div class="day-num">{{ getDayNum(day.date) }}</div>
+								<div class="meals">
+									<div
+										class="meal"
+										v-for="meal in day.meals"
+										v-on:click="meal.modalStatus = true"
+										:class="{
+											highlighted:
+												meal.highlighted ||
+												getRestaurant(meal.restaurantID).highlighted,
+										}"
+									>
+										<span v-if="!simplifiedNames && windowSize > 900">{{
+											meal.name
+										}}</span>
+										<span v-if="simplifiedNames || windowSize <= 900">{{
+											meal.coreName
+										}}</span>
+										<MealModal
+											:meal="meal"
+											:restaurant="getRestaurant(meal.restaurantID)"
+											:count="totalSpecificMeal(meal.name)"
+										></MealModal>
+									</div>
+								</div>
+								<div
+									v-if="!day.isToday && day.isFuture"
+									class="future-img"
+								></div>
+							</div>
+						</div>
+					</div>
+					<div class="week-calendar-mobile" v-if="windowSize <= 675">
+						<div class="day-mobile" v-for="(day, index) in daysOfTheWeek">
 							<div class="day-name">{{ day.name }}</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="week" v-for="prevWeek in previousWeeks">
-					<div class="content" v-for="prevDay in prevWeek">
-						<div class="day-num">{{ getDayNum(prevDay.date) }}</div>
-						<div class="meals">
 							<div
-								class="meal"
-								v-for="meal in prevDay.meals"
-								v-on:click="meal.modalStatus = true"
-								:class="{
-									highlighted:
-										meal.highlighted ||
-										getRestaurant(meal.restaurantID).highlighted,
-								}"
+								class="content"
+								:class="{ today: day.isToday, future: day.isFuture }"
 							>
-								<span v-if="!simplifiedNames && windowSize > 900">{{
-									meal.name
-								}}</span>
-								<span v-if="simplifiedNames || windowSize <= 900">{{
-									meal.coreName
-								}}</span>
-								<MealModal
-									:meal="meal"
-									:restaurant="getRestaurant(meal.restaurantID)"
-									:count="totalSpecificMeal(meal.name)"
-								></MealModal>
+								<div class="day-num">{{ getDayNum(day.date) }}</div>
+								<div class="meals">
+									<div class="meal" v-for="meal in day.meals">
+										<span v-if="!simplifiedNames">{{ meal.name }}</span>
+										<span v-if="simplifiedNames">{{ meal.coreName }}</span>
+									</div>
+								</div>
+								<div
+									v-if="!day.isToday && day.isFuture"
+									class="future-img"
+								></div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</section>
 
-				<div class="week current-week">
-					<div
-						class="content"
-						v-for="day in daysOfTheWeek"
-						:class="{ today: day.isToday }"
-					>
-						<div class="day-num">{{ getDayNum(day.date) }}</div>
-						<div class="meals">
-							<div
-								class="meal"
-								v-for="meal in day.meals"
-								v-on:click="meal.modalStatus = true"
-								:class="{
-									highlighted:
-										meal.highlighted ||
-										getRestaurant(meal.restaurantID).highlighted,
-								}"
-							>
-								<span v-if="!simplifiedNames && windowSize > 900">{{
-									meal.name
-								}}</span>
-								<span v-if="simplifiedNames || windowSize <= 900">{{
-									meal.coreName
-								}}</span>
-								<MealModal
-									:meal="meal"
-									:restaurant="getRestaurant(meal.restaurantID)"
-									:count="totalSpecificMeal(meal.name)"
-								></MealModal>
-							</div>
-						</div>
-						<div v-if="!day.isToday && day.isFuture" class="future-img"></div>
-					</div>
-				</div>
-			</div>
-			<div class="week-calendar-mobile" v-if="windowSize <= 675">
-				<div class="day-mobile" v-for="(day, index) in daysOfTheWeek">
-					<div class="day-name">{{ day.name }}</div>
-					<div
-						class="content"
-						:class="{ today: day.isToday, future: day.isFuture }"
-					>
-						<div class="day-num">{{ getDayNum(day.date) }}</div>
-						<div class="meals">
-							<div class="meal" v-for="meal in day.meals">
-								<span v-if="!simplifiedNames">{{ meal.name }}</span>
-								<span v-if="simplifiedNames">{{ meal.coreName }}</span>
-							</div>
-						</div>
-						<div v-if="!day.isToday && day.isFuture" class="future-img"></div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<Statistics
-			v-if="allMeals?.length && allRestaurants?.length"
-			:meals="allMeals"
-			:restaurants="allRestaurants"
-		></Statistics>
-		<NewMealModal
-			:open="newMealModalStatus"
-			:restaurants="allRestaurants"
-			:userInfo="userInfo"
-			@close-modal="newMealModalClose"
-		></NewMealModal>
-	</section>
-	<v-tour name="foodTrackerTour" :steps="tourSteps"></v-tour>
+				<Statistics
+					v-if="allMeals?.length && allRestaurants?.length"
+					:meals="allMeals"
+					:restaurants="allRestaurants"
+				></Statistics>
+				<NewMealModal
+					:open="newMealModalStatus"
+					:restaurants="allRestaurants"
+					:userInfo="userInfo"
+					@close-modal="newMealModalClose"
+				></NewMealModal>
+			</section>
+			<v-tour name="foodTrackerTour" :steps="tourSteps"></v-tour>
+		</template>
+	</Authenticator>
 </template>
 
 <style scoped lang="scss">

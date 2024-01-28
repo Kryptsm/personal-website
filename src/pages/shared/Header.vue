@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { onUpdated, ref, onMounted, watch } from "vue";
 import {
 	Dialog,
 	DialogPanel,
@@ -10,8 +10,32 @@ import {
 } from "@headlessui/vue";
 import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
+import SWLogo from "../../assets/SWLogo.png";
+import { useRoute, useRouter } from "vue-router";
 
 const mobileMenuOpen = ref(false);
+const personalPage = ref(false);
+const route = useRoute();
+
+function scrollElementIntoView(str) {
+	const targetElement = document.querySelector(str);
+
+	targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+onUpdated(() => {
+	const route = useRoute();
+	const currentRouteName = route.name;
+	console.log(currentRouteName);
+});
+
+watch(
+	() => route.name,
+	async (a, b) => {
+		if (a == "personal") personalPage.value = true;
+		else personalPage.value = false;
+	}
+);
 </script>
 
 <template>
@@ -22,11 +46,7 @@ const mobileMenuOpen = ref(false);
 		>
 			<a class="-m-1.5 p-1.5">
 				<span class="sr-only">Your Company</span>
-				<img
-					class="h-8 w-auto"
-					src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-					alt=""
-				/>
+				<img class="h-8 w-auto" :src="SWLogo" alt="" />
 			</a>
 			<div class="flex lg:hidden">
 				<button
@@ -39,77 +59,27 @@ const mobileMenuOpen = ref(false);
 				</button>
 			</div>
 			<div class="hidden lg:flex lg:gap-x-12 link-parent">
+				<a
+					class="text-sm font-semibold leading-6 text-gray-900"
+					@click="scrollElementIntoView('.examples-of-work')"
+					v-if="personalPage"
+				>
+					Examples of Work
+				</a>
+				<a
+					class="text-sm font-semibold leading-6 text-gray-900"
+					@click="scrollElementIntoView('.ways-to-reach-me')"
+					v-if="personalPage"
+				>
+					Ways to Reach Me
+				</a>
 				<router-link
 					:to="{ name: 'personal' }"
 					class="text-sm font-semibold leading-6 text-gray-900"
+					v-if="!personalPage"
 				>
-					Personal
+					Return to Homepage
 				</router-link>
-				<router-link
-					:to="{ name: 'flower-game' }"
-					class="text-sm font-semibold leading-6 text-gray-900"
-				>
-					Flower Game
-				</router-link>
-				<router-link
-					:to="{ name: 'maze-solver' }"
-					class="text-sm font-semibold leading-6 text-gray-900"
-				>
-					Maze Solver
-				</router-link>
-				<Menu as="div" class="relative inline-block text-left">
-					<div>
-						<MenuButton
-							class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-						>
-							Food Tracker
-							<ChevronDownIcon
-								class="-mr-1 h-5 w-5 text-gray-400"
-								aria-hidden="true"
-							/>
-						</MenuButton>
-					</div>
-
-					<transition
-						enter-active-class="transition ease-out duration-100"
-						enter-from-class="transform opacity-0 scale-95"
-						enter-to-class="transform opacity-100 scale-100"
-						leave-active-class="transition ease-in duration-75"
-						leave-from-class="transform opacity-100 scale-100"
-						leave-to-class="transform opacity-0 scale-95"
-					>
-						<MenuItems
-							class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-						>
-							<div class="py-1">
-								<MenuItem v-slot="{ active }">
-									<router-link
-										href="#"
-										:to="{ name: 'food-tracker' }"
-										:class="[
-											active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-											'block px-4 py-2 text-sm',
-										]"
-									>
-										Calendar
-									</router-link>
-								</MenuItem>
-								<MenuItem v-slot="{ active }">
-									<router-link
-										href="#"
-										:to="{ name: 'food-tracker/statistics' }"
-										:class="[
-											active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-											'block px-4 py-2 text-sm',
-										]"
-									>
-										Statistics
-									</router-link>
-								</MenuItem>
-							</div>
-						</MenuItems>
-					</transition>
-				</Menu>
 			</div>
 		</div>
 		<Dialog
@@ -125,11 +95,7 @@ const mobileMenuOpen = ref(false);
 				<div class="flex items-center justify-between">
 					<a class="-m-1.5 p-1.5">
 						<span class="sr-only">Your Company</span>
-						<img
-							class="h-8 w-auto"
-							src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-							alt=""
-						/>
+						<img class="h-8 w-auto" :src="SWLogo" alt="" />
 					</a>
 					<button
 						type="button"
@@ -143,40 +109,32 @@ const mobileMenuOpen = ref(false);
 				<div class="mt-6 flow-root">
 					<div class="-my-6 divide-y divide-gray-500/10">
 						<div class="space-y-2 py-6">
+							<a
+								@click="
+									mobileMenuOpen = false;
+									scrollElementIntoView('.examples-of-work');
+								"
+								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+								v-if="personalPage"
+							>
+								Examples of Work
+							</a>
+							<a
+								@click="
+									mobileMenuOpen = false;
+									scrollElementIntoView('.ways-to-reach-me');
+								"
+								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+								v-if="personalPage"
+							>
+								Ways to Reach Me
+							</a>
 							<router-link
 								:to="{ name: 'personal' }"
-								@click="mobileMenuOpen = false"
 								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+								v-if="!personalPage"
 							>
-								Personal
-							</router-link>
-							<router-link
-								:to="{ name: 'flower-game' }"
-								@click="mobileMenuOpen = false"
-								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-							>
-								Flower Game
-							</router-link>
-							<router-link
-								:to="{ name: 'maze-solver' }"
-								@click="mobileMenuOpen = false"
-								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-							>
-								Maze Solver
-							</router-link>
-							<router-link
-								:to="{ name: 'food-tracker' }"
-								@click="mobileMenuOpen = false"
-								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-							>
-								Food Tracker: Calendar
-							</router-link>
-							<router-link
-								:to="{ name: 'food-tracker/statistics' }"
-								@click="mobileMenuOpen = false"
-								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-							>
-								Food Tracker: Statistics
+								Return to Homepage
 							</router-link>
 						</div>
 					</div>
@@ -186,10 +144,14 @@ const mobileMenuOpen = ref(false);
 	</header>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .link-parent {
 	display: flex;
 	align-items: center;
+
+	a {
+		cursor: pointer;
+	}
 
 	@media only screen and (max-width: 1023px) {
 		display: none;
