@@ -123,6 +123,7 @@ onMounted(() => {
 	tours.value = $tours;
 
 	fetchValues();
+	startTour();
 });
 
 //Removes the event listener on unmounting
@@ -131,18 +132,18 @@ onUnmounted(() => {
 });
 
 function fetchValues() {
-	userFunctions.fetchUser().then((user) => {
-		if (user && !user.mazeFTUE) {
-			startTour();
-			userFunctions.updateUser(
-				user,
-				user.name,
-				user.lastQuery,
-				true,
-				user.foodTrackerFTUE
-			);
-		}
-	});
+	// userFunctions.fetchUser().then((user) => {
+	// 	if (user && !user.mazeFTUE) {
+	// 		startTour();
+	// 		userFunctions.updateUser(
+	// 			user,
+	// 			user.name,
+	// 			user.lastQuery,
+	// 			true,
+	// 			user.foodTrackerFTUE
+	// 		);
+	// 	}
+	// });
 }
 
 function startTour() {
@@ -547,143 +548,141 @@ function getAdjacentNodePathStatus(indexRow, indexCol, colInfo) {
 </script>
 
 <template>
-	<Authenticator>
-		<template v-slot="{ user, signOut }">
-			<section class="maze-container">
-				<div class="maze">
-					<v-row v-for="(row, indexRow) in nodes" class="mazeRow">
-						<v-col v-for="(col, indexCol) in row" class="mazeCol">
-							<Tile
-								:status="getNodeStatus(indexRow, indexCol, col)"
-								:adjacent-path-status="
-									getAdjacentNodePathStatus(indexRow, indexCol, col)
-								"
-								:x="indexCol"
-								:y="indexRow"
-								:hoverStatus="currentChoice"
-								:trackerNum="tracker[indexRow][indexCol]"
-								:trackerTotal="currentStep"
-								:top-left="
-									indexRow != 0 &&
-									indexCol != 0 &&
-									nodes[indexRow - 1][indexCol - 1] == 0
-								"
-								:top-right="
-									indexRow != 0 &&
-									indexCol != width - 1 &&
-									nodes[indexRow - 1][indexCol + 1] == 0
-								"
-								:show-bubble="displayChoices[0].status"
-								@select-choice="selectChoice"
-							></Tile>
-						</v-col>
-					</v-row>
-				</div>
-			</section>
+	<!-- <Authenticator>
+		<template v-slot="{ user, signOut }"> -->
+	<section class="maze-container">
+		<div class="maze">
+			<v-row v-for="(row, indexRow) in nodes" class="mazeRow">
+				<v-col v-for="(col, indexCol) in row" class="mazeCol">
+					<Tile
+						:status="getNodeStatus(indexRow, indexCol, col)"
+						:adjacent-path-status="
+							getAdjacentNodePathStatus(indexRow, indexCol, col)
+						"
+						:x="indexCol"
+						:y="indexRow"
+						:hoverStatus="currentChoice"
+						:trackerNum="tracker[indexRow][indexCol]"
+						:trackerTotal="currentStep"
+						:top-left="
+							indexRow != 0 &&
+							indexCol != 0 &&
+							nodes[indexRow - 1][indexCol - 1] == 0
+						"
+						:top-right="
+							indexRow != 0 &&
+							indexCol != width - 1 &&
+							nodes[indexRow - 1][indexCol + 1] == 0
+						"
+						:show-bubble="displayChoices[0].status"
+						@select-choice="selectChoice"
+					></Tile>
+				</v-col>
+			</v-row>
+		</div>
+	</section>
 
-			<fieldset class="info">
-				<div class="header-bar mx-auto flex">
-					<legend
-						class="text-base font-semibold leading-6 text-gray-900 mr-auto"
-					>
-						Display Options
-					</legend>
+	<fieldset class="info">
+		<div class="header-bar mx-auto flex">
+			<legend class="text-base font-semibold leading-6 text-gray-900 mr-auto">
+				Display Options
+			</legend>
 
-					<div class="newmaze flex newmaze-btn">
-						<button
-							@click="createNodes(true)"
-							class="text-base font-semibold leading-6 text-gray-900 ml-auto"
-						>
-							New Maze
-						</button>
-					</div>
-
-					<div class="newmaze flex resetmaze-btn">
-						<button
-							@click="createNodes(false)"
-							class="text-base font-semibold leading-6 text-gray-900 ml-auto"
-						>
-							Reset the Maze
-						</button>
-					</div>
-				</div>
-
-				<div
-					class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200 body display-options"
+			<div class="newmaze flex newmaze-btn">
+				<button
+					@click="createNodes(true)"
+					class="text-base font-semibold leading-6 text-gray-900 ml-auto"
 				>
-					<div
-						v-for="(rule, ruleId) in displayChoices"
-						:key="ruleId"
-						class="relative flex items-start py-4"
+					New Maze
+				</button>
+			</div>
+
+			<div class="newmaze flex resetmaze-btn">
+				<button
+					@click="createNodes(false)"
+					class="text-base font-semibold leading-6 text-gray-900 ml-auto"
+				>
+					Reset the Maze
+				</button>
+			</div>
+		</div>
+
+		<div
+			class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200 body display-options"
+		>
+			<div
+				v-for="(rule, ruleId) in displayChoices"
+				:key="ruleId"
+				class="relative flex items-start py-4"
+			>
+				<div class="min-w-0 flex-1 text-sm leading-6">
+					<label
+						:for="`person-${rule.id}`"
+						class="select-none font-medium text-gray-900"
 					>
-						<div class="min-w-0 flex-1 text-sm leading-6">
-							<label
-								:for="`person-${rule.id}`"
-								class="select-none font-medium text-gray-900"
-							>
-								Option {{ rule.id }}. {{ rule.name }}
-							</label>
-						</div>
-						<div class="ml-3 flex h-6 items-center">
-							<input
-								:id="`person-${rule.id}`"
-								:name="`person-${rule.id}`"
-								v-model="rule.status"
-								type="checkbox"
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-							/>
-						</div>
-					</div>
+						Option {{ rule.id }}. {{ rule.name }}
+					</label>
 				</div>
-				<div class="body" id="v-step-0">
-					From a more computer science point of view, here is a longer
-					explanation of how it works:
+				<div class="ml-3 flex h-6 items-center">
+					<input
+						:id="`person-${rule.id}`"
+						:name="`person-${rule.id}`"
+						v-model="rule.status"
+						type="checkbox"
+						class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+					/>
 				</div>
-				<div class="body" id="v-step-1">
-					Essentially, this program uses a breadth first search in order to
-					locate the ending of a maze without actually knowing where the ending
-					is. Additionally, it works without the assumption that the ending is
-					against a wall, and that walls are always connected to other walls.
-					Due to the random generation, walls can be floating, so a simple
-					"follow the left handed wall until the exit" strategy is non-viable.
-				</div>
-				<div class="body" id="v-step-2">
-					So, my program essentially just tracks each cell and how long it takes
-					to get from every cell back to the start. It expands outwards, so that
-					it marks all the cells that would take 1 turn to move back to the
-					start first. These would be the four cells in each cardinal direction
-					around the starting cell. Ignoring all the walls of course.
-				</div>
-				<div class="body">
-					Then it marks all the cells that take 2 turns to get back to the
-					start, which are all the cells adjacent to the 1 turn cells that we
-					haven't visited yet. It keeps expanding outwards in this pattern,
-					keeping track of each cell it visits and how many turns it takes to
-					reach the starting cell from that cell. This results in it "bubbling
-					out" as you can see if you select Option 1 in the Display Options. The
-					darker a cell gets, the farther away from the start it is.
-				</div>
-				<div class="body">
-					Once the exit is found, we work our way backwards counting down to
-					one. If it took us 20 turns to find the exit, we then locate a cell
-					adjacent to the exit which takes 19 turns to reach the start. Then
-					from that cell we locate an adjacent on that takes 18 turns. All the
-					way back to zero. As a result, this method will return the most
-					optimal path possible to get from beginning to end.
-				</div>
-				<div class="body">
-					I originally completed a program similar to this (in C++ Programming
-					Language) as part of a class I took at Southern Methodist University.
-					Basically I was bored one day at work and decided to test my knowledge
-					and re-program this. With styling and more functionality, I completed
-					a program that was an entire grade, and we had at least 2 weeks to do,
-					in the span of a day. I also did not look up and assistance or my own
-					old code to accomplish it.
-				</div>
-			</fieldset>
-			<v-tour name="mazeTour" :steps="tourSteps"></v-tour>
-		</template>
-	</Authenticator>
+			</div>
+		</div>
+		<div class="body" id="v-step-0">
+			From a more computer science point of view, here is a longer explanation
+			of how it works:
+		</div>
+		<div class="body" id="v-step-1">
+			Essentially, this program uses a breadth first search in order to locate
+			the ending of a maze without actually knowing where the ending is.
+			Additionally, it works without the assumption that the ending is against a
+			wall, and that walls are always connected to other walls. Due to the
+			random generation, walls can be floating, so a simple "follow the left
+			handed wall until the exit" strategy is non-viable.
+		</div>
+		<div class="body" id="v-step-2">
+			So, my program essentially just tracks each cell and how long it takes to
+			get from every cell back to the start. It expands outwards, so that it
+			marks all the cells that would take 1 turn to move back to the start
+			first. These would be the four cells in each cardinal direction around the
+			starting cell. Ignoring all the walls of course.
+		</div>
+		<div class="body">
+			Then it marks all the cells that take 2 turns to get back to the start,
+			which are all the cells adjacent to the 1 turn cells that we haven't
+			visited yet. It keeps expanding outwards in this pattern, keeping track of
+			each cell it visits and how many turns it takes to reach the starting cell
+			from that cell. This results in it "bubbling out" as you can see if you
+			select Option 1 in the Display Options. The darker a cell gets, the
+			farther away from the start it is.
+		</div>
+		<div class="body">
+			Once the exit is found, we work our way backwards counting down to one. If
+			it took us 20 turns to find the exit, we then locate a cell adjacent to
+			the exit which takes 19 turns to reach the start. Then from that cell we
+			locate an adjacent on that takes 18 turns. All the way back to zero. As a
+			result, this method will return the most optimal path possible to get from
+			beginning to end.
+		</div>
+		<div class="body">
+			I originally completed a program similar to this (in C++ Programming
+			Language) as part of a class I took at Southern Methodist University.
+			Basically I was bored one day at work and decided to test my knowledge and
+			re-program this. With styling and more functionality, I completed a
+			program that was an entire grade, and we had at least 2 weeks to do, in
+			the span of a day. I also did not look up and assistance or my own old
+			code to accomplish it.
+		</div>
+	</fieldset>
+	<v-tour name="mazeTour" :steps="tourSteps"></v-tour>
+	<!-- </template>
+	</Authenticator> -->
 </template>
 
 <style scoped lang="scss">
