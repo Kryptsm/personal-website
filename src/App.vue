@@ -4,8 +4,8 @@ import { Authenticator } from "@aws-amplify/ui-vue";
 </script>
 
 <template>
-	<div class="mx-auto max-w-7xl">
-		<Header />
+	<Header />
+	<div class="mx-auto max-w-7xl background-light">
 		<router-view></router-view>
 	</div>
 </template>
@@ -20,7 +20,8 @@ import { Authenticator } from "@aws-amplify/ui-vue";
 	border: 5px solid #ea7d1c;
 }
 
-.background-light {
+.background-light,
+#app {
 	background-color: #f5f3fc;
 }
 </style>
