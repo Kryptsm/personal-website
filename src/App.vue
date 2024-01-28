@@ -4,18 +4,23 @@ import { Authenticator } from "@aws-amplify/ui-vue";
 </script>
 
 <template>
-	<Authenticator>
-		<template v-slot="{ user, signOut }">
-			<Header />
-			<div class="mx-auto max-w-7xl">
-				<router-view></router-view>
-			</div>
-		</template>
-	</Authenticator>
+	<div class="mx-auto max-w-7xl">
+		<Header />
+		<router-view></router-view>
+	</div>
 </template>
 
 <style>
 .authenticator {
 	margin-top: 30px;
+}
+
+.background-main {
+	background-color: #8965d9;
+	border: 5px solid #ea7d1c;
+}
+
+.background-light {
+	background-color: #f5f3fc;
 }
 </style>
