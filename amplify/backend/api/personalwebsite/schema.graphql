@@ -1,0 +1,27 @@
+type UserInfo @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  lastQuery: AWSDateTime
+  Meals: [Meal] @hasMany(indexName: "byUserInfo", fields: ["id"])
+  mazeFTUE: Boolean
+  foodTrackerFTUE: Boolean
+}
+
+type Restaurant @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  Meals: [Meal] @hasMany(indexName: "byRestaurant", fields: ["id"])
+}
+
+type Meal @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  date: AWSDate!
+  restaurantID: ID! @index(name: "byRestaurant")
+  coreName: String
+  side: String
+  isLeftovers: Boolean
+  createdBy: ID! @index(name: "byUserInfo")
+  rating: Int
+}
+ 

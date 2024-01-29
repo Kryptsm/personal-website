@@ -11,12 +11,19 @@
 	},
 	"dependencies": {
 		"@aws-amplify/cli": "^12.2.4",
+		"@aws-amplify/ui-vue": "^4.0.6",
 		"@headlessui/vue": "^1.7.14",
 		"@heroicons/vue": "^2.0.18",
+		"@popperjs/core": "^2.11.8",
 		"@tailwindcss/forms": "^0.5.4",
+		"aws-amplify": "^6.0.1",
 		"bootstrap-vue": "^2.23.1",
+		"chart.js": "^4.3.3",
+		"openai": "^4.24.1",
 		"vue": "^3.3.4",
+		"vue-chartjs": "^5.2.0",
 		"vue-router": "^4.2.4",
+		"vue3-tour": "^0.3.4",
 		"vuetify": "^3.3.11"
 	},
 	"devDependencies": {
