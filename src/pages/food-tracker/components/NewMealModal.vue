@@ -369,7 +369,6 @@ function submit() {
 		(addNewRestaurant.value && !form.value.newRestaurantName) ||
 		!form.value.coreName
 	) {
-		console.log("Missing information");
 		return;
 	}
 
@@ -378,7 +377,6 @@ function submit() {
 
 		if (match) {
 			let parsedMatch = JSON.parse(JSON.stringify(match));
-			console.log(parsedMatch.id);
 
 			func
 				.createMeal(

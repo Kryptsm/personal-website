@@ -153,7 +153,6 @@ export async function createMeal(
 
 export async function getRestaurantRecommendations(restaurants) {
 	if (!restaurants || !restaurants.length) return;
-	console.log(restaurants);
 	let compiledList = "";
 
 	restaurants.forEach((restaurant) => {

@@ -26,7 +26,6 @@ function scrollElementIntoView(str) {
 onUpdated(() => {
 	const route = useRoute();
 	const currentRouteName = route.name;
-	console.log(currentRouteName);
 });
 
 watch(
