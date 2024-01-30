@@ -252,7 +252,7 @@ function alterElement(fadeElement, coefficient) {
 
 	.left-image-right-text {
 		.text {
-			padding: 0 15px;
+			padding: 0 15px 0 35px;
 			h1,
 			.subtext {
 				text-align: right;
