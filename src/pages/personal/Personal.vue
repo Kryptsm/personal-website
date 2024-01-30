@@ -95,7 +95,7 @@ function alterElement(fadeElement, coefficient) {
 						<p class="desc">
 							A basic program to find the path from the beginning to the end of
 							a randomly generated maze. Based on a program as part of my
-							college education.
+							college education, reimagined with javascript and design.
 						</p>
 						<router-link :to="{ name: 'maze-solver' }" class="link">
 							Click here to see it!
@@ -111,8 +111,8 @@ function alterElement(fadeElement, coefficient) {
 					<div class="body">
 						<h3>Flower Game</h3>
 						<p class="desc">
-							A recreation of the cellular automation Conway's Game of Life
-							created by mathematition John Horton Conway in 1970.
+							A visual recreation of the cellular automation Conway's Game of
+							Life created by mathematition John Horton Conway in 1970.
 						</p>
 						<router-link :to="{ name: 'flower-game' }" class="link">
 							Click here to see it!
@@ -132,7 +132,7 @@ function alterElement(fadeElement, coefficient) {
 						<h3>Food Tracker</h3>
 						<p class="desc">
 							A food tracking application showing off a more typical application
-							I develop. Meant to track your means over time, allows you to rate
+							I develop. Meant to track your meals over time, allows you to rate
 							them, and see summaries about them.
 						</p>
 						<router-link :to="{ name: 'food-tracker' }" class="link">
