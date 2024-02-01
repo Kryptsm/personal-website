@@ -325,7 +325,8 @@ function alterElement(fadeElement, coefficient) {
 			}
 
 			.text {
-				padding-right: 0;
+				padding-left: 10px;
+				padding-right: 10px;
 				margin: 25px 0;
 				width: 100%;
 				h1,
