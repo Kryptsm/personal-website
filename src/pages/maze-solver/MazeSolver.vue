@@ -123,7 +123,8 @@ onMounted(() => {
 	tours.value = $tours;
 
 	fetchValues();
-	startTour();
+
+	if (window.innerWidth > 700) startTour();
 });
 
 //Removes the event listener on unmounting
@@ -197,8 +198,8 @@ function createNodes(status) {
 //Resizes the maze for different screen sizes
 function resizeMaze() {
 	let originalWidth = width.value;
-	if (window.innerWidth >= 1000 && width.value != 45) width.value = 45;
-	if (window.innerWidth < 1000) width.value = 35;
+	if (window.innerWidth >= 1100 && width.value != 45) width.value = 45;
+	if (window.innerWidth < 1100) width.value = 35;
 	if (window.innerWidth < 750) width.value = 25;
 	if (window.innerWidth < 550) width.value = 15;
 	if (originalWidth != width.value) createNodes(true);
@@ -545,6 +546,28 @@ function getAdjacentNodePathStatus(indexRow, indexCol, colInfo) {
 
 	return sidesHolder;
 }
+
+function getAdjacentNodeWallStatus(indexRow, indexCol, colInfo) {
+	if (colInfo != 1 && colInfo != 4) return;
+
+	let sidesHolder = {
+		north: false,
+		west: false,
+		east: false,
+		south: false,
+	};
+
+	if (indexRow != 0 && nodes.value[indexRow - 1][indexCol] == 0)
+		sidesHolder.north = true;
+	if (indexRow != height.value - 1 && nodes.value[indexRow + 1][indexCol] == 0)
+		sidesHolder.south = true;
+	if (indexCol != 0 && nodes.value[indexRow][indexCol - 1] == 0)
+		sidesHolder.west = true;
+	if (indexCol != width.value - 1 && nodes.value[indexRow][indexCol + 1] == 0)
+		sidesHolder.east = true;
+
+	return sidesHolder;
+}
 </script>
 
 <template>
@@ -558,6 +581,9 @@ function getAdjacentNodePathStatus(indexRow, indexCol, colInfo) {
 						:status="getNodeStatus(indexRow, indexCol, col)"
 						:adjacent-path-status="
 							getAdjacentNodePathStatus(indexRow, indexCol, col)
+						"
+						:adjacent-wall-status="
+							getAdjacentNodeWallStatus(indexRow, indexCol, col)
 						"
 						:x="indexCol"
 						:y="indexRow"

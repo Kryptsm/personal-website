@@ -5,7 +5,7 @@ import { Authenticator } from "@aws-amplify/ui-vue";
 
 <template>
 	<Header />
-	<div class="mx-auto max-w-7xl background-light">
+	<div class="mx-auto max-w-6xl background-light">
 		<router-view></router-view>
 	</div>
 </template>

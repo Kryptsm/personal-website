@@ -17,15 +17,17 @@ onMounted(() => {
 	const fadeElementsLeft = document.querySelectorAll(".fade-in-left");
 	const fadeElementsRight = document.querySelectorAll(".fade-in-right");
 
-	window.addEventListener("scroll", () => {
-		fadeElementsLeft.forEach((element) => {
-			alterElement(element, -1);
-		});
+	if (window.innerWidth > 700) {
+		window.addEventListener("scroll", () => {
+			fadeElementsLeft.forEach((element) => {
+				alterElement(element, -1);
+			});
 
-		fadeElementsRight.forEach((element) => {
-			alterElement(element, 1);
+			fadeElementsRight.forEach((element) => {
+				alterElement(element, 1);
+			});
 		});
-	});
+	}
 });
 
 function alterElement(fadeElement, coefficient) {
@@ -95,7 +97,7 @@ function alterElement(fadeElement, coefficient) {
 						<p class="desc">
 							A basic program to find the path from the beginning to the end of
 							a randomly generated maze. Based on a program as part of my
-							college education.
+							college education, reimagined with javascript and design.
 						</p>
 						<router-link :to="{ name: 'maze-solver' }" class="link">
 							Click here to see it!
@@ -111,8 +113,8 @@ function alterElement(fadeElement, coefficient) {
 					<div class="body">
 						<h3>Flower Game</h3>
 						<p class="desc">
-							A recreation of the cellular automation Conway's Game of Life
-							created by mathematition John Horton Conway in 1970.
+							A visual recreation of the cellular automation Conway's Game of
+							Life created by mathematition John Horton Conway in 1970.
 						</p>
 						<router-link :to="{ name: 'flower-game' }" class="link">
 							Click here to see it!
@@ -132,7 +134,7 @@ function alterElement(fadeElement, coefficient) {
 						<h3>Food Tracker</h3>
 						<p class="desc">
 							A food tracking application showing off a more typical application
-							I develop. Meant to track your means over time, allows you to rate
+							I develop. Meant to track your meals over time, allows you to rate
 							them, and see summaries about them.
 						</p>
 						<router-link :to="{ name: 'food-tracker' }" class="link">
@@ -252,7 +254,7 @@ function alterElement(fadeElement, coefficient) {
 
 	.left-image-right-text {
 		.text {
-			padding: 0 15px;
+			padding: 0 15px 0 35px;
 			h1,
 			.subtext {
 				text-align: right;
@@ -278,7 +280,8 @@ function alterElement(fadeElement, coefficient) {
 			height: 100%;
 			margin-top: auto;
 			.image {
-				height: 100%;
+				width: 100%;
+				height: auto;
 				padding: 0 25px;
 			}
 		}

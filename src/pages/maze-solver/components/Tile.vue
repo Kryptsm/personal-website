@@ -4,6 +4,7 @@ import { ref } from "vue";
 const props = defineProps([
 	"status",
 	"adjacentPathStatus",
+	"adjacentWallStatus",
 	"x",
 	"y",
 	"hoverStatus",
@@ -40,22 +41,28 @@ const emits = defineEmits(["select-choice"]);
 		]"
 		@click="$emit('select-choice', x, y)"
 		v-if="status == 1"
-	></div>
+	>
+		<div
+			class="circle"
+			:class="{
+				'top-left-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.north || !adjacentWallStatus.west),
+				'top-right-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.north || !adjacentWallStatus.east),
+				'bottom-left-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.south || !adjacentWallStatus.west),
+				'bottom-right-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.south || !adjacentWallStatus.east),
+			}"
+		></div>
+	</div>
 	<div class="tile start" v-if="status == 2"></div>
 	<div class="tile end" v-if="status == 3"></div>
-	<div
-		class="tile path"
-		v-if="status == 4"
-		:style="
-			showBubble
-				? {
-						backgroundColor: `rgb(${200 - 200 * (trackerNum / trackerTotal)}, ${
-							220 - 200 * (trackerNum / trackerTotal)
-						}, ${255 - 120 * (trackerNum / trackerTotal)})`,
-				  }
-				: ''
-		"
-	>
+	<div class="tile path" v-if="status == 4">
 		<div
 			class="center-tile"
 			v-if="
@@ -67,29 +74,85 @@ const emits = defineEmits(["select-choice"]);
 		<div class="south-path adjacent" v-if="adjacentPathStatus.south"></div>
 		<div class="west-path adjacent" v-if="adjacentPathStatus.west"></div>
 		<div class="east-path adjacent" v-if="adjacentPathStatus.east"></div>
+		<div
+			class="circle"
+			:class="{
+				'top-left-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.north || !adjacentWallStatus.west),
+				'top-right-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.north || !adjacentWallStatus.east),
+				'bottom-left-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.south || !adjacentWallStatus.west),
+				'bottom-right-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.south || !adjacentWallStatus.east),
+			}"
+			:style="
+				showBubble
+					? {
+							backgroundColor: `rgb(${
+								200 - 200 * (trackerNum / trackerTotal)
+							}, ${220 - 200 * (trackerNum / trackerTotal)}, ${
+								255 - 120 * (trackerNum / trackerTotal)
+							})`,
+					  }
+					: ''
+			"
+		></div>
 	</div>
-	<div
-		class="tile bubble"
-		:style="{
-			backgroundColor: `rgb(${200 - 200 * (trackerNum / trackerTotal)}, ${
-				220 - 200 * (trackerNum / trackerTotal)
-			}, ${255 - 120 * (trackerNum / trackerTotal)})`,
-		}"
-		v-if="status == 5"
-	></div>
+	<div class="tile bubble" v-if="status == 5">
+		<div
+			class="circle"
+			:class="{
+				'top-left-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.north || !adjacentWallStatus.west),
+				'top-right-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.north || !adjacentWallStatus.east),
+				'bottom-left-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.south || !adjacentWallStatus.west),
+				'bottom-right-blocker':
+					adjacentWallStatus &&
+					(!adjacentWallStatus.south || !adjacentWallStatus.east),
+			}"
+			:style="
+				showBubble
+					? {
+							backgroundColor: `rgb(${
+								200 - 200 * (trackerNum / trackerTotal)
+							}, ${220 - 200 * (trackerNum / trackerTotal)}, ${
+								255 - 120 * (trackerNum / trackerTotal)
+							})`,
+					  }
+					: ''
+			"
+		></div>
+	</div>
 </template>
 
 <style scoped lang="scss">
 .space {
-	background-color: white;
+	background-color: rgb(35, 35, 35);
+	position: relative;
 }
 
 .hover-start:hover {
-	background-color: lightgreen;
+	.circle,
+	.blocker {
+		background-color: lightgreen;
+	}
 }
 
 .hover-end:hover {
-	background-color: pink;
+	.circle,
+	.blocker {
+		background-color: pink;
+	}
 }
 
 .start {
@@ -156,6 +219,11 @@ const emits = defineEmits(["select-choice"]);
 	border: 1px solid transparent !important;
 }
 
+.bubble,
+.path {
+	background: rgb(35, 35, 35);
+}
+
 .wall {
 	background-color: rgb(35, 35, 35);
 	position: relative;
@@ -170,14 +238,16 @@ const emits = defineEmits(["select-choice"]);
 		&.top-right {
 			transform: rotate(-45deg);
 			top: -13.75px;
-			right: -14.5px;
+			right: -12.5px;
+			display: none;
 		}
 
 		&.top-left {
 			transform: rotate(45deg);
 
 			top: -13.75px;
-			left: -14.5px;
+			left: -12.5px;
+			display: none;
 		}
 
 		.div {
@@ -191,6 +261,7 @@ const emits = defineEmits(["select-choice"]);
 			position: relative;
 			background: rgb(35, 35, 35);
 			height: 12.5px;
+			// opacity: 0.5;
 		}
 
 		.div-inner:before,
@@ -216,5 +287,32 @@ const emits = defineEmits(["select-choice"]);
 	border: 1px solid rgb(35, 35, 35);
 	width: 100%;
 	height: 100%;
+	position: relative;
+}
+
+.circle {
+	top: -1px;
+	left: -1px;
+	position: absolute;
+	width: calc(100% + 2px);
+	height: calc(100% + 2px);
+	background: white;
+	border-radius: 50%;
+}
+
+.top-left-blocker {
+	border-top-left-radius: 0;
+}
+
+.top-right-blocker {
+	border-top-right-radius: 0;
+}
+
+.bottom-left-blocker {
+	border-bottom-left-radius: 0;
+}
+
+.bottom-right-blocker {
+	border-bottom-right-radius: 0;
 }
 </style>
