@@ -123,7 +123,8 @@ onMounted(() => {
 	tours.value = $tours;
 
 	fetchValues();
-	startTour();
+
+	if (window.innerWidth > 700) startTour();
 });
 
 //Removes the event listener on unmounting

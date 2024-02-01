@@ -17,15 +17,17 @@ onMounted(() => {
 	const fadeElementsLeft = document.querySelectorAll(".fade-in-left");
 	const fadeElementsRight = document.querySelectorAll(".fade-in-right");
 
-	window.addEventListener("scroll", () => {
-		fadeElementsLeft.forEach((element) => {
-			alterElement(element, -1);
-		});
+	if (window.innerWidth > 700) {
+		window.addEventListener("scroll", () => {
+			fadeElementsLeft.forEach((element) => {
+				alterElement(element, -1);
+			});
 
-		fadeElementsRight.forEach((element) => {
-			alterElement(element, 1);
+			fadeElementsRight.forEach((element) => {
+				alterElement(element, 1);
+			});
 		});
-	});
+	}
 });
 
 function alterElement(fadeElement, coefficient) {
@@ -278,7 +280,8 @@ function alterElement(fadeElement, coefficient) {
 			height: 100%;
 			margin-top: auto;
 			.image {
-				height: 100%;
+				width: 100%;
+				height: auto;
 				padding: 0 25px;
 			}
 		}
