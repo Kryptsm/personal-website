@@ -22,6 +22,6 @@ import { Authenticator } from "@aws-amplify/ui-vue";
 
 .background-light,
 #app {
-	background-color: #f5f3fc;
+	background-color: #fcf8ff;
 }
 </style>

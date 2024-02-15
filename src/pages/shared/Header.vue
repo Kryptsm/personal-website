@@ -157,4 +157,8 @@ watch(
 		display: none;
 	}
 }
+
+header {
+	border-bottom: 1px solid lightgray;
+}
 </style>
