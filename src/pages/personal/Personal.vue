@@ -75,7 +75,7 @@ function alterElement(fadeElement, coefficient) {
 
 			<div class="text fade-in-right">
 				<div class="text-container">
-					<h1>Hello, my name is Sam Walsh!</h1>
+					<h1>Hello, my name is <span>Sam Walsh!</span></h1>
 					<p class="subtext">
 						I create websites for a living and for fun. Graduating from Southern
 						Methodist Univeristy in 2022, I have been a front end engineer ever
@@ -259,6 +259,10 @@ function alterElement(fadeElement, coefficient) {
 			.subtext {
 				text-align: right;
 			}
+
+			h1 span {
+				white-space: nowrap;
+			}
 		}
 	}
 	.left-text-right-image {
@@ -278,7 +282,7 @@ function alterElement(fadeElement, coefficient) {
 		.image-container {
 			width: 50%;
 			height: 100%;
-			margin-top: auto;
+			align-self: center;
 			.image {
 				width: 100%;
 				height: auto;
