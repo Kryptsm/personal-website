@@ -123,8 +123,6 @@ onMounted(() => {
 	tours.value = $tours;
 
 	fetchValues();
-
-	if (window.innerWidth > 700) startTour();
 });
 
 //Removes the event listener on unmounting
@@ -149,6 +147,10 @@ function fetchValues() {
 
 function startTour() {
 	tours.value.mazeTour.start();
+}
+
+function getInnerWidth() {
+	return window.innerWidth;
 }
 
 //Creates the maze, as well as a same-size secondary array of arrays which we will use to track the path to the exit.
@@ -614,6 +616,15 @@ function getAdjacentNodeWallStatus(indexRow, indexCol, colInfo) {
 				Display Options
 			</legend>
 
+			<div class="newmaze flex newmaze-btn" v-if="getInnerWidth() > 700">
+				<button
+					@click="startTour()"
+					class="text-base font-semibold leading-6 text-gray-900 ml-auto"
+				>
+					Take the Tour
+				</button>
+			</div>
+
 			<div class="newmaze flex newmaze-btn">
 				<button
 					@click="createNodes(true)"
@@ -632,6 +643,39 @@ function getAdjacentNodeWallStatus(indexRow, indexCol, colInfo) {
 				</button>
 			</div>
 		</div>
+
+		<ol>
+			<li>Module Files</li>
+			<ol style="list-style-type: upper-alpha; padding-bottom: 0">
+				<li style="margin-left: 2em">[name].module.ts</li>
+				<li style="margin-left: 2em; padding-bottom: 0">
+					[name]-routing.module.ts
+				</li>
+				<ol style="list-style-type: lower-alpha; padding-bottom: 0">
+					<li style="margin-left: 2em">
+						Where you store all the main routes for the module in question. Some
+						modules omit this and include the routes in the module.ts file
+						itself, if they even have routes. At this level most should.
+					</li>
+				</ol>
+			</ol>
+			<li>Components</li>
+			<ol style="list-style-type: upper-alpha; padding-bottom: 0">
+				<li style="margin-left: 2em">
+					Where we store all the components directly owned by this module. These
+					shouldn't be used by any other module.
+				</li>
+			</ol>
+			<li>Services</li>
+			<ol style="list-style-type: upper-alpha; padding-bottom: 0">
+				<li style="margin-left: 2em">
+					This is where we keep all services directly relating to this module.
+					There are two types of services we typically use, Endpoint Services
+					and Functionality Services. Endpoint services are service files that
+					only contain endpoints.
+				</li>
+			</ol>
+		</ol>
 
 		<div
 			class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200 body display-options"
