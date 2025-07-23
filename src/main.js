@@ -24,45 +24,50 @@ import awsconfig from "./aws-exports";
 Amplify.configure(awsconfig);
 
 const vuetify = createVuetify({
-	components,
-	directives,
+  components,
+  directives,
 });
 
 const routes = [
-	{
-		path: "/",
-		name: "personal",
-		component: Personal,
-	},
-	{
-		path: "/flower-game",
-		name: "flower-game",
-		component: FlowerGame,
-	},
-	{
-		path: "/maze-solver",
-		name: "maze-solver",
-		component: MazeSolver,
-	},
-	{
-		path: "/food-tracker",
-		name: "food-tracker",
-		component: FoodTracker,
-	},
-	{
-		path: "/food-tracker/statistics",
-		name: "food-tracker/statistics",
-		component: Statistics,
-	},
-	{
-		path: "/:pathMatch(.*)*",
-		redirect: "/",
-	},
+  {
+    path: "/",
+    name: "personal",
+    component: Personal,
+  },
+  {
+    path: "/flower-game",
+    name: "flower-game",
+    component: FlowerGame,
+  },
+  {
+    path: "/maze-solver",
+    name: "maze-solver",
+    component: MazeSolver,
+  },
+  {
+    path: "/food-tracker",
+    name: "food-tracker",
+    component: FoodTracker,
+  },
+  {
+    path: "/food-tracker/statistics",
+    name: "food-tracker/statistics",
+    component: Statistics,
+  },
+  {
+    path: "/wordle",
+    name: "wordle",
+    component: () => import("./pages/wordle/Wordle.vue"),
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/",
+  },
 ];
 
 const router = createRouter({
-	history: createWebHistory(import.meta.env.BASE_URL),
-	routes,
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes,
 });
 
 const app = createApp(App);

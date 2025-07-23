@@ -1,17 +1,14 @@
 <script setup>
-import PersonalBanner from "./components/PersonalBanner.vue";
-import ProfileActions from "./components/ProfileActions.vue";
 import samPhotoNoBgWithOrange2 from "../../assets/SamPhotoNoBackgroundWithOrange2.png";
 import MazeExampleImage from "../../assets/MazeExampleImage.png";
 import FlowerGameExampleVideo from "../../assets/FlowerGameExample.mp4";
-import FoodTrackerExampleImage from "../../assets/FoodTrackerExampleImage.png";
 import PokedexExampleImage from "../../assets/PokedexExampleImage.png";
 import LinkedInLogo from "../../assets/LI-In-Bug.png";
 import GitHubLogo from "../../assets/github-mark.png";
 import InstagramLogo from "../../assets/Instagram_Glyph_Gradient.png";
 import DeviantArtLogo from "../../assets/deviantart_logo.png";
 import DiscordLogo from "../../assets/discord-mark-blue.png";
-import Header from "../shared/Header.vue";
+import WordleAssistantImage from "../../assets/WordleAssistantExample.png";
 import { ref, onMounted } from "vue";
 
 onMounted(() => {
@@ -78,10 +75,15 @@ function alterElement(fadeElement, coefficient) {
         <div class="text-container">
           <h1>Hello, my name is <span>Sam Walsh!</span></h1>
           <p class="subtext">
-            I create websites for a living and for fun. Graduating from Southern
-            Methodist Univeristy in 2022, I have been a front end engineer ever
-            since, with a passion for constructing smart and interactive user
-            experiences.
+            I create websites for a living and for fun. I graduated from
+            Southern Methodist University in 2022 with majors in Computer
+            Science and Creative Computing, and have been designing front end
+            architecture ever since.
+          </p>
+          <p class="subtext mt-4">
+            I have a real passion for the intersection of design and technology,
+            seeking to create fun and intuitive experiences that integrate cool
+            tech as well.
           </p>
         </div>
       </div>
@@ -100,12 +102,38 @@ function alterElement(fadeElement, coefficient) {
               about them. Includes thorough data and competitive statistics from
               external APIs, and the ability to create a team.
             </p>
+            <p class="desc">
+              Some tech utilized in this project: GitHub Copilot, v0 for
+              component generation, PokeAPI for API calls, Amazon AWS Amplify
+              for hosting, authentication, and various other services
+            </p>
             <a href="https://dex.kryptsm.com" class="link">
               Click here to see it!
             </a>
           </div>
           <div class="image-container">
             <img :src="PokedexExampleImage" />
+          </div>
+        </div>
+      </div>
+      <div class="full-width">
+        <div class="card orange">
+          <div class="body">
+            <h3>Wordle Assistant</h3>
+            <p class="desc">
+              An assistant program that helps you complete the Wordle each day.
+              Does not suggest strategy or help directly, but rather keeps track
+              of your guesses and which letters are viable in each slot.
+            </p>
+            <p class="desc">
+              Some tech utilized in this project: GitHub Copilot (Vibe Coding)
+            </p>
+            <router-link :to="{ name: 'wordle' }" class="link">
+              Click here to see it!
+            </router-link>
+          </div>
+          <div class="image-container">
+            <img :src="WordleAssistantImage" />
           </div>
         </div>
       </div>
@@ -117,6 +145,9 @@ function alterElement(fadeElement, coefficient) {
               A basic program to find the path from the beginning to the end of
               a randomly generated maze. Based on a program as part of my
               college education, reimagined with javascript and design.
+            </p>
+            <p class="desc">
+              Some tech utilized in this project: Basic breadth-first search
             </p>
             <router-link :to="{ name: 'maze-solver' }" class="link">
               Click here to see it!
