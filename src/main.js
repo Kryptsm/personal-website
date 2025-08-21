@@ -60,6 +60,11 @@ const routes = [
     component: () => import("./pages/wordle/Wordle.vue"),
   },
   {
+    path: "/sudoku",
+    name: "sudoku",
+    component: () => import("./pages/sudoku/Sudoku.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     redirect: "/",
   },

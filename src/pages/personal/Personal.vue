@@ -9,6 +9,7 @@ import InstagramLogo from "../../assets/Instagram_Glyph_Gradient.png";
 import DeviantArtLogo from "../../assets/deviantart_logo.png";
 import DiscordLogo from "../../assets/discord-mark-blue.png";
 import WordleAssistantImage from "../../assets/WordleAssistantExample.png";
+import SudokuExampleImage from "../../assets/SudokuExampleImage.png";
 import { ref, onMounted } from "vue";
 
 onMounted(() => {
@@ -122,8 +123,7 @@ function alterElement(fadeElement, coefficient) {
             <h3>Wordle Assistant</h3>
             <p class="desc">
               An assistant program that helps you complete the Wordle each day.
-              Does not suggest strategy or help directly, but rather keeps track
-              of your guesses and which letters are viable in each slot.
+              Will even suggest words to use, but this is considered cheating!
             </p>
             <p class="desc">
               Some tech utilized in this project: GitHub Copilot (Vibe Coding)
@@ -134,6 +134,29 @@ function alterElement(fadeElement, coefficient) {
           </div>
           <div class="image-container">
             <img :src="WordleAssistantImage" />
+          </div>
+        </div>
+      </div>
+      <div class="full-width">
+        <div class="card purple">
+          <div class="body">
+            <h3>Sudoku Solver</h3>
+            <p class="desc">
+              A program that solves Sudoku puzzles using a backtracking
+              algorithm. If it runs into an issue with a number, it backtracks
+              and tries alternate approaches. Also can calculate potential
+              number options for each empty cell.
+            </p>
+            <p class="desc">
+              Some tech utilized in this project: GitHub Copilot (Vibe Coding),
+              Depth First Search algorithm
+            </p>
+            <router-link :to="{ name: 'sudoku' }" class="link">
+              Click here to see it!
+            </router-link>
+          </div>
+          <div class="image-container">
+            <img :src="SudokuExampleImage" />
           </div>
         </div>
       </div>

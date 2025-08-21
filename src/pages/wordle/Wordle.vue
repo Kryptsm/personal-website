@@ -1,7 +1,7 @@
 <script setup>
-import { TrashIcon } from "@heroicons/vue/24/outline";
 import { ref, onMounted } from "vue";
 import Notification from "../shared/Notification.vue";
+import words from "./words.json";
 
 // Wordle game state
 const currentGuess = ref(["", "", "", "", ""]);
@@ -10,10 +10,12 @@ const inputRefs = ref([]); // Will hold references to the input elements
 const guesses = ref([]);
 const correctSpots = ref(["", "", "", "", ""]); // Array to track correct letter positions
 const closeSpots = ref([[], [], [], [], []]); // Array to track close letter positions
+const incorrectLetters = ref([]); // Array to track letters that are not in the word
 const correctMode = ref(false);
 const closeMode = ref(false);
 const maxGuesses = 6;
 const showHints = ref(false); // Toggle for showing letter hints
+const possibleWords = ref([]);
 
 // Notification state
 const notification = ref({
@@ -125,8 +127,12 @@ const submitGuess = (e) => {
 
   if (isComplete && guessIndex.value < maxGuesses) {
     // Add the current guess to the beginning of the array
-    guesses.value.unshift([...currentGuess.value]);
+    const currentGuessArray = [...currentGuess.value];
+    guesses.value.unshift(currentGuessArray);
     guessIndex.value++;
+
+    // Update incorrect letters after submitting a guess
+    updateIncorrectLetters();
 
     // Create a new array for the next guess, but keep any known correct letters
     const newGuess = ["", "", "", "", ""];
@@ -274,6 +280,9 @@ const markLetter = (letterIdx, letter) => {
     closeSpots.value = newCloseSpots;
   }
 
+  // Update incorrect letters when marking changes
+  updateIncorrectLetters();
+
   // Run deduction logic after marking to see if we can determine letters that must go in specific positions
   deduceLetters();
 };
@@ -312,44 +321,27 @@ const getViableLetters = () => {
   }
 
   // Check previous guesses to eliminate letters that are definitely not in the word
-  const usedLetters = new Set();
-  const definitelyNotInWord = new Set();
+  const knownGoodLetters = new Set(); // Letters that are definitely in the word
 
   // First, gather all letters that are definitely in the word (either correct or close)
   for (let i = 0; i < 5; i++) {
     if (correctSpots.value[i] !== "") {
-      usedLetters.add(correctSpots.value[i]);
+      knownGoodLetters.add(correctSpots.value[i]);
     }
     if (closeSpots.value[i] && closeSpots.value[i].length > 0) {
-      closeSpots.value[i].forEach((letter) => usedLetters.add(letter));
+      closeSpots.value[i].forEach((letter) => knownGoodLetters.add(letter));
     }
   }
 
-  // Check previous guesses for letters that weren't marked as correct or close
-  guesses.value.forEach((guess) => {
-    guess.forEach((letter, i) => {
-      // If this letter isn't marked as correct or close anywhere, it's not in the word
-      if (
-        !usedLetters.has(letter) &&
-        !isCorrect(i, letter) &&
-        !isClose(i, letter)
-      ) {
-        definitelyNotInWord.add(letter);
-      }
-    });
-  });
-
-  // Remove letters that are definitely not in the word from all positions
+  // Remove incorrect letters from all positions
   for (let position = 0; position < 5; position++) {
     if (correctSpots.value[position] === "") {
       // Skip positions with correct letters
       viableLetters[position] = viableLetters[position].filter(
-        (letter) => !definitelyNotInWord.has(letter)
+        (letter) => !incorrectLetters.value.includes(letter)
       );
     }
-  }
-
-  // Sort the letters alphabetically for easier reading
+  } // Sort the letters alphabetically for easier reading
   for (let position = 0; position < 5; position++) {
     viableLetters[position].sort();
   }
@@ -386,14 +378,11 @@ const getLetterStatus = () => {
     }
   }
 
-  // Check all guesses for used letters that aren't correct or close
-  guesses.value.forEach((guess) => {
-    guess.forEach((letter) => {
-      // If the letter status is still 'unused', mark it as 'used'
-      if (letterStatus[letter] === "unused") {
-        letterStatus[letter] = "used";
-      }
-    });
+  // Mark all incorrect letters as "used" (not in the word)
+  incorrectLetters.value.forEach((letter) => {
+    if (letterStatus[letter] === "unused") {
+      letterStatus[letter] = "used";
+    }
   });
 
   return letterStatus;
@@ -483,6 +472,39 @@ const getForbiddenLettersForSlot = (position) => {
   return closeSpots.value[position]
     ? [...closeSpots.value[position]].sort()
     : [];
+};
+
+// Function to update the list of incorrect letters
+const updateIncorrectLetters = () => {
+  const knownGoodLetters = new Set(); // Letters that are definitely in the word (correct or close)
+
+  // First, gather all letters that are definitely in the word
+  for (let i = 0; i < 5; i++) {
+    // Add correct letters
+    if (correctSpots.value[i] !== "") {
+      knownGoodLetters.add(correctSpots.value[i]);
+    }
+
+    // Add close letters
+    if (closeSpots.value[i] && closeSpots.value[i].length > 0) {
+      closeSpots.value[i].forEach((letter) => knownGoodLetters.add(letter));
+    }
+  }
+
+  // Create a set of all used letters from guesses
+  const allGuessedLetters = new Set();
+  guesses.value.forEach((guess) => {
+    guess.forEach((letter) => {
+      if (letter) {
+        allGuessedLetters.add(letter);
+      }
+    });
+  });
+
+  // Letters that are used but not in knownGoodLetters are incorrect
+  incorrectLetters.value = Array.from(allGuessedLetters)
+    .filter((letter) => !knownGoodLetters.has(letter))
+    .sort();
 };
 
 // Function to deduce letters that must go in certain positions
@@ -576,6 +598,8 @@ const deduceLetters = () => {
 
 // Initialize inputRefs when component is mounted
 onMounted(() => {
+  console.log(words);
+
   // Initialize with empty array of length 5
   inputRefs.value = new Array(5).fill(null);
 
@@ -585,6 +609,9 @@ onMounted(() => {
       currentGuess.value[i] = correctSpots.value[i];
     }
   }
+
+  // Initialize incorrect letters list based on existing state
+  updateIncorrectLetters();
 
   // Focus on the first input element when the component loads
   setTimeout(() => {
@@ -607,6 +634,41 @@ onMounted(() => {
     }
   }, 100);
 });
+
+function getSuggestions() {
+  console.log(correctSpots.value, closeSpots.value, incorrectLetters.value);
+  let possibleWordsStorage = [...words];
+  correctSpots.value.forEach((spot, index) => {
+    if (spot !== "") {
+      console.log(spot);
+      possibleWordsStorage = possibleWordsStorage.filter(
+        (word) => word[index].toLowerCase() === spot.toLowerCase()
+      );
+    }
+  });
+
+  incorrectLetters.value.forEach((letter, index) => {
+    possibleWordsStorage = possibleWordsStorage.filter(
+      (word) => !word.toLowerCase().includes(letter.toLowerCase())
+    );
+  });
+
+  closeSpots.value.forEach((spot, index) => {
+    if (spot && spot.length)
+      spot.forEach((letter) => {
+        if (!correctSpots.value.includes(letter))
+          possibleWordsStorage = possibleWordsStorage.filter(
+            (word) =>
+              word.toLowerCase().includes(letter.toLowerCase()) &&
+              word[index].toLowerCase() !== letter.toLowerCase()
+          );
+      });
+  });
+
+  possibleWords.value = possibleWordsStorage;
+
+  console.log(possibleWords);
+}
 </script>
 
 <template>
@@ -619,7 +681,9 @@ onMounted(() => {
         letter, right spot) or "close" (right letter, wrong spot) by clicking
         the respective buttons, then clicking on letters in your guesses at the
         bottom. The tool will show possible letters for each position, track
-        letter status, and automatically deduce where letters must go.
+        letter status, and automatically deduce where letters must go. It can
+        also give you actual word suggestions to use that fit your current
+        guesses.
       </p>
     </div>
     <Notification
@@ -699,6 +763,14 @@ onMounted(() => {
         >
           Submit
         </button>
+      </div>
+      <div class="flex w-100 justify-center">
+        <button class="button submit" @click="getSuggestions">
+          Get Suggestions
+        </button>
+      </div>
+      <div class="possible-words-container">
+        {{ possibleWords.join(", ") }}
       </div>
 
       <!-- Letter hints section -->
@@ -838,7 +910,7 @@ onMounted(() => {
         <h3 class="text-lg font-bold">Previous Guesses</h3>
       </div>
       <div class="controls flex flex-col gap-2 mb-2" v-if="guesses.length">
-        <div class="click-choice flex justify-around">
+        <div class="click-choice flex justify-center gap-3">
           <button
             @click="
               correctMode = !correctMode;
@@ -1415,6 +1487,20 @@ onMounted(() => {
         }
       }
     }
+  }
+
+  .possible-words-container {
+    margin-top: 15px;
+    padding: 0 15px;
+    border-radius: 8px;
+    max-width: 800px;
+    text-align: center;
+    line-height: 1.6;
+    color: #333;
+    font-size: 16px;
+    text-transform: uppercase;
+    max-height: 200px;
+    overflow-y: auto;
   }
 }
 </style>
