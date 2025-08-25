@@ -22,15 +22,24 @@ const path = ref([]);
 const bubbleInterval = ref(0);
 const pathInterval = ref(0);
 
-const displayChoices = ref([
+const displayOptions = ref([
   {
     id: 1,
-    name: "Show search progress. Will display blue cells during and after the search which indicates cells that we look at to try and find the exit. The darker the cell, the farther away from the start it is.",
+    description:
+      "Show search progress. Will display blue cells during and after the search which indicates cells that we look at to try and find the exit.",
     status: false,
+    options: [
+      {
+        id: 1,
+        description:
+          "Show detailed search. Includes color indication of how deep the search progress is. The darker the cell, the farther away from the start it is.",
+        status: true,
+      },
+    ],
   },
   {
     id: 2,
-    name: "Show path discovery animation. A light green path that appears once the end has been found successfully. Represents the fastest possible path from start to end. This will remove the animation but the path will still appear.",
+    description: "Shows the path from start to end being created over time.",
     status: true,
   },
 ]);
@@ -218,7 +227,7 @@ function selectChoice(x, y) {
     nodes.value[y][x] = 3;
     end.value = { x: x, y: y };
     currentChoice.value = "none";
-    startTimeout(displayChoices.value[0].status);
+    startTimeout(displayOptions.value[0].status);
   }
 }
 
@@ -356,7 +365,7 @@ function startTimeout(animation) {
 
         if (end.value.x == -1) setAllUnreachable();
       }
-    }, 150);
+    }, 75);
   } else {
     let result = 1;
     let index = 0;
@@ -379,7 +388,7 @@ function findPath(loc) {
   path.value.push(nextNode);
   nodes.value[nextNode.y][nextNode.x] = 4;
 
-  if (displayChoices.value[1].status) {
+  if (displayOptions.value[1].status) {
     //Set an interval to repeat the above process as long as the start hasn't been found as part of the path.
     pathInterval.value = setInterval(function () {
       if (nextNode.x != start.value.x || nextNode.y != start.value.y) {
@@ -397,7 +406,7 @@ function findPath(loc) {
         clearInterval(pathInterval.value);
         pathInterval.value = 0;
       }
-    }, 150);
+    }, 100);
   } else {
     let index = 0;
     while (
@@ -472,7 +481,7 @@ function setAllUnreachable() {
 function getNodeStatus(indexRow, indexCol, colInfo) {
   let result = colInfo;
   //If we are displaying the bubble
-  if (displayChoices.value[0].status) {
+  if (displayOptions.value[0].status) {
     //If the node in question has been tracked as part of the bubble, and its not part of the path, return 5 which indicates this node is a bubble node
     if (
       tracker.value[indexRow][indexCol] != 0 &&
@@ -602,7 +611,8 @@ function getAdjacentNodeWallStatus(indexRow, indexCol, colInfo) {
               indexCol != width - 1 &&
               nodes[indexRow - 1][indexCol + 1] == 0
             "
-            :show-bubble="displayChoices[0].status"
+            :show-bubble="displayOptions[0].status"
+            :show-detailed-bubble="displayOptions[0].options[0].status"
             @select-choice="selectChoice"
           ></Tile>
         </v-col>
@@ -647,27 +657,51 @@ function getAdjacentNodeWallStatus(indexRow, indexCol, colInfo) {
     <div
       class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200 body display-options"
     >
-      <div
-        v-for="(rule, ruleId) in displayChoices"
-        :key="ruleId"
-        class="relative flex items-start py-4"
-      >
-        <div class="min-w-0 flex-1 text-sm leading-6">
-          <label
-            :for="`person-${rule.id}`"
-            class="select-none font-medium text-gray-900"
-          >
-            Option {{ rule.id }}. {{ rule.name }}
-          </label>
+      <div v-for="(rule, ruleId) in displayOptions" :key="ruleId" class="">
+        <div class="relative flex items-start py-4">
+          <div class="min-w-0 flex-1 text-sm leading-6">
+            <label
+              :for="`display-option-${rule.id}`"
+              class="select-none font-medium text-gray-900"
+            >
+              Option {{ rule.id }}. {{ rule.description }}
+            </label>
+          </div>
+          <div class="ml-3 flex h-6 items-center">
+            <input
+              :id="`display-option-${rule.id}`"
+              :name="`display-option-${rule.id}`"
+              v-model="rule.status"
+              type="checkbox"
+              class="h-4 w-4 rounded border border-gray-300 text-indigo-600 focus:ring-indigo-600"
+            />
+          </div>
         </div>
-        <div class="ml-3 flex h-6 items-center">
-          <input
-            :id="`person-${rule.id}`"
-            :name="`person-${rule.id}`"
-            v-model="rule.status"
-            type="checkbox"
-            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-          />
+        <div
+          v-if="rule.options"
+          v-for="(option, optionId) in rule.options"
+          :key="optionId"
+          class="ps-5"
+        >
+          <div class="relative flex items-start py-4">
+            <div class="min-w-0 flex-1 text-sm leading-6">
+              <label
+                :for="`option-${option.id}`"
+                class="select-none font-medium text-gray-900"
+              >
+                Modifier {{ option.id }}. {{ option.description }}
+              </label>
+            </div>
+            <div class="ml-3 flex h-6 items-center">
+              <input
+                :id="`option-${option.id}`"
+                :name="`option-${option.id}`"
+                v-model="option.status"
+                type="checkbox"
+                class="h-4 w-4 rounded border border-gray-300 text-indigo-600 focus:ring-indigo-600"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

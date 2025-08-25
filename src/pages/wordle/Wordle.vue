@@ -665,9 +665,38 @@ function getSuggestions() {
       });
   });
 
+  let letterFreq = letterFrequencies();
+  possibleWordsStorage = possibleWordsStorage
+    .slice()
+    .sort((a, b) => scoreWord(b, letterFreq) - scoreWord(a, letterFreq));
+
+  if (possibleWordsStorage.length > 50) {
+    possibleWordsStorage = possibleWordsStorage.slice(0, 75);
+  }
+
+  if (possibleWordsStorage.length > 50) {
+    possibleWordsStorage = possibleWordsStorage.filter((word) => {
+      return new Set(word).size === 5;
+    });
+  }
+
   possibleWords.value = possibleWordsStorage;
 
   console.log(possibleWords);
+}
+
+function letterFrequencies() {
+  const freq = {};
+  for (const word of words) {
+    for (const letter of new Set(word)) {
+      freq[letter] = (freq[letter] || 0) + 1;
+    }
+  }
+  return freq;
+}
+
+function scoreWord(word, freq) {
+  return [...new Set(word)].reduce((sum, l) => sum + (freq[l] || 0), 0);
 }
 </script>
 
