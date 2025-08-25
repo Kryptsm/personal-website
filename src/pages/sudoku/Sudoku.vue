@@ -182,13 +182,6 @@ function calculate() {
   let hasOptionsChanges =
     JSON.stringify(initialOptions) !== JSON.stringify(storedOptions);
 
-  console.log(
-    "Grid Has Changes: ",
-    hasChanges,
-    "Options Has Changes: ",
-    hasOptionsChanges
-  );
-
   if (hasChanges || hasOptionsChanges) {
     calculate();
   }
@@ -290,19 +283,6 @@ function calculateOptions() {
           });
 
           if (nakedCount == 2) {
-            if (
-              nakedIndexes[0].x == nakedIndexes[1].x &&
-              nakedIndexes[0].y == nakedIndexes[1].y
-            ) {
-              console.log(
-                "Same Square Naked Pairs: ",
-                first,
-                second,
-                "At: ",
-                nakedIndexes[0].x,
-                nakedIndexes[0].y
-              );
-            }
             row.forEach((group, groupIndex) => {
               if (
                 !(
