@@ -8,6 +8,8 @@ const props = defineProps([
   "x",
   "y",
   "hoverStatus",
+  "highlight",
+  "mazeType",
   "trackerNum",
   "trackerTotal",
   "topLeft",
@@ -19,7 +21,14 @@ const emits = defineEmits(["select-choice"]);
 </script>
 
 <template>
-  <div class="tile wall" v-if="status == 0">
+  <div
+    :x="x"
+    :y="y"
+    class="tile wall"
+    v-if="status == 0"
+    :class="[mazeType == 'create' ? 'hover-create' : '', highlight ? 'highlight' : '']"
+    @click="mazeType == 'create' && $emit('select-choice', x, y)"
+  >
     <span class="container top-left" v-if="topLeft">
       <div class="div">
         <div class="div-inner"></div>
@@ -34,16 +43,22 @@ const emits = defineEmits(["select-choice"]);
   <div
     class="tile space"
     :class="[
-      hoverStatus == 'start'
-        ? 'hover-start'
-        : hoverStatus == 'end'
-        ? 'hover-end'
-        : '',
+      mazeType == 'solve'
+        ? hoverStatus == 'start'
+          ? 'hover-start'
+          : hoverStatus == 'end'
+          ? 'hover-end'
+          : ''
+        : mazeType == 'create'
+        ? 'hover-create'
+        : '', highlight ? 'highlight' : ''
     ]"
     @click="$emit('select-choice', x, y)"
     v-if="status == 1"
   >
     <div
+      :x="x"
+      :y="y"
       class="circle"
       :class="{
         'top-left-blocker':
@@ -238,6 +253,32 @@ const emits = defineEmits(["select-choice"]);
   .circle,
   .blocker {
     background-color: pink;
+  }
+}
+
+.hover-create:hover {
+  .circle,
+  .blocker {
+    cursor: pointer;
+    border: 1px solid red;
+  }
+
+  &.wall {
+    cursor: pointer;
+    border: 1px solid red;
+  }
+}
+
+.highlight {
+  .circle,
+  .blocker {
+    cursor: pointer;
+    border: 1px solid red;
+  }
+
+  &.wall {
+    cursor: pointer;
+    border: 1px solid red;
   }
 }
 

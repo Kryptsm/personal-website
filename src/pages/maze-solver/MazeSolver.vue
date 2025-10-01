@@ -1,17 +1,151 @@
 <script setup>
 import { useGetRandomInt } from "../../functions/math";
 import { ref, onMounted, onUnmounted, getCurrentInstance } from "vue";
-import * as userFunctions from "../../functions/user-functions";
 import Tile from "./components/Tile.vue";
-import { Authenticator } from "@aws-amplify/ui-vue";
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 const initialNodes = ref([]);
 const nodes = ref([]);
+// Preset maze: 0 = wall, 1 = open space
+const presetMazes = [
+  // 45x25 maze: simple open maze with a border and a few internal walls
+  Array.from({ length: 25 }, (v, y) =>
+    Array.from({ length: 45 }, (v, x) => {
+      // Border walls
+      if (y === 0 || y === 24 || x === 0 || x === 44) return 0;
+      // Internal vertical wall
+      if (x === 10 && y > 2 && y < 22) return 0;
+      // Internal horizontal wall
+      if (y === 12 && x > 10 && x < 35) return 0;
+      // Another vertical wall
+      if (x === 35 && y > 12 && y < 22) return 0;
+      // Open space
+      return 1;
+    })
+  ),
+  // 45x25 maze: complex maze with many walls and multiple paths
+  [
+    // Each row is a 45-element array (0=wall, 1=space)
+    // This maze is hand-designed for complexity and multiple routes
+    // S = suggested start, E = suggested end
+    // Pathways snake around, with dead ends and loops
+    [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    ],
+    [
+      0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1,
+      1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0,
+    ],
+    [
+      0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1,
+      0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0,
+    ],
+    [
+      0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1,
+      0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0,
+    ],
+    [
+      0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+      0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0,
+    ],
+    [
+      0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1,
+      1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0,
+    ],
+    [
+      0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+    ],
+    [
+      0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
+      0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0,
+    ],
+    [
+      0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+      0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+    ],
+    [
+      0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+      1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0,
+    ],
+    [
+      0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+    ],
+    [
+      0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    ],
+    [
+      0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+    ],
+    [
+      0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    ],
+    [
+      0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+    ],
+    [
+      0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1,
+      1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0,
+    ],
+    [
+      0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+    ],
+    [
+      0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
+      0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0,
+    ],
+    [
+      0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+      0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+    ],
+    [
+      0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1,
+      1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0,
+    ],
+    [
+      0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+    ],
+    [
+      0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    ],
+    [
+      0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+    ],
+    [
+      0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    ],
+    [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    ],
+  ],
+];
+const presetDrawerOpen = ref(false);
+
 const initialTracker = ref([]);
 const tracker = ref([]);
 const width = ref(45);
 const height = ref(25);
 const currentChoice = ref("start");
+const selectMode = ref("create");
 
 const currentStep = ref(0);
 const currentBubbleLayer = ref([]);
@@ -118,41 +252,94 @@ const tourSteps = ref([
   },
 ]);
 
+const dragStart = ref({ x: null, y: null });
+const dragEnd = ref({ x: null, y: null });
+const currentlyDragging = ref(false);
+const currentDragPos = ref({ x: null, y: null });
+const dragValue = ref(1);
+
+const howDoesItWork = ref(false);
+
 //Manages the creation of the MazeSolver, setting the width properly for screen size, creates the maze, and adds an event listener.
 onMounted(() => {
   if (window.innerWidth < 900) width.value = 35;
   if (window.innerWidth < 750) width.value = 25;
   if (window.innerWidth < 550) width.value = 15;
   createNodes(true);
+  clearBoard();
 
   window.addEventListener("resize", resizeMaze);
+
+  window.addEventListener("mousemove", function (e) {
+    e.preventDefault();
+    if (selectMode.value == "solve") return;
+    if (currentlyDragging.value) {
+      let x = e.target.getAttribute("x");
+      let y = e.target.getAttribute("y");
+      currentDragPos.value = { x, y };
+      console.log("current drag pos", x, y, currentDragPos.value);
+    }
+  });
+
+  window.addEventListener("mousedown", function (e) {
+    e.preventDefault();
+    if (selectMode.value == "solve") return;
+
+    let x = e.target.getAttribute("x");
+    let y = e.target.getAttribute("y");
+    dragStart.value = { x, y };
+    currentDragPos.value = { x, y };
+    dragEnd.value = { x: null, y: null };
+    currentlyDragging.value = true;
+
+    if (e.target.classList.contains("wall")) dragValue.value = 0;
+    else dragValue.value = 1;
+
+    console.log("mousedown", x, y, dragStart.value);
+  });
+
+  window.addEventListener("mouseup", function (e) {
+    e.preventDefault();
+    if (selectMode.value == "solve") return;
+
+    let x = e.target.getAttribute("x");
+    let y = e.target.getAttribute("y");
+    dragEnd.value = { x, y };
+    console.log("mouseup", x, y, dragEnd.value);
+
+    // Remove walls for all nodes within the rectangle defined by dragStart and dragEnd
+    if (
+      dragStart.value &&
+      dragEnd.value &&
+      dragStart.value.x !== null &&
+      dragStart.value.y !== null &&
+      dragEnd.value.x !== null &&
+      dragEnd.value.y !== null
+    ) {
+      const minX = Math.min(dragStart.value.x, dragEnd.value.x);
+      const maxX = Math.max(dragStart.value.x, dragEnd.value.x);
+      const minY = Math.min(dragStart.value.y, dragEnd.value.y);
+      const maxY = Math.max(dragStart.value.y, dragEnd.value.y);
+
+      for (let y = minY; y <= maxY; y++) {
+        for (let x = minX; x <= maxX; x++) {
+          nodes.value[y][x] = dragValue.value ? 0 : 1;
+        }
+      }
+    }
+
+    currentlyDragging.value = false;
+  });
 
   const internalInstance = getCurrentInstance();
   const $tours = internalInstance.appContext.config.globalProperties.$tours;
   tours.value = $tours;
-
-  fetchValues();
 });
 
 //Removes the event listener on unmounting
 onUnmounted(() => {
   window.removeEventListener("resize", resizeMaze);
 });
-
-function fetchValues() {
-  // userFunctions.fetchUser().then((user) => {
-  // 	if (user && !user.mazeFTUE) {
-  // 		startTour();
-  // 		userFunctions.updateUser(
-  // 			user,
-  // 			user.name,
-  // 			user.lastQuery,
-  // 			true,
-  // 			user.foodTrackerFTUE
-  // 		);
-  // 	}
-  // });
-}
 
 function startTour() {
   tours.value.mazeTour.start();
@@ -206,6 +393,14 @@ function createNodes(status) {
   }
 }
 
+function clearBoard() {
+  nodes.value.forEach((row, rowIndex) => {
+    row.forEach((col, colIndex) => {
+      nodes.value[rowIndex][colIndex] = 1;
+    });
+  });
+}
+
 //Resizes the maze for different screen sizes
 function resizeMaze() {
   let originalWidth = width.value;
@@ -218,16 +413,22 @@ function resizeMaze() {
 
 //Handles choosing the start and end points for the maze
 function selectChoice(x, y) {
-  if (currentChoice.value == "start") {
-    nodes.value[y][x] = 2;
-    start.value = { x: x, y: y };
-    currentChoice.value = "end";
-    startTimeout(false);
-  } else if (currentChoice.value == "end") {
-    nodes.value[y][x] = 3;
-    end.value = { x: x, y: y };
-    currentChoice.value = "none";
-    startTimeout(displayOptions.value[0].status);
+  if (selectMode.value == "create") {
+    if (nodes.value[y][x] == 0) nodes.value[y][x] = 1;
+    else if (nodes.value[y][x] == 1) nodes.value[y][x] = 0;
+    initialNodes.value = JSON.parse(JSON.stringify(nodes.value));
+  } else if (selectMode.value == "solve") {
+    if (currentChoice.value == "start") {
+      nodes.value[y][x] = 2;
+      start.value = { x: x, y: y };
+      currentChoice.value = "end";
+      startTimeout(false);
+    } else if (currentChoice.value == "end") {
+      nodes.value[y][x] = 3;
+      end.value = { x: x, y: y };
+      currentChoice.value = "none";
+      startTimeout(displayOptions.value[0].status);
+    }
   }
 }
 
@@ -579,11 +780,149 @@ function getAdjacentNodeWallStatus(indexRow, indexCol, colInfo) {
 
   return sidesHolder;
 }
+
+function changeMode() {
+  if (selectMode.value == "create") {
+    selectMode.value = "solve";
+  } else {
+    selectMode.value = "create";
+    createNodes(false);
+  }
+}
+
+function calculateHighlightStatus(x, y) {
+  if (
+    !currentlyDragging.value ||
+    !dragStart.value ||
+    !currentDragPos.value ||
+    !dragStart.value.x ||
+    !dragStart.value.y ||
+    !currentDragPos.value.x ||
+    !currentDragPos.value.y
+  )
+    return false;
+
+  const minX = Math.min(currentDragPos.value.x, dragStart.value.x);
+  const maxX = Math.max(currentDragPos.value.x, dragStart.value.x);
+  const minY = Math.min(currentDragPos.value.y, dragStart.value.y);
+  const maxY = Math.max(currentDragPos.value.y, dragStart.value.y);
+
+  if (
+    (x == minX && y >= minY && y <= maxY) ||
+    (x == maxX && y <= maxY && y >= minY) ||
+    (y == minY && x >= minX && x <= maxX) ||
+    (y == maxY && x >= minX && x <= maxX)
+  ) {
+    return true;
+  } else return false;
+}
+
+function setPreset(presetIndex) {
+  createNodes(false);
+
+  nodes.value = JSON.parse(JSON.stringify(presetMazes[presetIndex]));
+  initialNodes.value = JSON.parse(JSON.stringify(presetMazes[presetIndex]));
+
+  if (selectMode.value == "create") {
+    selectMode.value = "solve";
+  }
+}
 </script>
 
 <template>
   <!-- <Authenticator>
 		<template v-slot="{ user, signOut }"> -->
+
+  <section class="header">
+    <p class="text-md font-semibold py-3">
+      Create your own maze by clicking to add or remove walls below, or
+      <span class="randomize-link" @click="createNodes(true)"
+        >randomize a maze.</span
+      >
+      Alternatively, you can choose
+      <span class="randomize-link" @click="presetDrawerOpen = true"
+        >a preset</span
+      >
+      as well. Once your maze is created, click the button below in order to
+      choose start and end point.
+    </p>
+
+    <div>
+      <TransitionRoot as="template" :show="presetDrawerOpen">
+        <Dialog class="relative z-10" @close="presetDrawerOpen = false">
+          <div class="fixed inset-0" />
+
+          <div class="fixed inset-0 overflow-hidden">
+            <div class="absolute inset-0 overflow-hidden">
+              <div
+                class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16"
+              >
+                <TransitionChild
+                  as="template"
+                  enter="transform transition ease-in-out duration-500 sm:duration-700"
+                  enter-from="translate-x-full"
+                  enter-to="translate-x-0"
+                  leave="transform transition ease-in-out duration-500 sm:duration-700"
+                  leave-from="translate-x-0"
+                  leave-to="translate-x-full"
+                >
+                  <DialogPanel class="pointer-events-auto w-screen max-w-md">
+                    <div
+                      class="relative flex h-full flex-col overflow-y-auto bg-white py-6 shadow-xl dark:bg-gray-800 dark:after:absolute dark:after:inset-y-0 dark:after:left-0 dark:after:w-px dark:after:bg-white/10"
+                    >
+                      <div class="px-4 sm:px-6">
+                        <div class="flex items-start justify-between">
+                          <DialogTitle
+                            class="text-base font-semibold text-gray-900 dark:text-white"
+                            >Choose a Preset Maze</DialogTitle
+                          >
+                          <div class="ml-3 flex h-7 items-center">
+                            <button
+                              type="button"
+                              class="relative rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:hover:text-white dark:focus-visible:outline-indigo-500"
+                              @click="presetDrawerOpen = false"
+                            >
+                              <span class="absolute -inset-2.5" />
+                              <span class="sr-only">Close panel</span>
+                              <XMarkIcon class="size-6" aria-hidden="true" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="relative mt-6 flex-1 px-4 sm:px-6">
+                        <button
+                          class="mr-4 rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
+                          @click="setPreset(0)"
+                        >
+                          Simple Wall
+                        </button>
+
+                        <button
+                          class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
+                          @click="setPreset(1)"
+                        >
+                          PacMan
+                        </button>
+                      </div>
+                    </div>
+                  </DialogPanel>
+                </TransitionChild>
+              </div>
+            </div>
+          </div>
+        </Dialog>
+      </TransitionRoot>
+    </div>
+
+    <div class="header-controls">
+      <button
+        @click="changeMode()"
+        class="text-base font-semibold leading-6 text-gray-900"
+      >
+        {{ selectMode == "create" ? "Start Solving!" : "Edit Maze" }}
+      </button>
+    </div>
+  </section>
   <section class="maze-container">
     <div class="maze">
       <v-row v-for="(row, indexRow) in nodes" class="mazeRow">
@@ -599,6 +938,8 @@ function getAdjacentNodeWallStatus(indexRow, indexCol, colInfo) {
             :x="indexCol"
             :y="indexRow"
             :hoverStatus="currentChoice"
+            :highlight="calculateHighlightStatus(indexCol, indexRow)"
+            :maze-type="selectMode"
             :trackerNum="tracker[indexRow][indexCol]"
             :trackerTotal="currentStep"
             :top-left="
@@ -626,23 +967,14 @@ function getAdjacentNodeWallStatus(indexRow, indexCol, colInfo) {
         Display Options
       </legend>
 
-      <div class="newmaze flex newmaze-btn" v-if="getInnerWidth() > 700">
+      <!-- <div class="newmaze flex newmaze-btn" v-if="getInnerWidth() > 700">
         <button
           @click="startTour()"
           class="text-base font-semibold leading-6 text-gray-900 ml-auto"
         >
           Take the Tour
         </button>
-      </div>
-
-      <div class="newmaze flex newmaze-btn">
-        <button
-          @click="createNodes(true)"
-          class="text-base font-semibold leading-6 text-gray-900 ml-auto"
-        >
-          New Maze
-        </button>
-      </div>
+      </div> -->
 
       <div class="newmaze flex resetmaze-btn">
         <button
@@ -705,50 +1037,58 @@ function getAdjacentNodeWallStatus(indexRow, indexCol, colInfo) {
         </div>
       </div>
     </div>
-    <div class="body" id="v-step-0">
-      From a more computer science point of view, here is a longer explanation
-      of how it works:
-    </div>
-    <div class="body" id="v-step-1">
-      Essentially, this program uses a breadth first search in order to locate
-      the ending of a maze without actually knowing where the ending is.
-      Additionally, it works without the assumption that the ending is against a
-      wall, and that walls are always connected to other walls. Due to the
-      random generation, walls can be floating, so a simple "follow the left
-      handed wall until the exit" strategy is non-viable.
-    </div>
-    <div class="body" id="v-step-2">
-      So, my program essentially just tracks each cell and how long it takes to
-      get from every cell back to the start. It expands outwards, so that it
-      marks all the cells that would take 1 turn to move back to the start
-      first. These would be the four cells in each cardinal direction around the
-      starting cell. Ignoring all the walls of course.
-    </div>
-    <div class="body">
-      Then it marks all the cells that take 2 turns to get back to the start,
-      which are all the cells adjacent to the 1 turn cells that we haven't
-      visited yet. It keeps expanding outwards in this pattern, keeping track of
-      each cell it visits and how many turns it takes to reach the starting cell
-      from that cell. This results in it "bubbling out" as you can see if you
-      select Option 1 in the Display Options. The darker a cell gets, the
-      farther away from the start it is.
-    </div>
-    <div class="body">
-      Once the exit is found, we work our way backwards counting down to one. If
-      it took us 20 turns to find the exit, we then locate a cell adjacent to
-      the exit which takes 19 turns to reach the start. Then from that cell we
-      locate an adjacent on that takes 18 turns. All the way back to zero. As a
-      result, this method will return the most optimal path possible to get from
-      beginning to end.
-    </div>
-    <div class="body">
-      I originally completed a program similar to this (in C++ Programming
-      Language) as part of a class I took at Southern Methodist University.
-      Basically I was bored one day at work and decided to test my knowledge and
-      re-program this. With styling and more functionality, I completed a
-      program that was an entire grade, and we had at least 2 weeks to do, in
-      the span of a day. I also did not look up and assistance or my own old
-      code to accomplish it.
+    <button
+      @click="howDoesItWork = !howDoesItWork"
+      class="text-base font-semibold leading-6 text-gray-900 p-2 bg-green-300 rounded my-3"
+    >
+      How Does It Work?
+    </button>
+    <div class="container" v-if="howDoesItWork">
+      <div class="body" id="v-step-0">
+        From a more computer science point of view, here is a longer explanation
+        of how it works:
+      </div>
+      <div class="body" id="v-step-1">
+        Essentially, this program uses a breadth first search in order to locate
+        the ending of a maze without actually knowing where the ending is.
+        Additionally, it works without the assumption that the ending is against
+        a wall, and that walls are always connected to other walls. Due to the
+        random generation, walls can be floating, so a simple "follow the left
+        handed wall until the exit" strategy is non-viable.
+      </div>
+      <div class="body" id="v-step-2">
+        So, my program just tracks each cell and how long it takes to get from
+        every cell back to the start. It expands outwards, so that it marks all
+        the cells that would take 1 turn to move back to the start first. These
+        would be the four cells in each cardinal direction around the starting
+        cell. Ignoring all the walls of course.
+      </div>
+      <div class="body">
+        Then it marks all the cells that take 2 turns to get back to the start,
+        which are all the cells adjacent to the 1 turn cells that we haven't
+        visited yet. It keeps expanding outwards in this pattern, keeping track
+        of each cell it visits and how many turns it takes to reach the starting
+        cell from that cell. This results in it "bubbling out" as you can see if
+        you select Option 1 in the Display Options. The darker a cell gets, the
+        farther away from the start it is.
+      </div>
+      <div class="body">
+        Once the exit is found, we work our way backwards counting down to one.
+        If it took us 20 turns to find the exit, we then locate a cell adjacent
+        to the exit which takes 19 turns to reach the start. Then from that cell
+        we locate an adjacent on that takes 18 turns. All the way back to zero.
+        As a result, this method will return the most optimal path possible to
+        get from beginning to end.
+      </div>
+      <div class="body">
+        I originally completed a program similar to this (in C++ Programming
+        Language) as part of a class I took at Southern Methodist University.
+        Basically I was bored one day at work and decided to test my knowledge
+        and re-program this. With styling and more functionality, I completed a
+        program that was an entire grade, and we had at least 2 weeks to do, in
+        the span of a day. I also did not look up and assistance or my own old
+        code to accomplish it.
+      </div>
     </div>
   </fieldset>
   <v-tour name="mazeTour" :steps="tourSteps"></v-tour>
@@ -757,8 +1097,35 @@ function getAdjacentNodeWallStatus(indexRow, indexCol, colInfo) {
 </template>
 
 <style scoped lang="scss">
+.header {
+  .randomize-link {
+    color: rgb(95, 95, 255);
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      color: rgb(159, 159, 255);
+    }
+  }
+
+  button {
+    background-color: rgb(150, 182, 255);
+    padding: 5px 10px;
+    border-radius: 8px;
+
+    &:hover {
+      background-color: rgb(118, 159, 255);
+    }
+  }
+
+  .header-controls {
+    display: flex;
+    justify-content: center;
+  }
+}
+
 .maze-container {
-  padding-top: 30px;
+  padding-top: 20px;
   .maze {
     border: 1px solid black;
     .mazeRow {
@@ -801,11 +1168,6 @@ function getAdjacentNodeWallStatus(indexRow, indexCol, colInfo) {
 
     legend {
       padding-top: 5px;
-    }
-
-    .pauseplay svg {
-      cursor: pointer;
-      margin-top: 4px;
     }
   }
 
