@@ -137,6 +137,322 @@ const presetMazes = [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     ],
   ],
+  // 45x25 maze: Spiral Pattern - Creates a connected spiral path
+  Array.from({ length: 25 }, (v, y) =>
+    Array.from({ length: 45 }, (v, x) => {
+      // Border walls
+      if (y === 0 || y === 24 || x === 0 || x === 44) return 0;
+
+      // Create concentric rectangular "rings" with openings to form a spiral
+      const layers = [
+        { minX: 2, maxX: 42, minY: 2, maxY: 22 },
+        { minX: 5, maxX: 39, minY: 5, maxY: 19 },
+        { minX: 8, maxX: 36, minY: 8, maxY: 16 },
+        { minX: 11, maxX: 33, minY: 11, maxY: 13 },
+      ];
+
+      // Create walls for each layer
+      for (let i = 0; i < layers.length; i++) {
+        const layer = layers[i];
+        // Top wall (with gap on right side)
+        if (y === layer.minY && x >= layer.minX && x < layer.maxX - 2) return 0;
+        // Right wall (with gap on bottom side)
+        if (x === layer.maxX && y >= layer.minY && y < layer.maxY - 2) return 0;
+        // Bottom wall (with gap on left side)
+        if (y === layer.maxY && x <= layer.maxX && x > layer.minX + 2) return 0;
+        // Left wall (with gap on top side)
+        if (x === layer.minX && y <= layer.maxY && y > layer.minY + 2) return 0;
+      }
+
+      return 1;
+    })
+  ),
+  // 45x25 maze: Zigzag Pattern - Creates connected zigzag corridors
+  Array.from({ length: 25 }, (v, y) =>
+    Array.from({ length: 45 }, (v, x) => {
+      // Border walls
+      if (y === 0 || y === 24 || x === 0 || x === 44) return 0;
+
+      // Create a simple connected zigzag pattern
+      // Main horizontal path at y=12 (middle)
+      if (y === 12) return 1;
+
+      // Vertical segments that connect to form zigzag
+      // First segment: go up from left side
+      if (x === 5 && y >= 3 && y <= 12) return 1;
+      if (y === 3 && x >= 5 && x <= 15) return 1;
+
+      // Second segment: go down
+      if (x === 15 && y >= 3 && y <= 21) return 1;
+      if (y === 21 && x >= 15 && x <= 25) return 1;
+
+      // Third segment: go up
+      if (x === 25 && y >= 12 && y <= 21) return 1;
+      if (y === 5 && x >= 25 && x <= 35) return 1;
+      if (x === 35 && y >= 5 && y <= 12) return 1;
+
+      // Fourth segment: final connection
+      if (y === 18 && x >= 35 && x <= 40) return 1;
+      if (x === 40 && y >= 12 && y <= 18) return 1;
+
+      // Add some additional branching paths for complexity
+      if (x === 10 && y >= 7 && y <= 12) return 1;
+      if (y === 7 && x >= 10 && x <= 15) return 1;
+
+      if (x === 20 && y >= 12 && y <= 17) return 1;
+      if (y === 17 && x >= 20 && x <= 25) return 1;
+
+      if (x === 30 && y >= 8 && y <= 12) return 1;
+      if (y === 8 && x >= 30 && x <= 35) return 1;
+
+      return 0;
+    })
+  ),
+  // 45x25 maze: Room-based Maze - Creates rooms connected by corridors
+  Array.from({ length: 25 }, (v, y) =>
+    Array.from({ length: 45 }, (v, x) => {
+      // Border walls
+      if (y === 0 || y === 24 || x === 0 || x === 44) return 0;
+
+      // Define room areas (4 rooms)
+      const inRoom1 = x >= 5 && x <= 15 && y >= 3 && y <= 8;
+      const inRoom2 = x >= 25 && x <= 35 && y >= 3 && y <= 8;
+      const inRoom3 = x >= 5 && x <= 15 && y >= 15 && y <= 20;
+      const inRoom4 = x >= 25 && x <= 35 && y >= 15 && y <= 20;
+
+      // Room walls
+      if ((x === 5 || x === 15) && y >= 3 && y <= 8 && !(y === 5 && x === 15))
+        return 0; // Room 1 walls with door
+      if ((x === 25 || x === 35) && y >= 3 && y <= 8 && !(y === 5 && x === 25))
+        return 0; // Room 2 walls with door
+      if (
+        (x === 5 || x === 15) &&
+        y >= 15 &&
+        y <= 20 &&
+        !(y === 17 && x === 15)
+      )
+        return 0; // Room 3 walls with door
+      if (
+        (x === 25 || x === 35) &&
+        y >= 15 &&
+        y <= 20 &&
+        !(y === 17 && x === 25)
+      )
+        return 0; // Room 4 walls with door
+      if ((y === 3 || y === 8) && x >= 5 && x <= 15) return 0; // Room 1 top/bottom
+      if ((y === 3 || y === 8) && x >= 25 && x <= 35) return 0; // Room 2 top/bottom
+      if ((y === 15 || y === 20) && x >= 5 && x <= 15) return 0; // Room 3 top/bottom
+      if ((y === 15 || y === 20) && x >= 25 && x <= 35) return 0; // Room 4 top/bottom
+
+      // Corridor walls
+      if (y === 12 && (x < 5 || (x > 15 && x < 25) || x > 35)) return 0; // Horizontal corridor walls
+      if (x === 20 && (y < 8 || y > 15)) return 0; // Vertical corridor walls
+
+      return 1;
+    })
+  ),
+  // 45x25 maze: Cross Pattern - Creates a cross with connecting paths
+  Array.from({ length: 25 }, (v, y) =>
+    Array.from({ length: 45 }, (v, x) => {
+      // Border walls
+      if (y === 0 || y === 24 || x === 0 || x === 44) return 0;
+
+      // Vertical arm of cross
+      if (x >= 20 && x <= 24 && (y < 8 || y > 16)) return 0;
+      // Horizontal arm of cross
+      if (y >= 10 && y <= 14 && (x < 15 || x > 29)) return 0;
+
+      // Create some internal maze structure
+      if (
+        (x % 8 === 3 || x % 8 === 4) &&
+        y % 4 === 0 &&
+        !(x >= 20 && x <= 24) &&
+        !(y >= 10 && y <= 14)
+      )
+        return 0;
+      if (
+        (y % 6 === 2 || y % 6 === 3) &&
+        x % 3 === 0 &&
+        !(x >= 20 && x <= 24) &&
+        !(y >= 10 && y <= 14)
+      )
+        return 0;
+
+      return 1;
+    })
+  ),
+  // 45x25 maze: Concentric Rectangles - Creates nested rectangular paths
+  Array.from({ length: 25 }, (v, y) =>
+    Array.from({ length: 45 }, (v, x) => {
+      // Border walls
+      if (y === 0 || y === 24 || x === 0 || x === 44) return 0;
+
+      // Create concentric rectangles
+      const layers = [
+        { minX: 5, maxX: 39, minY: 3, maxY: 21 },
+        { minX: 10, maxX: 34, minY: 6, maxY: 18 },
+        { minX: 15, maxX: 29, minY: 9, maxY: 15 },
+      ];
+
+      layers.forEach((layer, index) => {
+        // Rectangle walls with gaps
+        if (
+          (x === layer.minX || x === layer.maxX) &&
+          y >= layer.minY &&
+          y <= layer.maxY
+        ) {
+          // Add gaps in walls
+          if (
+            !(
+              (y === layer.minY + 2 && x === layer.minX) ||
+              (y === layer.maxY - 2 && x === layer.maxX)
+            )
+          ) {
+            if (Math.random() > 0.3) return 0; // This creates the pattern
+          }
+        }
+        if (
+          (y === layer.minY || y === layer.maxY) &&
+          x >= layer.minX &&
+          x <= layer.maxX
+        ) {
+          // Add gaps in walls
+          if (
+            !(
+              (x === layer.minX + 3 && y === layer.minY) ||
+              (x === layer.maxX - 3 && y === layer.maxY)
+            )
+          ) {
+            if (Math.random() > 0.3) return 0; // This creates the pattern
+          }
+        }
+      });
+
+      // Since we can't use random in the static definition, let's use a deterministic pattern
+      // Rectangle 1
+      if (
+        (x === 5 || x === 39) &&
+        y >= 3 &&
+        y <= 21 &&
+        !((y === 5 && x === 5) || (y === 19 && x === 39))
+      )
+        return 0;
+      if (
+        (y === 3 || y === 21) &&
+        x >= 5 &&
+        x <= 39 &&
+        !((x === 8 && y === 3) || (x === 36 && y === 21))
+      )
+        return 0;
+
+      // Rectangle 2
+      if (
+        (x === 10 || x === 34) &&
+        y >= 6 &&
+        y <= 18 &&
+        !((y === 8 && x === 10) || (y === 16 && x === 34))
+      )
+        return 0;
+      if (
+        (y === 6 || y === 18) &&
+        x >= 10 &&
+        x <= 34 &&
+        !((x === 13 && y === 6) || (x === 31 && y === 18))
+      )
+        return 0;
+
+      // Rectangle 3
+      if (
+        (x === 15 || x === 29) &&
+        y >= 9 &&
+        y <= 15 &&
+        !((y === 11 && x === 15) || (y === 13 && x === 29))
+      )
+        return 0;
+      if (
+        (y === 9 || y === 15) &&
+        x >= 15 &&
+        x <= 29 &&
+        !((x === 18 && y === 9) || (x === 26 && y === 15))
+      )
+        return 0;
+
+      return 1;
+    })
+  ),
+  // 45x25 maze: Traditional Maze - Dense maze with narrow corridors and dead ends
+  Array.from({ length: 25 }, (v, y) =>
+    Array.from({ length: 45 }, (v, x) => {
+      // Border walls
+      if (y === 0 || y === 24 || x === 0 || x === 44) return 0;
+
+      // Create a dense traditional maze pattern
+      // Main vertical corridors every 4 columns
+      if (x % 4 === 1 && y > 0 && y < 24) {
+        // Create breaks in vertical corridors for horizontal connections
+        if (y % 6 !== 3) return 1;
+      }
+
+      // Main horizontal corridors every 4 rows
+      if (y % 4 === 1 && x > 0 && x < 44) {
+        // Create breaks for intersections and variety
+        if (x % 8 !== 5) return 1;
+      }
+
+      // Additional horizontal connectors
+      if (y % 4 === 3 && x > 0 && x < 44) {
+        // Shorter horizontal segments that create complexity
+        if ((x % 12 >= 2 && x % 12 <= 6) || (x % 12 >= 9 && x % 12 <= 10))
+          return 1;
+      }
+
+      // Create dead ends and branches
+      if (y % 8 === 2 && x % 4 === 3) {
+        // Short dead-end branches going up
+        return 1;
+      }
+
+      if (y % 8 === 6 && x % 4 === 3) {
+        // Short dead-end branches going down
+        return 1;
+      }
+
+      // Additional vertical connectors for complexity
+      if (x % 8 === 3 && y > 0 && y < 24) {
+        // Create some vertical segments between main corridors
+        if (y % 6 === 2 || y % 6 === 4) return 1;
+      }
+
+      // Small chambers and connecting passages
+      if ((x % 12 === 7 || x % 12 === 8) && (y % 8 === 4 || y % 8 === 5)) {
+        return 1;
+      }
+
+      // Additional branching paths
+      if (y % 6 === 5 && x % 8 === 2) {
+        return 1;
+      }
+
+      // Create some L-shaped corridors
+      if ((x % 16 === 6 || x % 16 === 7) && y % 8 === 7) {
+        return 1;
+      }
+      if (x % 16 === 6 && (y % 8 === 6 || y % 8 === 0)) {
+        return 1;
+      }
+
+      // More connecting passages to ensure everything is reachable
+      if (y === 2 && x % 8 === 5) return 1;
+      if (y === 6 && x % 12 === 9) return 1;
+      if (y === 10 && x % 10 === 7) return 1;
+      if (y === 14 && x % 8 === 3) return 1;
+      if (y === 18 && x % 12 === 5) return 1;
+      if (y === 22 && x % 10 === 2) return 1;
+
+      // Default to wall
+      return 0;
+    })
+  ),
 ];
 const presetDrawerOpen = ref(false);
 
@@ -807,14 +1123,30 @@ function calculateHighlightStatus(x, y) {
   const minY = Math.min(currentDragPos.value.y, dragStart.value.y);
   const maxY = Math.max(currentDragPos.value.y, dragStart.value.y);
 
-  if (
-    (x == minX && y >= minY && y <= maxY) ||
-    (x == maxX && y <= maxY && y >= minY) ||
-    (y == minY && x >= minX && x <= maxX) ||
-    (y == maxY && x >= minX && x <= maxX)
-  ) {
-    return true;
-  } else return false;
+  // Check if this cell is within the selection rectangle
+  if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
+    // Don't show borders on the current mouse position tile (end point)
+    if (x === currentDragPos.value.x && y === currentDragPos.value.y) {
+      return {
+        active: true,
+        borderTop: false,
+        borderBottom: false,
+        borderLeft: false,
+        borderRight: false,
+      };
+    }
+
+    // Show borders on the outer edges of the selection (except for the end point)
+    return {
+      active: true,
+      borderTop: y === minY,
+      borderBottom: y === maxY,
+      borderLeft: x === minX,
+      borderRight: x === maxX,
+    };
+  }
+
+  return false;
 }
 
 function setPreset(presetIndex) {
@@ -890,19 +1222,63 @@ function setPreset(presetIndex) {
                         </div>
                       </div>
                       <div class="relative mt-6 flex-1 px-4 sm:px-6">
-                        <button
-                          class="mr-4 rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
-                          @click="setPreset(0)"
-                        >
-                          Simple Wall
-                        </button>
+                        <div class="grid grid-cols-2 gap-2">
+                          <button
+                            class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
+                            @click="setPreset(0)"
+                          >
+                            Simple Wall
+                          </button>
 
-                        <button
-                          class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
-                          @click="setPreset(1)"
-                        >
-                          PacMan
-                        </button>
+                          <button
+                            class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
+                            @click="setPreset(1)"
+                          >
+                            PacMan
+                          </button>
+
+                          <button
+                            class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
+                            @click="setPreset(2)"
+                          >
+                            Spiral Path
+                          </button>
+
+                          <button
+                            class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
+                            @click="setPreset(3)"
+                          >
+                            Zigzag Maze
+                          </button>
+
+                          <button
+                            class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
+                            @click="setPreset(4)"
+                          >
+                            Room Maze
+                          </button>
+
+                          <button
+                            class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
+                            @click="setPreset(5)"
+                          >
+                            Cross Pattern
+                          </button>
+
+                          <button
+                            class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
+                            @click="setPreset(6)"
+                          >
+                            Concentric Maze
+                          </button>
+
+                          <button
+                            class="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
+                            @click="setPreset(7)"
+                          >
+                            Traditional Maze
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </DialogPanel>

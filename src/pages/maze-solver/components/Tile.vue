@@ -26,7 +26,14 @@ const emits = defineEmits(["select-choice"]);
     :y="y"
     class="tile wall"
     v-if="status == 0"
-    :class="[mazeType == 'create' ? 'hover-create' : '', highlight ? 'highlight' : '']"
+    :class="[
+      !highlight && mazeType == 'create' ? 'hover-create' : '',
+      highlight && highlight.active ? 'highlighted' : '',
+      highlight && highlight.borderTop ? 'highlight-border-top' : '',
+      highlight && highlight.borderBottom ? 'highlight-border-bottom' : '',
+      highlight && highlight.borderLeft ? 'highlight-border-left' : '',
+      highlight && highlight.borderRight ? 'highlight-border-right' : '',
+    ]"
     @click="mazeType == 'create' && $emit('select-choice', x, y)"
   >
     <span class="container top-left" v-if="topLeft">
@@ -43,15 +50,22 @@ const emits = defineEmits(["select-choice"]);
   <div
     class="tile space"
     :class="[
-      mazeType == 'solve'
-        ? hoverStatus == 'start'
-          ? 'hover-start'
-          : hoverStatus == 'end'
-          ? 'hover-end'
+      !highlight
+        ? mazeType == 'solve'
+          ? hoverStatus == 'start'
+            ? 'hover-start'
+            : hoverStatus == 'end'
+            ? 'hover-end'
+            : ''
+          : mazeType == 'create'
+          ? 'hover-create'
           : ''
-        : mazeType == 'create'
-        ? 'hover-create'
-        : '', highlight ? 'highlight' : ''
+        : '',
+      highlight && highlight.active ? 'highlighted' : '',
+      highlight && highlight.borderTop ? 'highlight-border-top' : '',
+      highlight && highlight.borderBottom ? 'highlight-border-bottom' : '',
+      highlight && highlight.borderLeft ? 'highlight-border-left' : '',
+      highlight && highlight.borderRight ? 'highlight-border-right' : '',
     ]"
     @click="$emit('select-choice', x, y)"
     v-if="status == 1"
@@ -79,13 +93,6 @@ const emits = defineEmits(["select-choice"]);
   <div class="tile start" v-if="status == 2"></div>
   <div class="tile end" v-if="status == 3"></div>
   <div class="tile path" v-if="status == 4">
-    <!-- <div
-      class="center-tile"
-      v-if="
-        (!adjacentPathStatus.north || !adjacentPathStatus.south) &&
-        (!adjacentPathStatus.west || !adjacentPathStatus.east)
-      "
-    ></div> -->
     <svg
       style="background: none"
       class="curve curve-bottom-right"
@@ -273,13 +280,79 @@ const emits = defineEmits(["select-choice"]);
   .circle,
   .blocker {
     cursor: pointer;
-    border: 1px solid red;
+    border: 1px solid transparent;
   }
 
   &.wall {
     cursor: pointer;
-    border: 1px solid red;
+    border: 1px solid transparent;
   }
+}
+
+/* High specificity highlight borders that work on all tile types */
+.tile.wall.highlight-border-top,
+.tile.space.highlight-border-top,
+.tile.start.highlight-border-top,
+.tile.end.highlight-border-top,
+.tile.path.highlight-border-top {
+  border-top: 2px solid red !important;
+}
+
+.tile.wall.highlight-border-bottom,
+.tile.space.highlight-border-bottom,
+.tile.start.highlight-border-bottom,
+.tile.end.highlight-border-bottom,
+.tile.path.highlight-border-bottom {
+  border-bottom: 2px solid red !important;
+}
+
+.tile.wall.highlight-border-left,
+.tile.space.highlight-border-left,
+.tile.start.highlight-border-left,
+.tile.end.highlight-border-left,
+.tile.path.highlight-border-left {
+  border-left: 2px solid red !important;
+}
+
+.tile.wall.highlight-border-right,
+.tile.space.highlight-border-right,
+.tile.start.highlight-border-right,
+.tile.end.highlight-border-right,
+.tile.path.highlight-border-right {
+  border-right: 2px solid red !important;
+}
+
+/* Reset borders for tiles that have highlight borders but not on specific sides */
+.tile.wall.highlighted:not(.highlight-border-top),
+.tile.space.highlighted:not(.highlight-border-top),
+.tile.start.highlighted:not(.highlight-border-top),
+.tile.end.highlighted:not(.highlight-border-top),
+.tile.path.highlighted:not(.highlight-border-top) {
+  border-top: none !important;
+}
+
+.tile.wall.highlighted:not(.highlight-border-bottom),
+.tile.space.highlighted:not(.highlight-border-bottom),
+.tile.start.highlighted:not(.highlight-border-bottom),
+.tile.end.highlighted:not(.highlight-border-bottom),
+.tile.path.highlighted:not(.highlight-border-bottom) {
+  border-bottom: none !important;
+}
+
+.tile.wall.highlighted:not(.highlight-border-left),
+.tile.space.highlighted:not(.highlight-border-left),
+.tile.start.highlighted:not(.highlight-border-left),
+.tile.end.highlighted:not(.highlight-border-left),
+.tile.path.highlighted:not(.highlight-border-left) {
+  border-left: none !important;
+}
+
+.tile.wall.highlighted:not(.highlight-border-right),
+.tile.space.highlighted:not(.highlight-border-right),
+.tile.start.highlighted:not(.highlight-border-right),
+.tile.end.highlighted:not(.highlight-border-right),
+.tile.path.highlighted:not(.highlight-border-right) {
+  border-right: none !important;
 }
 
 .start {
