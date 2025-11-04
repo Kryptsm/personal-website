@@ -98,14 +98,12 @@ export function calculateStartingWordScore(word, fallbackScoreFunction) {
  */
 export function formatStartingWordTooltip(word) {
   const testData = getTestDataForWord(word);
-  
+
   if (testData) {
     return `${word.toUpperCase()} - Analysis:
 Rank: #${testData.rank} (${testData.tier} tier)
 Success Rate: ${testData.successRate}%`;
   }
-  
+
   return `${word.toUpperCase()} - Standard word`;
 }
-
-

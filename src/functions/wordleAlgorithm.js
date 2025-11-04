@@ -7,9 +7,28 @@ import { debugLogModule } from "./debugUtils.js";
 
 // Simplified letter frequency data (only most common letters)
 const letterFreq = {
-  e: 11.16, a: 8.5, r: 7.58, i: 7.54, o: 7.16, t: 6.95, n: 6.65, s: 5.74,
-  l: 5.49, c: 4.54, u: 3.63, d: 3.38, p: 3.17, m: 3.01, h: 3.0, g: 2.47,
-  b: 2.07, f: 1.81, y: 1.78, w: 1.29, k: 1.1, v: 1.01
+  e: 11.16,
+  a: 8.5,
+  r: 7.58,
+  i: 7.54,
+  o: 7.16,
+  t: 6.95,
+  n: 6.65,
+  s: 5.74,
+  l: 5.49,
+  c: 4.54,
+  u: 3.63,
+  d: 3.38,
+  p: 3.17,
+  m: 3.01,
+  h: 3.0,
+  g: 2.47,
+  b: 2.07,
+  f: 1.81,
+  y: 1.78,
+  w: 1.29,
+  k: 1.1,
+  v: 1.01,
 };
 
 // Simplified positional frequency (only top letters per position)
@@ -96,11 +115,11 @@ export function getSolutionCandidates(
  */
 function estimateWordValue(candidateWord, solutionCandidates) {
   if (solutionCandidates.length <= 1) return 0;
-  
+
   // Simple heuristic: count unique letters and common patterns
   const uniqueLetters = new Set(candidateWord.toLowerCase()).size;
   const vowelCount = (candidateWord.match(/[aeiou]/g) || []).length;
-  
+
   // Basic scoring without expensive pattern analysis
   return uniqueLetters * 2 + (vowelCount >= 2 ? 3 : 0);
 }
@@ -108,39 +127,48 @@ function estimateWordValue(candidateWord, solutionCandidates) {
 /**
  * Get information gathering words - simplified version
  */
-export function getInformationGatherers(words, closeSpots, incorrectLetters, usedLetters) {
-  return words.filter((word) => {
-    // Must obey close letter constraints
-    if (closeSpots) {
-      for (let i = 0; i < closeSpots.length; i++) {
-        const spot = closeSpots[i];
-        if (spot && spot.length) {
-          for (const letter of spot) {
-            if (!word.toLowerCase().includes(letter.toLowerCase()) ||
-                word[i].toLowerCase() === letter.toLowerCase()) {
-              return false;
+export function getInformationGatherers(
+  words,
+  closeSpots,
+  incorrectLetters,
+  usedLetters
+) {
+  return words
+    .filter((word) => {
+      // Must obey close letter constraints
+      if (closeSpots) {
+        for (let i = 0; i < closeSpots.length; i++) {
+          const spot = closeSpots[i];
+          if (spot && spot.length) {
+            for (const letter of spot) {
+              if (
+                !word.toLowerCase().includes(letter.toLowerCase()) ||
+                word[i].toLowerCase() === letter.toLowerCase()
+              ) {
+                return false;
+              }
             }
           }
         }
       }
-    }
 
-    // Must not contain incorrect letters
-    if (incorrectLetters && incorrectLetters.length > 0) {
-      for (const letter of incorrectLetters) {
-        if (word.toLowerCase().includes(letter.toLowerCase())) {
-          return false;
+      // Must not contain incorrect letters
+      if (incorrectLetters && incorrectLetters.length > 0) {
+        for (const letter of incorrectLetters) {
+          if (word.toLowerCase().includes(letter.toLowerCase())) {
+            return false;
+          }
         }
       }
-    }
 
-    // Prefer words with unused letters
-    const unusedLetterCount = word
-      .split("")
-      .filter((letter) => !usedLetters.has(letter.toLowerCase())).length;
+      // Prefer words with unused letters
+      const unusedLetterCount = word
+        .split("")
+        .filter((letter) => !usedLetters.has(letter.toLowerCase())).length;
 
-    return unusedLetterCount >= 2;
-  }).slice(0, 50); // Limit results for performance
+      return unusedLetterCount >= 2;
+    })
+    .slice(0, 50); // Limit results for performance
 }
 
 /**
@@ -232,25 +260,19 @@ export function applyPatternBonus(word) {
 
   // Common endings
   if (w.endsWith("ed") || w.endsWith("er") || w.endsWith("ly")) bonus += 2;
-  
+
   // Vowel distribution
   const vowelCount = (w.match(/[aeiou]/g) || []).length;
   if (vowelCount === 2 || vowelCount === 3) bonus += 2;
-  
+
   // Unique letters bonus
   if (new Set(w).size === 5) bonus += 3;
-  
+
   // Avoid double letters (less information)
   if (new Set(w).size < 5) bonus -= 1;
 
   return bonus;
 }
-
-
-
-
-
-
 
 /**
  * Simplified main algorithm to get word suggestions
@@ -299,21 +321,24 @@ export function getWordSuggestions(
   // Score solution candidates
   const scoredSolutions = solutionCandidates.map((word) => ({
     word,
-    score: (scoreWordWithPositions(word, usedLetters) + 
-            applyPatternBonus(word) +
-            calculateConstraintSatisfactionBonus(word, correctSpots, closeSpots)) * solutionWeight
+    score:
+      (scoreWordWithPositions(word, usedLetters) +
+        applyPatternBonus(word) +
+        calculateConstraintSatisfactionBonus(word, correctSpots, closeSpots)) *
+      solutionWeight,
   }));
 
   // Score information gatherers
   const scoredInformationGatherers = informationGatherers.map((word) => ({
     word,
-    score: (scoreWordWithPositions(word, usedLetters) + 
-            applyPatternBonus(word)) * informationWeight
+    score:
+      (scoreWordWithPositions(word, usedLetters) + applyPatternBonus(word)) *
+      informationWeight,
   }));
 
   // Combine and sort all suggestions
   const allSuggestions = [...scoredSolutions, ...scoredInformationGatherers];
-  
+
   // Remove duplicates and sort by score
   const uniqueSuggestions = [];
   const seenWords = new Set();

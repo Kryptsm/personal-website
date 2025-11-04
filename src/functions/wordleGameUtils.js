@@ -63,10 +63,6 @@ export function getLetterStatus(
   return letterStatus;
 }
 
-
-
-
-
 /**
  * Check if a letter is correct at a specific position
  */

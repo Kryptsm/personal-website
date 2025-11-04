@@ -97,5 +97,3 @@ Rank: #${data.rank} (${data.tier} tier)
 Success Rate: ${data.successRate}%
 Practical Score: ${data.practicalScore} pts`;
 }
-
-

@@ -67,7 +67,11 @@ export function handleKeyDown(
   }
 
   // Prevent default for certain keys
-  if (e.key === "/" || (e.ctrlKey && /^[fgk]$/.test(e.key)) || (e.metaKey && /^[fgk]$/.test(e.key))) {
+  if (
+    e.key === "/" ||
+    (e.ctrlKey && /^[fgk]$/.test(e.key)) ||
+    (e.metaKey && /^[fgk]$/.test(e.key))
+  ) {
     e.preventDefault();
     return;
   }
