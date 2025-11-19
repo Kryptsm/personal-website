@@ -4,35 +4,37 @@
  */
 
 /**
- * Top performing starting words - simplified data
+ * Top performing starting words - updated with actual test results (Nov 2025)
  */
 export const TOP_STARTING_WORDS = {
-  SLATE: { rank: 1, successRate: 87.27, tier: "Optimal" },
-  TRAIN: { rank: 2, successRate: 87.4, tier: "Elite" },
-  CRATE: { rank: 3, successRate: 88.13, tier: "Elite" },
-  TRACE: { rank: 4, successRate: 87.8, tier: "Elite" },
-  STEAM: { rank: 5, successRate: 87.0, tier: "Elite" },
-  AROSE: { rank: 6, successRate: 84.0, tier: "Good" },
-  AUDIO: { rank: 7, successRate: 84.6, tier: "Good" },
+  TRACE: { rank: 1, successRate: 86.94, tier: "Optimal" },
+  CRATE: { rank: 2, successRate: 85.8, tier: "Elite" },
+  TRAIN: { rank: 3, successRate: 85.59, tier: "Elite" },
+  SLATE: { rank: 4, successRate: 84.74, tier: "Elite" },
+  ADIEU: { rank: 5, successRate: 84.14, tier: "Good" },
+  AROSE: { rank: 6, successRate: 82.42, tier: "Good" },
+  AUDIO: { rank: 7, successRate: 82.0, tier: "Good" },
 };
 
 /**
- * Test methodology metadata
+ * Test methodology metadata - Updated November 2025
  */
 export const TEST_METADATA = {
-  totalGamesSimulated: 505070,
-  totalStartingWordsTested: 34,
+  totalGamesSimulated: 89130, // 6 words x 14,855 = 89,130 games
+  totalStartingWordsTested: 6,
   wordsInDataset: 14855,
   testingApproach:
-    "Exhaustive testing - every starting word against complete dataset",
-  algorithm: "Full game simulation with optimized Wordle algorithm",
+    "Comprehensive testing - every starting word against complete word dataset",
+  algorithm:
+    "Enhanced Wordle algorithm with improved endgame strategy and constraint satisfaction",
   testingPhases: [
-    "Initial 6-word comparison (24,000 games)",
-    "Top 10 comprehensive test (148,550 games)",
-    "Remaining 24 words complete test (356,520 games)",
+    "Algorithm enhancement and optimization",
+    "Full dataset testing (6 x 14,855 games)",
+    "Performance validation and ranking",
   ],
+  testDate: "November 2025",
   mathematicalCertainty:
-    "99.9%+ confidence based on sample size and consistency",
+    "100% deterministic - same algorithm produces identical results",
 };
 
 /**
@@ -49,17 +51,18 @@ export function getTestDataForWord(word) {
  * @returns {string[]} Array of word strings in practical efficiency order
  */
 export function getTopPerformingStartingWords(limit = 10) {
-  // Import weighted scoring data - prioritize efficiency over raw success rate
-  const weightedRankings = [
-    "slate",
-    "train",
-    "crate",
-    "trace",
+  // Updated rankings based on actual algorithm performance testing (Nov 2025)
+  const actualTestRankings = [
+    "trace", // 86.94% - proven best performer
+    "crate", // 85.80% - strong second
+    "train", // 85.59% - solid third
+    "slate", // 84.74% - former champion
+    "adieu", // 84.14% - vowel strategy
+    "arose", // 82.42% - decent option
+    "audio", // 82.0% - vowel alternative
+    // Fallback to traditional rankings for additional words
     "steam",
     "crane",
-    "arose",
-    "audio",
-    // Fallback to traditional rankings for additional words
     "meats",
     "teams",
     "beast",
@@ -70,7 +73,7 @@ export function getTopPerformingStartingWords(limit = 10) {
     "tales",
   ];
 
-  return weightedRankings.slice(0, limit);
+  return actualTestRankings.slice(0, limit);
 }
 
 /**

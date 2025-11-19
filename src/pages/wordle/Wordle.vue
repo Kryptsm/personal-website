@@ -47,7 +47,8 @@ const handleKeyDown = (e, index) => {
     index,
     currentGuess.value,
     gameGridRef.value?.inputRefs || [],
-    GameLogic.findNextAvailableIndex,
+    (currentIndex) =>
+      GameLogic.findNextAvailableIndex(currentIndex, correctSpots.value),
     hasWon.value,
     handleSubmit,
     words
@@ -60,6 +61,19 @@ const handleCellClick = (index) => {
 
 const handleSubmit = () => {
   if (!canSubmit.value) return;
+
+  // Analyze the guess against known state before submitting
+  const analysis = GameLogic.analyzeGuessAgainstKnownState(
+    currentGuess.value,
+    correctSpots.value,
+    closeSpots.value,
+    incorrectLetters.value
+  );
+
+  // Apply the analysis results
+  correctSpots.value = analysis.correctSpots;
+  closeSpots.value = analysis.closeSpots;
+  incorrectLetters.value = analysis.incorrectLetters;
 
   const success = GameLogic.submitGuess(
     currentGuess.value,
@@ -74,12 +88,14 @@ const handleSubmit = () => {
 };
 
 const handleCycleLetter = (letterIdx, letter) => {
-  const result = GameLogic.cycleLetter(
+  const result = GameLogic.cycleLetterWithPropagation(
     letterIdx,
     letter,
     correctSpots.value,
     closeSpots.value,
-    incorrectLetters.value
+    incorrectLetters.value,
+    currentGuess.value,
+    guesses.value
   );
 
   correctSpots.value = result.correctSpots;

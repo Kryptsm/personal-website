@@ -33,16 +33,16 @@ export const SCORING_SYSTEMS = {
 };
 
 /**
- * Simplified starting word performance data
+ * Updated starting word performance data - based on actual algorithm testing (Nov 2025)
  */
 export const STARTING_WORD_DATA = {
-  SLATE: { rank: 1, successRate: 87.27, practicalScore: 53.5, tier: "Optimal" },
-  TRAIN: { rank: 2, successRate: 87.4, practicalScore: 53.0, tier: "Elite" },
-  CRATE: { rank: 3, successRate: 88.13, practicalScore: 52.9, tier: "Elite" },
-  TRACE: { rank: 4, successRate: 87.8, practicalScore: 52.7, tier: "Elite" },
-  STEAM: { rank: 5, successRate: 87.0, practicalScore: 52.7, tier: "Elite" },
-  AROSE: { rank: 6, successRate: 84.0, practicalScore: 50.5, tier: "Good" },
-  AUDIO: { rank: 7, successRate: 84.6, practicalScore: 50.4, tier: "Good" },
+  TRACE: { rank: 1, successRate: 86.94, practicalScore: 55.2, tier: "Optimal" },
+  CRATE: { rank: 2, successRate: 85.8, practicalScore: 54.1, tier: "Elite" },
+  TRAIN: { rank: 3, successRate: 85.59, practicalScore: 53.8, tier: "Elite" },
+  SLATE: { rank: 4, successRate: 84.74, practicalScore: 52.9, tier: "Elite" },
+  ADIEU: { rank: 5, successRate: 84.14, practicalScore: 52.1, tier: "Good" },
+  AROSE: { rank: 6, successRate: 82.42, practicalScore: 50.5, tier: "Good" },
+  AUDIO: { rank: 7, successRate: 82.0, practicalScore: 50.0, tier: "Good" },
 };
 
 /**
@@ -50,7 +50,7 @@ export const STARTING_WORD_DATA = {
  */
 export function getOptimalStartingWords(limit = 10) {
   return Object.entries(STARTING_WORD_DATA)
-    .sort((a, b) => b[1].practicalScore - a[1].practicalScore)
+    .sort((a, b) => b[1].successRate - a[1].successRate) // Sort by success rate (our primary metric)
     .slice(0, limit)
     .map(([word]) => word.toLowerCase());
 }

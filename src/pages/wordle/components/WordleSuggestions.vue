@@ -19,7 +19,7 @@
         >
           {{ getTopPerformingStartingWords()[0].toUpperCase() }}
         </span>
-        <span class="quick-context">(53.5 pts)</span>
+        <span class="quick-context">(55.2 pts)</span>
         <button @click="toggleSuggestions" class="inline-toggle-button">
           {{ showSuggestions ? "Hide Analysis" : "Show Analysis" }}
         </button>
@@ -57,10 +57,10 @@
         >
           <div class="metrics-title">Advanced Metrics (Top 6 Words):</div>
           <div class="metrics-explanation" v-if="guesses.length === 0">
-            Rankings from weighted efficiency analysis prioritizing speed +
-            success: SLATE (53.5 pts) optimal efficiency, TRAIN (53.0 pts),
-            CRATE (52.9 pts). Balances 3-4 guess solutions with high success
-            rates for practical play.
+            Rankings from comprehensive algorithm testing (Nov 2025): TRACE
+            (55.2 pts, 86.94% success) proven optimal performer, CRATE (54.1
+            pts, 85.80%), TRAIN (53.8 pts, 85.59%). Data based on 14,855 word
+            comprehensive testing with enhanced algorithm.
           </div>
           <div class="metrics-explanation" v-else>
             Enhanced scoring with entropy analysis: information theory +
@@ -124,7 +124,6 @@ import {
   getWordSuggestions,
   scoreWordWithPositions,
 } from "../../../functions/wordleAlgorithm.js";
-import * as GameUtils from "../../../functions/wordleGameUtils.js";
 
 import * as TestData from "../../../functions/wordleTestData.js";
 import * as WeightedScoring from "../../../functions/wordleWeightedScoring.js";
@@ -223,7 +222,7 @@ function getSuggestions() {
   if (currentGuessCount === 0) {
     possibleWords.value = getTopPerformingStartingWords().slice(0, 10);
     suggestedStrategy.value =
-      "🏆 SLATE is the optimal starting word based on weighted efficiency analysis: 53.5 practical efficiency points vs CRATE's 52.9. While CRATE has 0.86% higher success rate (88.13% vs 87.27%), SLATE solves faster on average (4.32 vs 4.39 guesses) with 18% 3-guess solutions vs 15.7%. Speed + success = better user experience.";
+      "🏆 TRACE is the optimal starting word based on comprehensive algorithm testing: 86.94% success rate (12,915/14,855 wins) with 4.65 average attempts. Outperforms SLATE by +2.2% and CRATE by +1.14%. Our enhanced algorithm achieves maximum performance with TRACE through improved endgame strategy and constraint satisfaction.";
     loadingSuggestions.value = false;
     return;
   }

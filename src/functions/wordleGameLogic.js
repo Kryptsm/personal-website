@@ -169,7 +169,97 @@ export function submitGuess(
 }
 
 /**
- * Cycle letter state (wrong -> close -> correct)
+ * Automatically analyze a new guess against known game state
+ * This ensures that letters in new guesses are automatically marked with their known states
+ */
+export function analyzeGuessAgainstKnownState(
+  guess,
+  correctSpots,
+  closeSpots,
+  incorrectLetters
+) {
+  const newCorrectSpots = [...correctSpots];
+  const newCloseSpots = closeSpots.map((spot) => [...spot]);
+  const newIncorrectLetters = [...incorrectLetters];
+
+  guess.forEach((letter, index) => {
+    if (!letter) return;
+
+    const upperLetter = letter.toUpperCase();
+    const lowerLetter = letter.toLowerCase();
+
+    // Check if this letter is already known to be correct at this position
+    if (
+      correctSpots[index] &&
+      correctSpots[index].toUpperCase() === upperLetter
+    ) {
+      // Already correct, keep it correct
+      newCorrectSpots[index] = upperLetter;
+      return;
+    }
+
+    // Check if this letter is known to be correct somewhere else
+    const correctPosition = correctSpots.findIndex(
+      (spot, pos) => spot && spot.toUpperCase() === upperLetter && pos !== index
+    );
+
+    if (correctPosition !== -1) {
+      // This letter is correct somewhere else, so it's close here
+      if (!newCloseSpots[index]) {
+        newCloseSpots[index] = [];
+      }
+      if (!newCloseSpots[index].includes(upperLetter)) {
+        newCloseSpots[index].push(upperLetter);
+      }
+      return;
+    }
+
+    // Check if this letter is already known to be close
+    const isKnownClose = closeSpots.some(
+      (spot) =>
+        spot &&
+        spot.some((closeLetter) => closeLetter.toUpperCase() === upperLetter)
+    );
+
+    if (isKnownClose) {
+      // Known to be close, apply close status
+      if (!newCloseSpots[index]) {
+        newCloseSpots[index] = [];
+      }
+      if (!newCloseSpots[index].includes(upperLetter)) {
+        newCloseSpots[index].push(upperLetter);
+      }
+      return;
+    }
+
+    // Check if this letter is known to be incorrect
+    if (
+      incorrectLetters.includes(lowerLetter) ||
+      incorrectLetters.includes(upperLetter)
+    ) {
+      // Known to be incorrect, keep it in incorrect list
+      if (
+        !newIncorrectLetters.includes(lowerLetter) &&
+        !newIncorrectLetters.includes(upperLetter)
+      ) {
+        newIncorrectLetters.push(upperLetter);
+      }
+      return;
+    }
+
+    // Letter is unknown - let user decide through cycling
+  });
+
+  return {
+    correctSpots: newCorrectSpots,
+    closeSpots: newCloseSpots,
+    incorrectLetters: newIncorrectLetters,
+  };
+}
+
+/**
+ * Cycle letter state with proper position-specific logic
+ * Cycles through: Wrong -> Close -> Correct -> Wrong
  */
 export function cycleLetter(
   letterIdx,
@@ -182,41 +272,68 @@ export function cycleLetter(
   const newCloseSpots = [...closeSpots];
   const newIncorrectLetters = [...incorrectLetters];
 
-  // Current state
-  const isCorrect = correctSpots[letterIdx] === letter;
+  // Determine current state for this specific position (handle case sensitivity)
+  const upperLetter = letter.toUpperCase();
+  const isCorrect =
+    correctSpots[letterIdx] === letter ||
+    correctSpots[letterIdx] === upperLetter;
   const isClose =
-    closeSpots[letterIdx] && closeSpots[letterIdx].includes(letter);
-  const isWrong = incorrectLetters.includes(letter);
+    closeSpots[letterIdx] &&
+    (closeSpots[letterIdx].includes(letter) ||
+      closeSpots[letterIdx].includes(upperLetter));
+  const isWrong =
+    incorrectLetters.includes(letter) || incorrectLetters.includes(upperLetter);
 
   if (isCorrect) {
-    // Correct -> Wrong
+    // Correct -> Wrong (only mark as wrong if not correct anywhere else)
     newCorrectSpots[letterIdx] = "";
-    if (!newIncorrectLetters.includes(letter)) {
-      newIncorrectLetters.push(letter);
+
+    // Only add to incorrect if this letter is not correct in any other position
+    const isCorrectElsewhere = correctSpots.some(
+      (spot, idx) =>
+        idx !== letterIdx && (spot === letter || spot === upperLetter)
+    );
+
+    if (!isCorrectElsewhere && !newIncorrectLetters.includes(upperLetter)) {
+      newIncorrectLetters.push(upperLetter);
     }
   } else if (isClose) {
     // Close -> Correct
     newCloseSpots[letterIdx] = newCloseSpots[letterIdx].filter(
-      (l) => l !== letter
+      (l) => l !== letter && l !== upperLetter
     );
-    newCorrectSpots[letterIdx] = letter;
+    newCorrectSpots[letterIdx] = upperLetter;
 
-    // Remove from incorrect if present
-    const incorrectIndex = newIncorrectLetters.indexOf(letter);
+    // Remove from incorrect if present (letter is confirmed to be in the word)
+    let incorrectIndex = newIncorrectLetters.indexOf(letter);
     if (incorrectIndex > -1) {
       newIncorrectLetters.splice(incorrectIndex, 1);
     }
-  } else {
+    incorrectIndex = newIncorrectLetters.indexOf(upperLetter);
+    if (incorrectIndex > -1) {
+      newIncorrectLetters.splice(incorrectIndex, 1);
+    }
+  } else if (isWrong) {
     // Wrong -> Close
+    let incorrectIndex = newIncorrectLetters.indexOf(letter);
+    if (incorrectIndex > -1) {
+      newIncorrectLetters.splice(incorrectIndex, 1);
+    }
+    incorrectIndex = newIncorrectLetters.indexOf(upperLetter);
+    if (incorrectIndex > -1) {
+      newIncorrectLetters.splice(incorrectIndex, 1);
+    }
+
     if (!newCloseSpots[letterIdx]) {
       newCloseSpots[letterIdx] = [];
     }
-    newCloseSpots[letterIdx].push(letter);
-
-    // Remove from incorrect
-    const incorrectIndex = newIncorrectLetters.indexOf(letter);
-    if (incorrectIndex > -1) {
-      newIncorrectLetters.splice(incorrectIndex, 1);
+    if (!newCloseSpots[letterIdx].includes(upperLetter)) {
+      newCloseSpots[letterIdx].push(upperLetter);
+    }
+  } else {
+    // Default state -> Wrong (start with wrong)
+    if (!newIncorrectLetters.includes(upperLetter)) {
+      newIncorrectLetters.push(upperLetter);
     }
   }
 
@@ -225,6 +342,28 @@ export function cycleLetter(
     closeSpots: newCloseSpots,
     incorrectLetters: newIncorrectLetters,
   };
+}
+
+/**
+ * Enhanced cycle letter with better state management (no auto-fill to preserve user choice)
+ */
+export function cycleLetterWithPropagation(
+  letterIdx,
+  letter,
+  correctSpots,
+  closeSpots,
+  incorrectLetters,
+  currentGuess,
+  guesses
+) {
+  // Just do the basic cycling - let users make their own strategic choices
+  return cycleLetter(
+    letterIdx,
+    letter,
+    correctSpots,
+    closeSpots,
+    incorrectLetters
+  );
 }
 
 /**
@@ -262,7 +401,19 @@ export function fillCurrentGuess(selectedWord, currentGuess) {
 }
 
 /**
+ * Auto-fill current guess with known correct letters
+ */
+export function autoFillCorrectLetters(currentGuess, correctSpots) {
+  for (let i = 0; i < correctSpots.length; i++) {
+    if (correctSpots[i] && correctSpots[i] !== "") {
+      currentGuess[i] = correctSpots[i].toUpperCase();
+    }
+  }
+}
+
+/**
  * Update incorrect letters based on current game state
+ * Sets default state for new letters and cleans up incorrect letters that are now known to be correct or close
  */
 export function updateIncorrectLetters(
   guesses,
@@ -270,17 +421,42 @@ export function updateIncorrectLetters(
   closeSpots,
   incorrectLetters
 ) {
-  const newIncorrectLetters = [];
+  const newIncorrectLetters = [...incorrectLetters];
 
+  // Process all letters in all guesses
   guesses.forEach((guess) => {
     guess.forEach((letter, index) => {
-      if (
-        letter &&
-        correctSpots[index] !== letter &&
-        !(closeSpots[index] && closeSpots[index].includes(letter))
-      ) {
-        if (!newIncorrectLetters.includes(letter)) {
-          newIncorrectLetters.push(letter);
+      if (!letter) return;
+
+      const upperLetter = letter.toUpperCase();
+
+      // Check if this letter is marked as correct at this position
+      const isCorrectHere = correctSpots[index] === upperLetter;
+
+      // Check if this letter is marked as close at this position
+      const isCloseHere =
+        closeSpots[index] && closeSpots[index].includes(upperLetter);
+
+      // Check if this letter is marked as correct anywhere
+      const isCorrectAnywhere = correctSpots.some(
+        (spot) => spot === upperLetter
+      );
+
+      // Check if this letter is marked as close anywhere
+      const isCloseAnywhere = closeSpots.some(
+        (spots) => spots && spots.includes(upperLetter)
+      );
+
+      if (isCorrectHere || isCloseHere) {
+        // Letter has a known state at this position, remove from incorrect if present
+        const incorrectIndex = newIncorrectLetters.indexOf(upperLetter);
+        if (incorrectIndex > -1) {
+          newIncorrectLetters.splice(incorrectIndex, 1);
+        }
+      } else if (!isCorrectAnywhere && !isCloseAnywhere) {
+        // Letter is not marked as correct or close anywhere, default to incorrect
+        if (!newIncorrectLetters.includes(upperLetter)) {
+          newIncorrectLetters.push(upperLetter);
         }
       }
     });

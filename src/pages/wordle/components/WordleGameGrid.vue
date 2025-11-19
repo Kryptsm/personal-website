@@ -91,18 +91,32 @@ const cycleLetter = (letterIdx, letter) => {
 
 // Helper methods for letter states
 const isCorrectLetter = (letter, index) => {
-  return props.correctSpots[index] === letter;
+  if (!letter) return false;
+  return (
+    props.correctSpots[index] === letter ||
+    props.correctSpots[index] === letter.toUpperCase() ||
+    props.correctSpots[index] === letter.toLowerCase()
+  );
 };
 
 const isCloseLetter = (letter, index) => {
-  return props.closeSpots[index] && props.closeSpots[index].includes(letter);
+  if (!letter || !props.closeSpots[index]) return false;
+  return (
+    props.closeSpots[index].includes(letter) ||
+    props.closeSpots[index].includes(letter.toUpperCase()) ||
+    props.closeSpots[index].includes(letter.toLowerCase())
+  );
 };
 
 const isWrongLetter = (letter, index) => {
+  if (!letter) return false;
+
   return (
     !isCorrectLetter(letter, index) &&
     !isCloseLetter(letter, index) &&
-    props.incorrectLetters.includes(letter)
+    (props.incorrectLetters.includes(letter) ||
+      props.incorrectLetters.includes(letter.toUpperCase()) ||
+      props.incorrectLetters.includes(letter.toLowerCase()))
   );
 };
 
