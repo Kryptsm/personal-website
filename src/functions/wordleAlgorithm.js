@@ -226,7 +226,7 @@ export function getInformationGatherers(
       const unusedLetters = word
         .split("")
         .filter((letter) => !usedLetters.has(letter.toLowerCase()));
-      
+
       const unusedLetterCount = unusedLetters.length;
 
       // Require at least 3 unused letters for good information gathering
@@ -234,11 +234,29 @@ export function getInformationGatherers(
 
       // Score unused letters by strategic value
       let informationValue = 0;
-      const priorityLetters = ['e', 'a', 'r', 'i', 'o', 't', 'n', 's', 'l', 'c', 'u', 'd', 'p', 'm', 'h'];
-      
+      const priorityLetters = [
+        "e",
+        "a",
+        "r",
+        "i",
+        "o",
+        "t",
+        "n",
+        "s",
+        "l",
+        "c",
+        "u",
+        "d",
+        "p",
+        "m",
+        "h",
+      ];
+
       for (const letter of unusedLetters) {
         const freq = letterFreq[letter.toLowerCase()] || 0;
-        const priorityBonus = priorityLetters.includes(letter.toLowerCase()) ? 2 : 1;
+        const priorityBonus = priorityLetters.includes(letter.toLowerCase())
+          ? 2
+          : 1;
         informationValue += freq * priorityBonus;
       }
 
@@ -246,28 +264,35 @@ export function getInformationGatherers(
       if (informationValue < 25) return false;
 
       // Bonus for optimal vowel-consonant distribution in information gathering
-      const vowels = unusedLetters.filter(l => 'aeiou'.includes(l.toLowerCase()));
-      const consonants = unusedLetters.filter(l => !'aeiou'.includes(l.toLowerCase()));
-      
+      const vowels = unusedLetters.filter((l) =>
+        "aeiou".includes(l.toLowerCase())
+      );
+      const consonants = unusedLetters.filter(
+        (l) => !"aeiou".includes(l.toLowerCase())
+      );
+
       // Prefer words with 1-2 unused vowels and 2-3 unused consonants
       const hasGoodVowelBalance = vowels.length >= 1 && vowels.length <= 2;
-      const hasGoodConsonantBalance = consonants.length >= 2 && consonants.length <= 4;
-      
+      const hasGoodConsonantBalance =
+        consonants.length >= 2 && consonants.length <= 4;
+
       return hasGoodVowelBalance && hasGoodConsonantBalance;
     })
     .map((word) => {
       // Score information gatherers for better selection
-      const unusedLetters = word.split("").filter((letter) => !usedLetters.has(letter.toLowerCase()));
+      const unusedLetters = word
+        .split("")
+        .filter((letter) => !usedLetters.has(letter.toLowerCase()));
       let score = 0;
-      
+
       for (const letter of unusedLetters) {
         score += letterFreq[letter.toLowerCase()] || 0;
       }
-      
+
       return { word, score };
     })
     .sort((a, b) => b.score - a.score)
-    .map(item => item.word)
+    .map((item) => item.word)
     .slice(0, 40); // Slightly fewer but higher quality options
 }
 
@@ -292,7 +317,8 @@ export function scoreWordWithPositions(word, usedLetters) {
     const letterScore = letterFreq[letter] || 0;
 
     // Enhanced positional bonus with higher impact
-    const positionalScore = (positionalFreq[i] && positionalFreq[i][letter]) || 0;
+    const positionalScore =
+      (positionalFreq[i] && positionalFreq[i][letter]) || 0;
 
     // More nuanced repetition penalty
     let repetitionPenalty = 1.0;
@@ -307,11 +333,18 @@ export function scoreWordWithPositions(word, usedLetters) {
 
     // Position-specific bonuses for common Wordle patterns
     let positionBonus = 1.0;
-    if (i === 0 && ['s', 'c', 'b', 't', 'p', 'f', 'm', 'w'].includes(letter)) positionBonus = 1.2;
-    if (i === 1 && ['a', 'o', 'r', 'e', 'i', 'l', 'u', 'h'].includes(letter)) positionBonus = 1.2;
-    if (i === 4 && ['e', 'y', 't', 'r', 's', 'd', 'n'].includes(letter)) positionBonus = 1.3;
+    if (i === 0 && ["s", "c", "b", "t", "p", "f", "m", "w"].includes(letter))
+      positionBonus = 1.2;
+    if (i === 1 && ["a", "o", "r", "e", "i", "l", "u", "h"].includes(letter))
+      positionBonus = 1.2;
+    if (i === 4 && ["e", "y", "t", "r", "s", "d", "n"].includes(letter))
+      positionBonus = 1.3;
 
-    score += (letterScore + positionalScore * 0.15) * repetitionPenalty * newLetterBonus * positionBonus;
+    score +=
+      (letterScore + positionalScore * 0.15) *
+      repetitionPenalty *
+      newLetterBonus *
+      positionBonus;
   }
 
   // Bonus for common Wordle word patterns
@@ -325,21 +358,29 @@ export function scoreWordWithPositions(word, usedLetters) {
  */
 function getWordStructureBonus(word) {
   let bonus = 0;
-  
+
   // CVCVC pattern bonus (very common in Wordle)
-  if (word.match(/^[bcdfghjklmnpqrstvwxyz][aeiou][bcdfghjklmnpqrstvwxyz][aeiou][bcdfghjklmnpqrstvwxyz]$/)) {
+  if (
+    word.match(
+      /^[bcdfghjklmnpqrstvwxyz][aeiou][bcdfghjklmnpqrstvwxyz][aeiou][bcdfghjklmnpqrstvwxyz]$/
+    )
+  ) {
     bonus += 5;
   }
-  
+
   // Common digraph bonuses
-  if (word.includes('th') || word.includes('ch') || word.includes('sh')) bonus += 3;
-  if (word.includes('st') || word.includes('nd') || word.includes('nt')) bonus += 3;
-  if (word.includes('er') || word.includes('ar') || word.includes('or')) bonus += 3;
-  
+  if (word.includes("th") || word.includes("ch") || word.includes("sh"))
+    bonus += 3;
+  if (word.includes("st") || word.includes("nd") || word.includes("nt"))
+    bonus += 3;
+  if (word.includes("er") || word.includes("ar") || word.includes("or"))
+    bonus += 3;
+
   // Avoid problematic patterns
   if (word.match(/[bcdfghjklmnpqrstvwxyz]{3}/)) bonus -= 4; // 3+ consecutive consonants
-  if (word.includes('x') || word.includes('z') || word.includes('q')) bonus -= 2; // rare letters
-  
+  if (word.includes("x") || word.includes("z") || word.includes("q"))
+    bonus -= 2; // rare letters
+
   return bonus;
 }
 
@@ -381,35 +422,108 @@ export function scoreEndgameWord(
 function getWordCommonalityBonus(word) {
   const w = word.toLowerCase();
   let bonus = 0;
-  
+
   // Tier 1: Extremely common Wordle answers (highest priority)
-  const tier1Words = ['about', 'world', 'house', 'right', 'great', 'white', 'black', 'place', 'small', 'young', 'sound', 'light', 'water', 'money', 'story', 'might', 'think', 'point', 'first', 'under', 'being'];
+  const tier1Words = [
+    "about",
+    "world",
+    "house",
+    "right",
+    "great",
+    "white",
+    "black",
+    "place",
+    "small",
+    "young",
+    "sound",
+    "light",
+    "water",
+    "money",
+    "story",
+    "might",
+    "think",
+    "point",
+    "first",
+    "under",
+    "being",
+  ];
   if (tier1Words.includes(w)) return 25;
-  
+
   // Tier 2: Very common Wordle answers
-  const tier2Words = ['other', 'which', 'their', 'would', 'there', 'could', 'where', 'while', 'never', 'after', 'these', 'three', 'again', 'large', 'public', 'order', 'power', 'shall', 'years', 'voice', 'music', 'court', 'study'];
+  const tier2Words = [
+    "other",
+    "which",
+    "their",
+    "would",
+    "there",
+    "could",
+    "where",
+    "while",
+    "never",
+    "after",
+    "these",
+    "three",
+    "again",
+    "large",
+    "public",
+    "order",
+    "power",
+    "shall",
+    "years",
+    "voice",
+    "music",
+    "court",
+    "study",
+  ];
   if (tier2Words.includes(w)) return 18;
-  
+
   // Tier 3: Common 5-letter word patterns that appear in Wordle
-  const tier3Words = ['bread', 'dream', 'cream', 'steam', 'beach', 'teach', 'reach', 'peace', 'heart', 'earth', 'worth', 'north', 'south', 'month', 'death', 'birth', 'chair', 'table', 'green', 'clean'];
+  const tier3Words = [
+    "bread",
+    "dream",
+    "cream",
+    "steam",
+    "beach",
+    "teach",
+    "reach",
+    "peace",
+    "heart",
+    "earth",
+    "worth",
+    "north",
+    "south",
+    "month",
+    "death",
+    "birth",
+    "chair",
+    "table",
+    "green",
+    "clean",
+  ];
   if (tier3Words.includes(w)) return 12;
-  
+
   // Pattern-based bonuses
   if (w.match(/^[sc][th]/)) bonus += 8; // st-, ch-, sh-, etc.
   if (w.match(/[aeiou][rln][tds]$/)) bonus += 6; // -art, -ent, -and, etc.
   if (w.match(/^[aeiou]/)) bonus += 4; // vowel starts
-  if (w.match(/^[bcdfghjklmnpqrstvwxyz][aeiou][bcdfghjklmnpqrstvwxyz][aeiou][bcdfghjklmnpqrstvwxyz]$/)) bonus += 5; // CVCVC pattern
-  
+  if (
+    w.match(
+      /^[bcdfghjklmnpqrstvwxyz][aeiou][bcdfghjklmnpqrstvwxyz][aeiou][bcdfghjklmnpqrstvwxyz]$/
+    )
+  )
+    bonus += 5; // CVCVC pattern
+
   // Wordle-favorable letter combinations
-  if (w.includes('er') || w.includes('ar') || w.includes('or')) bonus += 4;
-  if (w.includes('th') || w.includes('ch') || w.includes('sh')) bonus += 4;
-  if (w.includes('st') || w.includes('nd') || w.includes('nt')) bonus += 4;
-  
+  if (w.includes("er") || w.includes("ar") || w.includes("or")) bonus += 4;
+  if (w.includes("th") || w.includes("ch") || w.includes("sh")) bonus += 4;
+  if (w.includes("st") || w.includes("nd") || w.includes("nt")) bonus += 4;
+
   // Penalties for unlikely Wordle patterns
-  if (w.endsWith('tion') || w.endsWith('ing')) bonus -= 10; // too long patterns
-  if (w.includes('x') || w.includes('z') || w.includes('q') || w.includes('j')) bonus -= 4; // rare letters
+  if (w.endsWith("tion") || w.endsWith("ing")) bonus -= 10; // too long patterns
+  if (w.includes("x") || w.includes("z") || w.includes("q") || w.includes("j"))
+    bonus -= 4; // rare letters
   if (w.match(/[bcdfghjklmnpqrstvwxyz]{3}/)) bonus -= 6; // too many consecutive consonants
-  
+
   return Math.max(bonus, 0); // Don't go negative
 }
 
