@@ -356,7 +356,24 @@
         "5": 3700,
         "6": 1862
       }
+    },
+    "1763932404312": {
+      "timestamp": "2025-11-23T21:13:24.310Z",
+      "algorithmVersion": "current",
+      "startingWord": "trace",
+      "totalGames": 14855,
+      "gamesWon": 12918,
+      "successRate": 86.96061932009425,
+      "averageAttempts": 4.58653651969034,
+      "attemptDistribution": {
+        "1": 1,
+        "2": 165,
+        "3": 2252,
+        "4": 4938,
+        "5": 3700,
+        "6": 1862
+      }
     }
   },
-  "lastUpdated": "2025-11-08T21:27:11.536Z"
+  "lastUpdated": "2025-11-23T21:13:24.310Z"
 }
