@@ -381,7 +381,10 @@ export function resetGame(
   guesses.splice(0);
   guessIndex = 0;
   correctSpots.fill("");
-  closeSpots.fill().map(() => []);
+  // Reset closeSpots to array of empty arrays
+  for (let i = 0; i < closeSpots.length; i++) {
+    closeSpots[i] = [];
+  }
   incorrectLetters.splice(0);
 }
 
