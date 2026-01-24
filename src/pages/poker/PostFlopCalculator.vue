@@ -264,8 +264,14 @@
             />
           </div>
         </div>
-        <div v-if="potOddsResult" class="mt-4 p-4 rounded-lg" :class="potOddsResult.bgClass">
-          <div class="text-white font-bold text-lg mb-2">{{ potOddsResult.decision }}</div>
+        <div
+          v-if="potOddsResult"
+          class="mt-4 p-4 rounded-lg"
+          :class="potOddsResult.bgClass"
+        >
+          <div class="text-white font-bold text-lg mb-2">
+            {{ potOddsResult.decision }}
+          </div>
           <p class="text-white text-sm">{{ potOddsResult.explanation }}</p>
         </div>
       </div>
@@ -276,12 +282,20 @@
       >
         <h3 class="text-xl font-bold text-white mb-3">Quick Tips</h3>
         <ul class="text-green-200 space-y-2">
-          <li>• Enter your hole cards and the community cards as they're dealt</li>
-          <li>• Calculate after the flop, turn, or river to see your changing odds</li>
-          <li>• Use pot odds calculator to determine if a call is profitable</li>
+          <li>
+            • Enter your hole cards and the community cards as they're dealt
+          </li>
+          <li>
+            • Calculate after the flop, turn, or river to see your changing odds
+          </li>
+          <li>
+            • Use pot odds calculator to determine if a call is profitable
+          </li>
           <li>• Win rate 60%+ = strong position, bet aggressively</li>
           <li>• Win rate 40-60% = marginal, proceed with caution</li>
-          <li>• Win rate &lt;40% = usually fold unless pot odds are excellent</li>
+          <li>
+            • Win rate &lt;40% = usually fold unless pot odds are excellent
+          </li>
         </ul>
       </div>
     </div>
@@ -376,8 +390,8 @@ export default {
     function normalizeCardInput(field) {
       let value = postFlopHand.value[field].toUpperCase();
       // Convert "10" to "T"
-      if (value.startsWith('10')) {
-        value = 'T' + value.substring(2);
+      if (value.startsWith("10")) {
+        value = "T" + value.substring(2);
       }
       postFlopHand.value[field] = value;
     }
@@ -532,20 +546,26 @@ export default {
           if (currentWinRate >= winRateNeeded) {
             potOddsResult.value = {
               decision: "✅ CALL - Good Pot Odds",
-              explanation: `You need ${winRateNeeded.toFixed(1)}% to break even, and you have ${currentWinRate}% win rate. This is a profitable call.`,
+              explanation: `You need ${winRateNeeded.toFixed(
+                1
+              )}% to break even, and you have ${currentWinRate}% win rate. This is a profitable call.`,
               bgClass: "bg-green-500/30",
             };
           } else {
             potOddsResult.value = {
               decision: "❌ FOLD - Bad Pot Odds",
-              explanation: `You need ${winRateNeeded.toFixed(1)}% to break even, but only have ${currentWinRate}% win rate. This call loses money long-term.`,
+              explanation: `You need ${winRateNeeded.toFixed(
+                1
+              )}% to break even, but only have ${currentWinRate}% win rate. This call loses money long-term.`,
               bgClass: "bg-red-500/30",
             };
           }
         } else {
           potOddsResult.value = {
             decision: "ℹ️ Calculate Your Hand First",
-            explanation: `You need ${winRateNeeded.toFixed(1)}% win rate to profitably call. Use the calculator above to see if you have the odds.`,
+            explanation: `You need ${winRateNeeded.toFixed(
+              1
+            )}% win rate to profitably call. Use the calculator above to see if you have the odds.`,
             bgClass: "bg-blue-500/30",
           };
         }

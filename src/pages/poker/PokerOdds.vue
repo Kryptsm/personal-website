@@ -96,13 +96,13 @@
           <h3 class="text-xl font-bold text-white mb-3">
             {{ detailedResults.hand }} Results
           </h3>
-          
+
           <!-- Hand Strength Badge -->
           <div class="mb-4 p-3 rounded-lg bg-black/40">
             <div class="flex items-center justify-between">
               <div>
                 <span class="text-sm text-green-200">Hand Strength: </span>
-                <span 
+                <span
                   class="text-lg font-bold"
                   :style="{ color: detailedResults.strengthColor }"
                 >
@@ -114,7 +114,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="grid grid-cols-3 gap-4">
             <div class="text-center">
               <div class="text-3xl font-bold text-green-400">
@@ -152,7 +152,8 @@
               🎯 Need Post-Flop Analysis?
             </h2>
             <p class="text-green-200">
-              Calculate odds with your actual cards and get real-time recommendations
+              Calculate odds with your actual cards and get real-time
+              recommendations
             </p>
           </div>
           <router-link
@@ -163,7 +164,6 @@
           </router-link>
         </div>
       </div>
-
 
       <!-- Legend -->
       <div
@@ -296,15 +296,21 @@
         <div class="mt-4 p-3 bg-black/40 rounded-lg">
           <div class="grid grid-cols-3 gap-4 text-center">
             <div>
-              <div class="text-xl font-bold text-white">{{ sessionStats.handsPlayed }}</div>
+              <div class="text-xl font-bold text-white">
+                {{ sessionStats.handsPlayed }}
+              </div>
               <div class="text-green-200 text-xs">Hands Analyzed</div>
             </div>
             <div>
-              <div class="text-xl font-bold text-green-400">{{ sessionStats.avgWinRate }}%</div>
+              <div class="text-xl font-bold text-green-400">
+                {{ sessionStats.avgWinRate }}%
+              </div>
               <div class="text-green-200 text-xs">Avg Win Rate</div>
             </div>
             <div>
-              <div class="text-xl font-bold text-yellow-400">{{ sessionStats.bestHand }}</div>
+              <div class="text-xl font-bold text-yellow-400">
+                {{ sessionStats.bestHand }}
+              </div>
               <div class="text-green-200 text-xs">Best Hand</div>
             </div>
           </div>
@@ -335,10 +341,12 @@
             Carlo simulation
           </li>
           <li>
-            • <strong>Keyboard shortcuts:</strong> Press Enter to calculate, Escape to clear
+            • <strong>Keyboard shortcuts:</strong> Press Enter to calculate,
+            Escape to clear
           </li>
           <li>
-            • <strong>Session tracking:</strong> View your hand history to analyze patterns
+            • <strong>Session tracking:</strong> View your hand history to
+            analyze patterns
           </li>
         </ul>
       </div>
@@ -354,7 +362,6 @@ import {
   calculateHandOdds,
   getHandStrength,
 } from "../../functions/pokerOddsCalculator.js";
-
 
 export default {
   name: "PokerOdds",
@@ -517,7 +524,7 @@ export default {
               selectedHand.value.toUpperCase(),
               numPlayers.value
             );
-            
+
             const handData = {
               hand: selectedHand.value.toUpperCase(),
               winRate: results.winRate.toFixed(1),
@@ -529,7 +536,7 @@ export default {
               recommendation: strength.recommendation,
             };
             detailedResults.value = handData;
-            
+
             // Add to history
             addToHistory(handData.hand, handData.winRate, numPlayers.value);
           } else {
@@ -584,7 +591,7 @@ export default {
       // Auto-calculate for AA as an example
       selectedHand.value = "AA";
       calculateDetailedOdds();
-      
+
       // Add keyboard listener
       window.addEventListener("keydown", handleKeyboard);
     });
