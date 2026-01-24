@@ -65,6 +65,16 @@ const routes = [
     component: () => import("./pages/sudoku/Sudoku.vue"),
   },
   {
+    path: "/poker",
+    name: "poker",
+    component: () => import("./pages/poker/PokerOdds.vue"),
+  },
+  {
+    path: "/poker/post-flop",
+    name: "poker-post-flop",
+    component: () => import("./pages/poker/PostFlopCalculator.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     redirect: "/",
   },

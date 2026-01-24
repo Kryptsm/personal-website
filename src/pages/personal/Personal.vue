@@ -163,6 +163,41 @@ function alterElement(fadeElement, coefficient) {
       <div class="full-width">
         <div class="card green">
           <div class="body">
+            <h3>Texas Hold'em Odds Calculator</h3>
+            <p class="desc">
+              A comprehensive poker odds calculator showing pre-flop win rates
+              for all 169 starting hands. Uses Monte Carlo simulation to
+              calculate exact probabilities based on number of players. Perfect
+              for learning hand strength and making mathematically optimal
+              decisions.
+            </p>
+            <p class="desc">
+              Some tech utilized in this project: Monte Carlo simulation, poker
+              hand evaluation algorithms, dynamic odds tables
+            </p>
+            <router-link :to="{ name: 'poker' }" class="link">
+              Click here to see it!
+            </router-link>
+          </div>
+          <div class="image-container placeholder-poker">
+            <div
+              style="
+                background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                font-size: 6rem;
+              "
+            >
+              🃏
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="full-width">
+        <div class="card red">
+          <div class="body">
             <h3>Maze Solver</h3>
             <p class="desc">
               A basic program to find the path from the beginning to the end of
