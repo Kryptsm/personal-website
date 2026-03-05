@@ -368,7 +368,7 @@ function getDiscriminatingProbes(
 	words,
 	candidatesLower,
 	incorrectLetters,
-	limit
+	limit,
 ) {
 	const incorrectSet = new Set(incorrectLetters.map((l) => l.toLowerCase()));
 	const n = candidatesLower.length;
@@ -1245,8 +1245,7 @@ export function getWordSuggestions(
 		// Primary: lower expected remaining = better splitting
 		// Secondary: higher singleton fraction = more 3-guess wins
 		const singletonFraction = stats.singletonCount / candidatesLower.length;
-		let score =
-			-stats.expectedRemaining + singletonWeight * singletonFraction;
+		let score = -stats.expectedRemaining + singletonWeight * singletonFraction;
 
 		// Urgency bonus: favor candidates when guesses are running out
 		const isCandidate = candidateSet.has(guess);
