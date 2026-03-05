@@ -1,0 +1,721 @@
+{
+  "timestamp": "2026-02-23T19:52:47.575Z",
+  "totalWordsInList": 14855,
+  "totalTimeSec": 2252.6,
+  "results": [
+    {
+      "word": "CARTE",
+      "successRate": 87.53954897340964,
+      "avgAttempts": 4.572063278357455,
+      "gamesWon": 13004,
+      "gamesLost": 1851,
+      "totalGames": 14855,
+      "distribution": {
+        "1": 1,
+        "2": 171,
+        "3": 2261,
+        "4": 4982,
+        "5": 3776,
+        "6": 1813
+      },
+      "fastestWin": {
+        "targetWord": "carte",
+        "attempts": 1,
+        "guesses": [
+          "carte"
+        ]
+      },
+      "slowestWin": {
+        "targetWord": "jetty",
+        "attempts": 6,
+        "guesses": [
+          "carte",
+          "silen",
+          "goety",
+          "betty",
+          "petty",
+          "jetty"
+        ]
+      }
+    },
+    {
+      "word": "CARNE",
+      "successRate": 87.35106024907438,
+      "avgAttempts": 4.577919892292157,
+      "gamesWon": 12976,
+      "gamesLost": 1879,
+      "totalGames": 14855,
+      "distribution": {
+        "1": 1,
+        "2": 164,
+        "3": 2284,
+        "4": 4949,
+        "5": 3714,
+        "6": 1864
+      },
+      "fastestWin": {
+        "targetWord": "carne",
+        "attempts": 1,
+        "guesses": [
+          "carne"
+        ]
+      },
+      "slowestWin": {
+        "targetWord": "limas",
+        "attempts": 6,
+        "guesses": [
+          "carne",
+          "alist",
+          "dials",
+          "gilas",
+          "lipas",
+          "limas"
+        ]
+      }
+    },
+    {
+      "word": "CARLE",
+      "successRate": 86.53651969033996,
+      "avgAttempts": 4.637293840457758,
+      "gamesWon": 12855,
+      "gamesLost": 2000,
+      "totalGames": 14855,
+      "distribution": {
+        "1": 1,
+        "2": 151,
+        "3": 2022,
+        "4": 4823,
+        "5": 3922,
+        "6": 1936
+      },
+      "fastestWin": {
+        "targetWord": "carle",
+        "attempts": 1,
+        "guesses": [
+          "carle"
+        ]
+      },
+      "slowestWin": {
+        "targetWord": "jetty",
+        "attempts": 6,
+        "guesses": [
+          "carle",
+          "sient",
+          "motey",
+          "betty",
+          "petty",
+          "jetty"
+        ]
+      }
+    },
+    {
+      "word": "TIARE",
+      "successRate": 85.81622349377314,
+      "avgAttempts": 4.608818579602827,
+      "gamesWon": 12748,
+      "gamesLost": 2107,
+      "totalGames": 14855,
+      "distribution": {
+        "1": 1,
+        "2": 177,
+        "3": 2269,
+        "4": 4764,
+        "5": 3618,
+        "6": 1919
+      },
+      "fastestWin": {
+        "targetWord": "tiare",
+        "attempts": 1,
+        "guesses": [
+          "tiare"
+        ]
+      },
+      "slowestWin": {
+        "targetWord": "speed",
+        "attempts": 6,
+        "guesses": [
+          "tiare",
+          "coles",
+          "bused",
+          "syned",
+          "sewed",
+          "speed"
+        ]
+      }
+    },
+    {
+      "word": "SATER",
+      "successRate": 85.75563783237968,
+      "avgAttempts": 4.623897677549647,
+      "gamesWon": 12739,
+      "gamesLost": 2116,
+      "totalGames": 14855,
+      "distribution": {
+        "1": 1,
+        "2": 175,
+        "3": 2226,
+        "4": 4710,
+        "5": 3639,
+        "6": 1988
+      },
+      "fastestWin": {
+        "targetWord": "sater",
+        "attempts": 1,
+        "guesses": [
+          "sater"
+        ]
+      },
+      "slowestWin": {
+        "targetWord": "gurks",
+        "attempts": 6,
+        "guesses": [
+          "sater",
+          "crins",
+          "horsy",
+          "burls",
+          "murks",
+          "gurks"
+        ]
+      }
+    },
+    {
+      "word": "SOREL",
+      "successRate": 85.70178391114102,
+      "avgAttempts": 4.601144395826321,
+      "gamesWon": 12731,
+      "gamesLost": 2124,
+      "totalGames": 14855,
+      "distribution": {
+        "1": 1,
+        "2": 165,
+        "3": 2276,
+        "4": 4846,
+        "5": 3595,
+        "6": 1848
+      },
+      "fastestWin": {
+        "targetWord": "sorel",
+        "attempts": 1,
+        "guesses": [
+          "sorel"
+        ]
+      },
+      "slowestWin": {
+        "targetWord": "jetty",
+        "attempts": 6,
+        "guesses": [
+          "sorel",
+          "daine",
+          "chewy",
+          "betty",
+          "petty",
+          "jetty"
+        ]
+      }
+    },
+    {
+      "word": "CARSE",
+      "successRate": 85.63446650959273,
+      "avgAttempts": 4.63527431841131,
+      "gamesWon": 12721,
+      "gamesLost": 2134,
+      "totalGames": 14855,
+      "distribution": {
+        "1": 1,
+        "2": 167,
+        "3": 2117,
+        "4": 4778,
+        "5": 3693,
+        "6": 1965
+      },
+      "fastestWin": {
+        "targetWord": "carse",
+        "attempts": 1,
+        "guesses": [
+          "carse"
+        ]
+      },
+      "slowestWin": {
+        "targetWord": "jetty",
+        "attempts": 6,
+        "guesses": [
+          "carse",
+          "meint",
+          "felty",
+          "betty",
+          "petty",
+          "jetty"
+        ]
+      }
+    },
+    {
+      "word": "IRATE",
+      "successRate": 85.39212386401886,
+      "avgAttempts": 4.628677213059576,
+      "gamesWon": 12685,
+      "gamesLost": 2170,
+      "totalGames": 14855,
+      "distribution": {
+        "1": 1,
+        "2": 157,
+        "3": 2180,
+        "4": 4756,
+        "5": 3686,
+        "6": 1905
+      },
+      "fastestWin": {
+        "targetWord": "irate",
+        "attempts": 1,
+        "guesses": [
+          "irate"
+        ]
+      },
+      "slowestWin": {
+        "targetWord": "wizzo",
+        "attempts": 6,
+        "guesses": [
+          "irate",
+          "coins",
+          "pyoid",
+          "milko",
+          "biffo",
+          "wizzo"
+        ]
+      }
+    },
+    {
+      "word": "RAISE",
+      "successRate": 84.0592393133625,
+      "avgAttempts": 4.67842477280377,
+      "gamesWon": 12487,
+      "gamesLost": 2368,
+      "totalGames": 14855,
+      "distribution": {
+        "1": 1,
+        "2": 164,
+        "3": 2099,
+        "4": 4525,
+        "5": 3624,
+        "6": 2074
+      },
+      "fastestWin": {
+        "targetWord": "raise",
+        "attempts": 1,
+        "guesses": [
+          "raise"
+        ]
+      },
+      "slowestWin": {
+        "targetWord": "jetty",
+        "attempts": 6,
+        "guesses": [
+          "raise",
+          "toney",
+          "felty",
+          "betty",
+          "petty",
+          "jetty"
+        ]
+      }
+    },
+    {
+      "word": "ARISE",
+      "successRate": 83.70918882531134,
+      "avgAttempts": 4.692359474924268,
+      "gamesWon": 12435,
+      "gamesLost": 2420,
+      "totalGames": 14855,
+      "distribution": {
+        "1": 1,
+        "2": 168,
+        "3": 2022,
+        "4": 4502,
+        "5": 3678,
+        "6": 2064
+      },
+      "fastestWin": {
+        "targetWord": "arise",
+        "attempts": 1,
+        "guesses": [
+          "arise"
+        ]
+      },
+      "slowestWin": {
+        "targetWord": "jetty",
+        "attempts": 6,
+        "guesses": [
+          "arise",
+          "toney",
+          "felty",
+          "betty",
+          "petty",
+          "jetty"
+        ]
+      }
+    }
+  ],
+  "phase2Top30": [
+    {
+      "word": "SANER",
+      "successRate": 100,
+      "avgAttempts": 2.73,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "EARNS",
+      "successRate": 100,
+      "avgAttempts": 2.745,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "SAINE",
+      "successRate": 100,
+      "avgAttempts": 2.76,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "NEARS",
+      "successRate": 100,
+      "avgAttempts": 2.76,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "SOARE",
+      "successRate": 100,
+      "avgAttempts": 2.775,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "CARNE",
+      "successRate": 100,
+      "avgAttempts": 2.775,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "RATES",
+      "successRate": 100,
+      "avgAttempts": 2.775,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "RAISE",
+      "successRate": 100,
+      "avgAttempts": 2.78,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "ROATE",
+      "successRate": 100,
+      "avgAttempts": 2.785,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "TEARS",
+      "successRate": 100,
+      "avgAttempts": 2.785,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "IRATE",
+      "successRate": 100,
+      "avgAttempts": 2.785,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "SNARE",
+      "successRate": 100,
+      "avgAttempts": 2.79,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "SNORE",
+      "successRate": 100,
+      "avgAttempts": 2.79,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "ARISE",
+      "successRate": 100,
+      "avgAttempts": 2.79,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "SLANE",
+      "successRate": 100,
+      "avgAttempts": 2.795,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "CRANE",
+      "successRate": 100,
+      "avgAttempts": 2.795,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "CORSE",
+      "successRate": 100,
+      "avgAttempts": 2.795,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "TORSE",
+      "successRate": 100,
+      "avgAttempts": 2.795,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "CARTE",
+      "successRate": 100,
+      "avgAttempts": 2.8,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "SATER",
+      "successRate": 100,
+      "avgAttempts": 2.805,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "AROSE",
+      "successRate": 100,
+      "avgAttempts": 2.805,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "CANER",
+      "successRate": 100,
+      "avgAttempts": 2.805,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "SAICE",
+      "successRate": 100,
+      "avgAttempts": 2.81,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "CRONE",
+      "successRate": 100,
+      "avgAttempts": 2.81,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "MAIRE",
+      "successRate": 100,
+      "avgAttempts": 2.81,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "TIARE",
+      "successRate": 100,
+      "avgAttempts": 2.81,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "SIREN",
+      "successRate": 100,
+      "avgAttempts": 2.81,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "CARSE",
+      "successRate": 100,
+      "avgAttempts": 2.815,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "CARLE",
+      "successRate": 100,
+      "avgAttempts": 2.815,
+      "gamesWon": 200,
+      "totalGames": 200
+    },
+    {
+      "word": "SOREL",
+      "successRate": 100,
+      "avgAttempts": 2.815,
+      "gamesWon": 200,
+      "totalGames": 200
+    }
+  ],
+  "phase3Top10": [
+    {
+      "word": "CARLE",
+      "successRate": 100,
+      "avgAttempts": 3.409,
+      "gamesWon": 1000,
+      "totalGames": 1000,
+      "distribution": {
+        "1": 0,
+        "2": 107,
+        "3": 477,
+        "4": 325,
+        "5": 82,
+        "6": 9
+      }
+    },
+    {
+      "word": "CARTE",
+      "successRate": 100,
+      "avgAttempts": 3.434,
+      "gamesWon": 1000,
+      "totalGames": 1000,
+      "distribution": {
+        "1": 0,
+        "2": 109,
+        "3": 458,
+        "4": 334,
+        "5": 88,
+        "6": 11
+      }
+    },
+    {
+      "word": "TIARE",
+      "successRate": 99.9,
+      "avgAttempts": 3.395,
+      "gamesWon": 999,
+      "totalGames": 1000,
+      "distribution": {
+        "1": 0,
+        "2": 110,
+        "3": 474,
+        "4": 335,
+        "5": 73,
+        "6": 7
+      }
+    },
+    {
+      "word": "RAISE",
+      "successRate": 99.9,
+      "avgAttempts": 3.406,
+      "gamesWon": 999,
+      "totalGames": 1000,
+      "distribution": {
+        "1": 0,
+        "2": 118,
+        "3": 474,
+        "4": 312,
+        "5": 76,
+        "6": 19
+      }
+    },
+    {
+      "word": "IRATE",
+      "successRate": 99.9,
+      "avgAttempts": 3.406,
+      "gamesWon": 999,
+      "totalGames": 1000,
+      "distribution": {
+        "1": 0,
+        "2": 106,
+        "3": 478,
+        "4": 332,
+        "5": 72,
+        "6": 11
+      }
+    },
+    {
+      "word": "SOREL",
+      "successRate": 99.9,
+      "avgAttempts": 3.415,
+      "gamesWon": 999,
+      "totalGames": 1000,
+      "distribution": {
+        "1": 0,
+        "2": 111,
+        "3": 467,
+        "4": 333,
+        "5": 74,
+        "6": 14
+      }
+    },
+    {
+      "word": "CARNE",
+      "successRate": 99.9,
+      "avgAttempts": 3.427,
+      "gamesWon": 999,
+      "totalGames": 1000,
+      "distribution": {
+        "1": 0,
+        "2": 105,
+        "3": 472,
+        "4": 320,
+        "5": 97,
+        "6": 5
+      }
+    },
+    {
+      "word": "ARISE",
+      "successRate": 99.9,
+      "avgAttempts": 3.446,
+      "gamesWon": 999,
+      "totalGames": 1000,
+      "distribution": {
+        "1": 0,
+        "2": 117,
+        "3": 447,
+        "4": 329,
+        "5": 87,
+        "6": 19
+      }
+    },
+    {
+      "word": "SATER",
+      "successRate": 99.8,
+      "avgAttempts": 3.398,
+      "gamesWon": 998,
+      "totalGames": 1000,
+      "distribution": {
+        "1": 0,
+        "2": 114,
+        "3": 472,
+        "4": 330,
+        "5": 70,
+        "6": 12
+      }
+    },
+    {
+      "word": "CARSE",
+      "successRate": 99.8,
+      "avgAttempts": 3.418,
+      "gamesWon": 998,
+      "totalGames": 1000,
+      "distribution": {
+        "1": 0,
+        "2": 111,
+        "3": 465,
+        "4": 332,
+        "5": 79,
+        "6": 11
+      }
+    }
+  ]
+}
