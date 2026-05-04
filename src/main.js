@@ -75,6 +75,11 @@ const routes = [
     component: () => import("./pages/poker/PostFlopCalculator.vue"),
   },
   {
+    path: "/dashboard",
+    name: "dashboard",
+    component: () => import("./pages/dashboard/Dashboard.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     redirect: "/",
   },

@@ -306,17 +306,20 @@ function computePartitionStats(guessLower, candidatesLower) {
 
 	let sumSquares = 0;
 	let singletons = 0;
+	let maxBucket = 0;
 	for (let i = 0; i < 243; i++) {
 		const c = buckets[i];
 		if (c > 0) {
 			sumSquares += c * c;
 			if (c === 1) singletons++;
+			if (c > maxBucket) maxBucket = c;
 		}
 	}
 
 	return {
 		expectedRemaining: sumSquares / n,
 		singletonCount: singletons,
+		maxBucketSize: maxBucket,
 	};
 }
 
@@ -1171,16 +1174,9 @@ export function getWordSuggestions(
 		}
 	};
 
-	if (solutionCandidates.length <= 20) {
-		// Tiny candidate set: evaluate ALL words — computation is trivial
-		// (14,855 × 20 = 297K pattern computations ≈ negligible)
-		guessPool = [];
-		for (const w of words) {
-			addToPool(w);
-		}
-	} else if (solutionCandidates.length <= 100) {
-		// Small set: evaluate ALL words — still very feasible
-		// (14,855 × 100 = 1.5M pattern computations)
+	if (solutionCandidates.length <= 100) {
+		// Small candidate set: evaluate ALL words from word list
+		// (14,855 × 100 = 1.5M pattern computations ≈ fast)
 		guessPool = [];
 		for (const w of words) {
 			addToPool(w);
@@ -1236,31 +1232,52 @@ export function getWordSuggestions(
 	}
 
 	// Score each guess using optimized partition stats
-	// Dual objective: minimize E[remaining] + bonus for singleton buckets
-	const singletonWeight = 5.0; // Bonus scale for singleton fraction
+	// Triple objective: minimize E[remaining] + maximize singletons + penalize worst-case buckets
+	// Singleton weight scales with guess number: higher on early guesses (where impact
+	// on 3-guess wins is greatest) to aggressively optimize for fast solves.
+	const isEarlyGuess = currentGuessCount <= 1;
+	const singletonWeight = isEarlyGuess ? 8.0 : 4.0;
+	const maxBucketPenalty = 0.3; // Penalize guesses leaving a single large unsplit group
 	const scored = [];
+	const n = candidatesLower.length;
 
 	for (const guess of guessPool) {
 		const stats = computePartitionStats(guess, candidatesLower);
+		const singletonFraction = stats.singletonCount / n;
+		const maxBucketFraction = stats.maxBucketSize / n;
 		// Primary: lower expected remaining = better splitting
 		// Secondary: higher singleton fraction = more 3-guess wins
-		const singletonFraction = stats.singletonCount / candidatesLower.length;
-		let score = -stats.expectedRemaining + singletonWeight * singletonFraction;
+		// Tertiary: smaller max bucket = better worst-case behavior
+		let score =
+			-stats.expectedRemaining +
+			singletonWeight * singletonFraction -
+			maxBucketPenalty * maxBucketFraction;
 
-		// Urgency bonus: favor candidates when guesses are running out
+		// Candidate urgency: for small candidate sets, picking a candidate gives
+		// a 1/k chance of winning THIS turn, which is almost always better than
+		// a non-candidate splitter (proven mathematically for k ≤ 5-8).
 		const isCandidate = candidateSet.has(guess);
 		if (isCandidate) {
 			if (remainingGuesses <= 1) {
 				score += 10000; // Must pick a candidate on last guess
 			} else if (remainingGuesses <= 2) {
-				// Scale candidate bonus by inverse of candidate count
-				// Fewer candidates = higher chance of guessing right
-				score += Math.max(3.0, 20.0 / solutionCandidates.length);
-			} else if (solutionCandidates.length <= 5) {
-				// Small set: 20-33% chance of winning by picking a candidate
+				score += Math.max(5.0, 30.0 / solutionCandidates.length);
+			} else if (n <= 3) {
+				// With 2-3 candidates, a candidate is ALWAYS better than a splitter.
+				// The 33-50% win chance plus equivalent info value outweighs pure splitting.
+				score += 50.0;
+			} else if (n <= 5) {
+				// 20-25% win chance; candidate's {1, k-1} split is nearly as good
+				// as a non-candidate's {1,1,...,1} for small k
+				score += 10.0;
+			} else if (n <= 8) {
+				// ~12-17% win chance; candidates still often better
+				score += 3.0;
+			} else if (n <= 15) {
+				// Candidates sometimes better for moderate sets
 				score += 0.5;
 			} else {
-				score += 0.01; // Tiny tiebreaker for candidates
+				score += 0.01; // Tiny tiebreaker for large sets
 			}
 		} else if (remainingGuesses <= 1) {
 			continue; // Skip non-candidates on last guess
