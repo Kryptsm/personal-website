@@ -74,24 +74,211 @@ function alterElement(fadeElement, coefficient) {
 
       <div class="text fade-in-right">
         <div class="text-container">
-          <h1>Hello, my name is <span>Sam Walsh!</span></h1>
+          <h1>Hi, I'm <span>Sam Walsh.</span></h1>
+          <p class="role">Senior Frontend Engineer · Credera · Chicago, IL</p>
           <p class="subtext">
-            I create websites for a living and for fun. I graduated from
-            Southern Methodist University in 2022 with majors in Computer
-            Science and Creative Computing, and have been designing front end
-            architecture ever since.
+            I build web systems that perform at scale - and care about how they
+            look and feel. At Credera I work with enterprise clients on
+            everything from full-stack modernizations to large-scale rebrands.
           </p>
           <p class="subtext mt-4">
-            I have a real passion for the intersection of design and technology,
-            seeking to create fun and intuitive experiences that integrate cool
-            tech as well.
+            When I'm not consulting I'm building personal projects due to a love
+            of the craft.
           </p>
         </div>
       </div>
     </section>
-    <section class="card-group examples-of-work">
+    <section id="resume" class="card-group resume">
       <div class="header">
-        <div class="left-content">Examples of Work</div>
+        <div class="left-content">Resume</div>
+        <div class="right-content"></div>
+      </div>
+      <div class="full-width">
+        <div class="card blue no-image">
+          <div class="body">
+            <h3>Experience</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-role">Senior Frontend Engineer</div>
+                <div class="timeline-meta">
+                  Credera · Full-time · Feb 2025 – Present · Hybrid, Chicago IL
+                  (Aug 2025–)
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-role">Frontend Engineer</div>
+                <div class="timeline-meta">
+                  Credera · Full-time · Sep 2022 – Feb 2025 · Hybrid, Dallas TX
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-role">Summer Intern</div>
+                <div class="timeline-meta">
+                  Credera · Internship · May 2021 – Aug 2021 · Dallas TX
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-role">Resident Assistant</div>
+                <div class="timeline-meta">
+                  Southern Methodist University · Aug 2020 – May 2022 · Dallas
+                  TX
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="half-width">
+        <div class="card green no-image">
+          <div class="body">
+            <h3>Education</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-role">
+                  Bachelor of Arts — Computer Science &amp; Creative Computation
+                </div>
+                <div class="timeline-meta">
+                  Southern Methodist University · 2018 – 2022
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-role">Shady Side Academy</div>
+                <div class="timeline-meta">2007 – 2018</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card purple no-image">
+          <div class="body">
+            <h3>Skills</h3>
+            <div class="skills-grid">
+              <span class="skill-pill">HTML</span>
+              <span class="skill-pill">JavaScript</span>
+              <span class="skill-pill">CSS / SCSS</span>
+              <span class="skill-pill">AngularJS</span>
+              <span class="skill-pill">Angular Material</span>
+              <span class="skill-pill">Adobe Experience Manager</span>
+              <span class="skill-pill">AWS CloudFormation</span>
+              <span class="skill-pill">Cache Management</span>
+              <span class="skill-pill">dotCMS</span>
+              <span class="skill-pill">Figma</span>
+              <span class="skill-pill">LRU Caching</span>
+              <span class="skill-pill">Microsoft Azure</span>
+              <span class="skill-pill">Microsoft Copilot</span>
+              <span class="skill-pill">Redis</span>
+              <span class="skill-pill">Salesforce</span>
+              <span class="skill-pill">State Management</span>
+              <span class="skill-pill">User Acceptance Testing</span>
+              <span class="skill-pill">Visual Studio</span>
+              <span class="skill-pill">C++</span>
+              <span class="skill-pill">Presentation Skills</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      id="professional-projects"
+      class="card-group professional-projects"
+    >
+      <div class="header">
+        <div class="left-content">Professional Projects</div>
+        <div class="right-content"></div>
+      </div>
+      <div class="full-width">
+        <div class="card orange no-image">
+          <div class="body">
+            <h3>Website Modernization for Memorabilia Manufacturer</h3>
+            <p class="project-meta">Credera · Sep 2025 – Mar 2026</p>
+            <p class="desc">
+              Helped modernize a brand-new merchandise creation platform
+              enabling businesses and schools to build custom storefronts for
+              designing and distributing apparel. Key contributions:
+            </p>
+            <ul class="desc project-bullets">
+              <li>
+                Implemented a frontend cache system reducing average first-paint
+                time by up to 400,000x — from minutes to seconds on high-data
+                calls
+              </li>
+              <li>
+                Standardized global state management across server-side and
+                client-side rendering
+              </li>
+              <li>
+                Built ad-hoc cache monitoring software used during live
+                production testing to identify critical crashes
+              </li>
+              <li>
+                Consulted on frontend architecture needs and served as on-call
+                developer for Phase 1 release
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="full-width">
+        <div class="card blue no-image">
+          <div class="body">
+            <h3>Website Modernization for Mid-Size Benefits Provider</h3>
+            <p class="project-meta">Credera · Apr 2023 – Sep 2024</p>
+            <p class="desc">
+              Sole frontend developer for a complete overhaul of a benefits
+              selection and ordering system, working directly with the client
+              throughout. Key contributions:
+            </p>
+            <ul class="desc project-bullets">
+              <li>
+                Acted as the primary frontend point of contact, regularly
+                meeting with client leads on architecture decisions
+              </li>
+              <li>
+                Represented Credera in UAT sessions, presenting work and
+                fielding questions from internal client testers
+              </li>
+              <li>
+                Integrated the modernized experience into the existing legacy
+                system with dual-environment support
+              </li>
+              <li>
+                Implemented an emergency pagination feature to resolve a
+                critical design issue before launch
+              </li>
+              <li>Served as on-call developer for Phase 1 release</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="full-width">
+        <div class="card green no-image">
+          <div class="body">
+            <h3>Website Rebrand for Government Agency</h3>
+            <p class="project-meta">Credera · Oct 2022 – Mar 2023</p>
+            <p class="desc">
+              Collaborated with an external design firm to execute a large-scale
+              rebrand for a major US Government agency. Key contributions:
+            </p>
+            <ul class="desc project-bullets">
+              <li>
+                Rebranded key site components including navigation and image
+                carousels
+              </li>
+              <li>
+                Compiled a component-to-page inventory, reducing project
+                complexity and saving team time
+              </li>
+              <li>
+                Worked directly alongside non-Credera developers and designers
+                from the partnered agency
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="personal-projects" class="card-group examples-of-work">
+      <div class="header">
+        <div class="left-content">Personal Projects</div>
         <div class="right-content"></div>
       </div>
       <div class="full-width">
@@ -255,7 +442,7 @@ function alterElement(fadeElement, coefficient) {
 				</div>
 			</div> -->
     </section>
-    <section class="card-group ways-to-reach-me">
+    <section id="contact" class="card-group ways-to-reach-me">
       <div class="header">
         <div class="left-content">Ways to Reach Me</div>
         <div class="right-content"></div>
@@ -337,7 +524,7 @@ function alterElement(fadeElement, coefficient) {
           </div>
         </div>
       </div>
-      <div class="half-width">
+      <div class="full-width">
         <div class="card yellow">
           <div class="body">
             <h3>Discord</h3>
@@ -357,12 +544,22 @@ function alterElement(fadeElement, coefficient) {
 
 <style scoped lang="scss">
 .personal {
-  margin-bottom: 40px;
-  padding: 25px 25px 0 25px;
+  margin-bottom: 60px;
+  padding: 0 25px;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
 
   .left-image-right-text {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 80px max(25px, calc((100vw - 1050px) / 2)) 70px;
+
     .text {
       padding: 0 15px 0 35px;
+
       h1,
       .subtext {
         text-align: right;
@@ -370,6 +567,17 @@ function alterElement(fadeElement, coefficient) {
 
       h1 span {
         white-space: nowrap;
+        color: #ea7d1c;
+      }
+
+      .role {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #888;
+        text-align: right;
+        margin-bottom: 20px;
+        text-transform: uppercase;
       }
     }
   }
@@ -412,15 +620,15 @@ function alterElement(fadeElement, coefficient) {
       padding-bottom: 30px;
 
       h1 {
-        font-size: 45px;
-        line-height: 45px;
-        font-weight: 700;
+        font-size: 68px;
+        line-height: 1.05;
+        font-weight: 800;
         margin-bottom: 20px;
       }
 
       .subtext {
         font-size: 20px;
-        line-height: 24px;
+        line-height: 26px;
         font-weight: 500;
       }
     }
@@ -442,14 +650,15 @@ function alterElement(fadeElement, coefficient) {
         margin: 25px 0;
         width: 100%;
         h1,
-        .subtext {
+        .subtext,
+        .role {
           text-align: center;
         }
 
         h1 {
-          font-size: 30px;
-          line-height: 30px;
-          font-weight: 700;
+          font-size: 42px;
+          line-height: 1.05;
+          font-weight: 800;
           margin-bottom: 20px;
         }
 
@@ -463,18 +672,21 @@ function alterElement(fadeElement, coefficient) {
   }
   .card-group {
     margin: auto;
-    margin-top: 45px;
+    margin-top: 60px;
 
     .header {
       display: flex;
       justify-content: space-between;
-      padding: 5px 0;
-      margin-bottom: 15px;
-      border-bottom: 1px solid rgb(184, 184, 184);
+      align-items: baseline;
+      padding: 0 0 8px 16px;
+      margin-bottom: 24px;
+      border-left: 4px solid #ea7d1c;
 
       .left-content {
-        font-weight: 700;
-        font-size: 20px;
+        font-weight: 800;
+        font-size: 28px;
+        letter-spacing: -0.5px;
+        color: #281c2d;
       }
     }
 
@@ -494,6 +706,12 @@ function alterElement(fadeElement, coefficient) {
 
         border: 2px solid rgb(230, 230, 230);
         background-color: rgb(252, 252, 252);
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+        transition: box-shadow 0.2s ease;
+
+        &:hover {
+          box-shadow: 0 6px 28px rgba(0, 0, 0, 0.1);
+        }
 
         &.green {
           border: 2px solid #4d9e5b;
@@ -545,19 +763,37 @@ function alterElement(fadeElement, coefficient) {
         .body {
           padding-right: 30px;
           h3 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
             padding-bottom: 10px;
+            letter-spacing: -0.3px;
           }
 
           .desc {
             padding-bottom: 10px;
+            line-height: 1.6;
           }
 
           .link {
-            text-decoration: underline;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            color: #281c2d;
+            border-bottom: 2px solid currentColor;
+            padding-bottom: 1px;
             cursor: pointer;
-            text-underline-offset: 2px;
+            transition: opacity 0.15s;
+
+            &::after {
+              content: " →";
+            }
+
+            &:hover {
+              opacity: 0.65;
+            }
           }
         }
 
@@ -608,6 +844,84 @@ function alterElement(fadeElement, coefficient) {
             width: 100%;
           }
         }
+      }
+    }
+
+    .card.no-image {
+      .body {
+        width: 100%;
+        padding-right: 0;
+      }
+    }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-top: 10px;
+
+      .timeline-item {
+        padding-left: 14px;
+        border-left: 3px solid #ea7d1c;
+
+        .timeline-role {
+          font-weight: 600;
+          font-size: 15px;
+          margin-bottom: 3px;
+        }
+
+        .timeline-meta {
+          font-size: 13px;
+          color: #555;
+        }
+      }
+    }
+
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 10px;
+
+      .skill-pill {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        background: rgba(0, 0, 0, 0.07);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+      }
+    }
+
+    .project-meta {
+      font-size: 14px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .project-bullets {
+      list-style: disc;
+      padding-left: 20px;
+
+      li {
+        padding-bottom: 4px;
+      }
+    }
+  }
+
+  .ways-to-reach-me {
+    .full-width .card .image-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        max-height: 120px;
+        max-width: 120px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
       }
     }
   }
