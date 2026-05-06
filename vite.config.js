@@ -22,6 +22,28 @@ export default defineConfig({
 		},
 	},
 	plugins: [vue(), svgLoader()],
+	server: {
+		proxy: {
+			"/api/cta-train": {
+				target: "https://www.transitchicago.com/api/1.0",
+				changeOrigin: true,
+				secure: true,
+				rewrite: (path) => path.replace(/^\/api\/cta-train/, ""),
+			},
+			"/api/cta-bus": {
+				target: "https://www.ctabustracker.com/bustime/api/v2",
+				changeOrigin: true,
+				secure: true,
+				rewrite: (path) => path.replace(/^\/api\/cta-bus/, ""),
+			},
+			"/api/cta-alerts": {
+				target: "https://www.transitchicago.com/api/1.0",
+				changeOrigin: true,
+				secure: true,
+				rewrite: (path) => path.replace(/^\/api\/cta-alerts/, ""),
+			},
+		},
+	},
 	ssr: {
 		noExternal: ["chat.js/**"],
 	},

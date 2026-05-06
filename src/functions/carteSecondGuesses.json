@@ -1,0 +1,1484 @@
+{
+  "startingWord": "carte",
+  "totalWords": 14855,
+  "totalPatterns": 189,
+  "theoretical3GuessWins": 2016,
+  "theoretical3GuessRate": "13.57%",
+  "computedAt": "2026-03-05T16:06:17.974Z",
+  "patternToWord": {
+    "0": "nouls",
+    "1": "limns",
+    "2": "dowls",
+    "3": "piums",
+    "4": "dinos",
+    "5": "whios",
+    "6": "noups",
+    "7": "sepoy",
+    "8": "fisho",
+    "9": "poods",
+    "10": "polis",
+    "11": "pions",
+    "12": "pouis",
+    "13": "metes",
+    "14": "pyins",
+    "15": "fisho",
+    "16": "rossa",
+    "17": "fount",
+    "18": "gypos",
+    "19": "dumps",
+    "20": "pungs",
+    "21": "powis",
+    "22": "ympes",
+    "23": "femes",
+    "24": "sumph",
+    "25": "dunsh",
+    "26": "putto",
+    "27": "myons",
+    "28": "speed",
+    "29": "sling",
+    "30": "polis",
+    "31": "neals",
+    "32": "tonal",
+    "33": "suona",
+    "34": "pelfs",
+    "35": "elops",
+    "36": "pugil",
+    "37": "repas",
+    "38": "argal",
+    "39": "liars",
+    "40": "spalt",
+    "41": "pinds",
+    "42": "bigha",
+    "43": "rossa",
+    "44": "grouf",
+    "45": "mulsh",
+    "46": "diyas",
+    "47": "peeoy",
+    "48": "spiky",
+    "49": "fides",
+    "50": "thrae",
+    "51": "apsos",
+    "54": "bilks",
+    "55": "molds",
+    "56": "blind",
+    "57": "bulks",
+    "58": "misls",
+    "59": "busky",
+    "60": "wynds",
+    "61": "rossa",
+    "62": "whups",
+    "63": "kumis",
+    "64": "leves",
+    "65": "minks",
+    "66": "sitar",
+    "67": "tumps",
+    "68": "rathe",
+    "69": "chins",
+    "72": "kinds",
+    "73": "dowps",
+    "74": "dbags",
+    "75": "kinos",
+    "76": "speed",
+    "77": "gurks",
+    "78": "whips",
+    "79": "earth",
+    "80": "parte",
+    "81": "dinos",
+    "82": "sloid",
+    "83": "nouls",
+    "84": "kinos",
+    "85": "locis",
+    "86": "twice",
+    "87": "ousts",
+    "88": "sects",
+    "89": "rossa",
+    "90": "oinks",
+    "91": "dhikr",
+    "92": "hilus",
+    "93": "hoick",
+    "94": "queck",
+    "95": "truce",
+    "97": "recto",
+    "98": "recte",
+    "99": "misdo",
+    "100": "hemps",
+    "101": "rossa",
+    "102": "beisa",
+    "104": "terce",
+    "108": "alias",
+    "109": "lends",
+    "110": "spelk",
+    "111": "acais",
+    "112": "planh",
+    "114": "khads",
+    "115": "tecta",
+    "116": "acute",
+    "117": "opahs",
+    "118": "eches",
+    "119": "gurks",
+    "120": "britt",
+    "121": "react",
+    "122": "trace",
+    "124": "recta",
+    "126": "mynas",
+    "127": "squad",
+    "128": "scrae",
+    "129": "scrat",
+    "135": "lysis",
+    "136": "sylph",
+    "137": "linch",
+    "138": "hicks",
+    "139": "flitt",
+    "140": "tache",
+    "141": "typos",
+    "143": "macte",
+    "144": "snool",
+    "145": "damps",
+    "146": "panes",
+    "147": "ratch",
+    "153": "bidon",
+    "154": "varec",
+    "155": "farce",
+    "156": "taroc",
+    "162": "boils",
+    "163": "soily",
+    "164": "phons",
+    "165": "bonus",
+    "166": "dishy",
+    "167": "wizzo",
+    "168": "louis",
+    "169": "snool",
+    "170": "snool",
+    "171": "pousy",
+    "172": "siped",
+    "173": "pions",
+    "174": "mopus",
+    "175": "plush",
+    "177": "beisa",
+    "180": "loins",
+    "181": "sudor",
+    "182": "nevus",
+    "183": "curst",
+    "184": "curet",
+    "187": "certy",
+    "189": "holms",
+    "190": "bleak",
+    "191": "demos",
+    "192": "opals",
+    "193": "cleat",
+    "195": "lotus",
+    "196": "cesta",
+    "197": "coate",
+    "198": "nimps",
+    "199": "melba",
+    "200": "pharm",
+    "201": "fluyt",
+    "206": "crate",
+    "207": "dolie",
+    "208": "ceria",
+    "210": "curat",
+    "216": "omuls",
+    "217": "spend",
+    "218": "edile",
+    "219": "shrug",
+    "220": "cadet",
+    "222": "yonic",
+    "224": "caste",
+    "225": "quink",
+    "226": "vangs",
+    "227": "cadre",
+    "229": "cater",
+    "234": "bison",
+    "235": "oxids",
+    "236": "plans",
+    "237": "carat",
+    "238": "caret",
+    "240": "carts",
+    "242": "carte"
+  },
+  "details": {
+    "0": {
+      "word": "nouls",
+      "singletons": 45,
+      "candidates": 1806,
+      "expectedRemaining": 38.413067552602435,
+      "maxBucket": 112
+    },
+    "1": {
+      "word": "limns",
+      "singletons": 37,
+      "candidates": 1437,
+      "expectedRemaining": 66.4418928322895,
+      "maxBucket": 180
+    },
+    "2": {
+      "word": "dowls",
+      "singletons": 33,
+      "candidates": 525,
+      "expectedRemaining": 36.53142857142857,
+      "maxBucket": 94
+    },
+    "3": {
+      "word": "piums",
+      "singletons": 40,
+      "candidates": 411,
+      "expectedRemaining": 14.990267639902676,
+      "maxBucket": 34
+    },
+    "4": {
+      "word": "dinos",
+      "singletons": 29,
+      "candidates": 365,
+      "expectedRemaining": 18.28219178082192,
+      "maxBucket": 46
+    },
+    "5": {
+      "word": "whios",
+      "singletons": 17,
+      "candidates": 89,
+      "expectedRemaining": 7.921348314606742,
+      "maxBucket": 18
+    },
+    "6": {
+      "word": "noups",
+      "singletons": 27,
+      "candidates": 286,
+      "expectedRemaining": 15.377622377622378,
+      "maxBucket": 37
+    },
+    "7": {
+      "word": "sepoy",
+      "singletons": 20,
+      "candidates": 128,
+      "expectedRemaining": 20.734375,
+      "maxBucket": 47
+    },
+    "8": {
+      "word": "fisho",
+      "singletons": 13,
+      "candidates": 61,
+      "expectedRemaining": 5.065573770491803,
+      "maxBucket": 10
+    },
+    "9": {
+      "word": "poods",
+      "singletons": 37,
+      "candidates": 444,
+      "expectedRemaining": 21.05855855855856,
+      "maxBucket": 58
+    },
+    "10": {
+      "word": "polis",
+      "singletons": 28,
+      "candidates": 586,
+      "expectedRemaining": 42.51877133105802,
+      "maxBucket": 104
+    },
+    "11": {
+      "word": "pions",
+      "singletons": 19,
+      "candidates": 162,
+      "expectedRemaining": 13.037037037037036,
+      "maxBucket": 34
+    },
+    "12": {
+      "word": "pouis",
+      "singletons": 25,
+      "candidates": 125,
+      "expectedRemaining": 5.592,
+      "maxBucket": 14
+    },
+    "13": {
+      "word": "metes",
+      "singletons": 21,
+      "candidates": 138,
+      "expectedRemaining": 13.36231884057971,
+      "maxBucket": 26
+    },
+    "14": {
+      "word": "pyins",
+      "singletons": 11,
+      "candidates": 29,
+      "expectedRemaining": 3.3448275862068964,
+      "maxBucket": 6
+    },
+    "15": {
+      "word": "fisho",
+      "singletons": 14,
+      "candidates": 43,
+      "expectedRemaining": 2.9069767441860463,
+      "maxBucket": 7
+    },
+    "16": {
+      "word": "rossa",
+      "singletons": 6,
+      "candidates": 8,
+      "expectedRemaining": 1.25,
+      "maxBucket": 2
+    },
+    "17": {
+      "word": "fount",
+      "singletons": 10,
+      "candidates": 12,
+      "expectedRemaining": 1.1666666666666667,
+      "maxBucket": 2
+    },
+    "18": {
+      "word": "gypos",
+      "singletons": 28,
+      "candidates": 262,
+      "expectedRemaining": 18.763358778625953,
+      "maxBucket": 49
+    },
+    "19": {
+      "word": "dumps",
+      "singletons": 23,
+      "candidates": 210,
+      "expectedRemaining": 22.142857142857142,
+      "maxBucket": 49
+    },
+    "20": {
+      "word": "pungs",
+      "singletons": 14,
+      "candidates": 80,
+      "expectedRemaining": 14.225,
+      "maxBucket": 29
+    },
+    "21": {
+      "word": "powis",
+      "singletons": 16,
+      "candidates": 46,
+      "expectedRemaining": 2.869565217391304,
+      "maxBucket": 6
+    },
+    "22": {
+      "word": "ympes",
+      "singletons": 12,
+      "candidates": 23,
+      "expectedRemaining": 2.652173913043478,
+      "maxBucket": 6
+    },
+    "23": {
+      "word": "femes",
+      "singletons": 6,
+      "candidates": 8,
+      "expectedRemaining": 1.25,
+      "maxBucket": 2
+    },
+    "24": {
+      "word": "sumph",
+      "singletons": 14,
+      "candidates": 39,
+      "expectedRemaining": 5.102564102564102,
+      "maxBucket": 9
+    },
+    "25": {
+      "word": "dunsh",
+      "singletons": 6,
+      "candidates": 9,
+      "expectedRemaining": 1.6666666666666667,
+      "maxBucket": 3
+    },
+    "26": {
+      "word": "putto",
+      "singletons": 4,
+      "candidates": 4,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "27": {
+      "word": "myons",
+      "singletons": 38,
+      "candidates": 1090,
+      "expectedRemaining": 55.4697247706422,
+      "maxBucket": 134
+    },
+    "28": {
+      "word": "speed",
+      "singletons": 28,
+      "candidates": 351,
+      "expectedRemaining": 26.435897435897434,
+      "maxBucket": 61
+    },
+    "29": {
+      "word": "sling",
+      "singletons": 21,
+      "candidates": 165,
+      "expectedRemaining": 10.284848484848485,
+      "maxBucket": 27
+    },
+    "30": {
+      "word": "polis",
+      "singletons": 30,
+      "candidates": 223,
+      "expectedRemaining": 10.632286995515695,
+      "maxBucket": 24
+    },
+    "31": {
+      "word": "neals",
+      "singletons": 18,
+      "candidates": 81,
+      "expectedRemaining": 5.617283950617284,
+      "maxBucket": 10
+    },
+    "32": {
+      "word": "tonal",
+      "singletons": 13,
+      "candidates": 25,
+      "expectedRemaining": 2.76,
+      "maxBucket": 6
+    },
+    "33": {
+      "word": "suona",
+      "singletons": 20,
+      "candidates": 85,
+      "expectedRemaining": 7.211764705882353,
+      "maxBucket": 18
+    },
+    "34": {
+      "word": "pelfs",
+      "singletons": 13,
+      "candidates": 43,
+      "expectedRemaining": 8.023255813953488,
+      "maxBucket": 16
+    },
+    "35": {
+      "word": "elops",
+      "singletons": 8,
+      "candidates": 17,
+      "expectedRemaining": 2.411764705882353,
+      "maxBucket": 5
+    },
+    "36": {
+      "word": "pugil",
+      "singletons": 30,
+      "candidates": 374,
+      "expectedRemaining": 54.82887700534759,
+      "maxBucket": 128
+    },
+    "37": {
+      "word": "repas",
+      "singletons": 18,
+      "candidates": 167,
+      "expectedRemaining": 14.580838323353293,
+      "maxBucket": 32
+    },
+    "38": {
+      "word": "argal",
+      "singletons": 12,
+      "candidates": 67,
+      "expectedRemaining": 10.701492537313433,
+      "maxBucket": 19
+    },
+    "39": {
+      "word": "liars",
+      "singletons": 19,
+      "candidates": 109,
+      "expectedRemaining": 9.495412844036696,
+      "maxBucket": 20
+    },
+    "40": {
+      "word": "spalt",
+      "singletons": 12,
+      "candidates": 32,
+      "expectedRemaining": 5.625,
+      "maxBucket": 12
+    },
+    "41": {
+      "word": "pinds",
+      "singletons": 6,
+      "candidates": 6,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "42": {
+      "word": "bigha",
+      "singletons": 10,
+      "candidates": 20,
+      "expectedRemaining": 3.4,
+      "maxBucket": 7
+    },
+    "43": {
+      "word": "rossa",
+      "singletons": 4,
+      "candidates": 4,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "44": {
+      "word": "grouf",
+      "singletons": 6,
+      "candidates": 10,
+      "expectedRemaining": 2.2,
+      "maxBucket": 4
+    },
+    "45": {
+      "word": "mulsh",
+      "singletons": 20,
+      "candidates": 128,
+      "expectedRemaining": 13.875,
+      "maxBucket": 30
+    },
+    "46": {
+      "word": "diyas",
+      "singletons": 12,
+      "candidates": 32,
+      "expectedRemaining": 2.9375,
+      "maxBucket": 6
+    },
+    "47": {
+      "word": "peeoy",
+      "singletons": 7,
+      "candidates": 7,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "48": {
+      "word": "spiky",
+      "singletons": 9,
+      "candidates": 21,
+      "expectedRemaining": 2.8095238095238093,
+      "maxBucket": 5
+    },
+    "49": {
+      "word": "fides",
+      "singletons": 6,
+      "candidates": 9,
+      "expectedRemaining": 1.6666666666666667,
+      "maxBucket": 3
+    },
+    "50": {
+      "word": "thrae",
+      "singletons": 2,
+      "candidates": 2,
+      "expectedRemaining": 1
+    },
+    "51": {
+      "word": "apsos",
+      "singletons": 6,
+      "candidates": 8,
+      "expectedRemaining": 1.25,
+      "maxBucket": 2
+    },
+    "54": {
+      "word": "bilks",
+      "singletons": 29,
+      "candidates": 882,
+      "expectedRemaining": 60.51020408163265,
+      "maxBucket": 150
+    },
+    "55": {
+      "word": "molds",
+      "singletons": 20,
+      "candidates": 260,
+      "expectedRemaining": 26.06923076923077,
+      "maxBucket": 57
+    },
+    "56": {
+      "word": "blind",
+      "singletons": 17,
+      "candidates": 112,
+      "expectedRemaining": 11.928571428571429,
+      "maxBucket": 24
+    },
+    "57": {
+      "word": "bulks",
+      "singletons": 21,
+      "candidates": 194,
+      "expectedRemaining": 21.309278350515463,
+      "maxBucket": 50
+    },
+    "58": {
+      "word": "misls",
+      "singletons": 12,
+      "candidates": 52,
+      "expectedRemaining": 9.576923076923077,
+      "maxBucket": 15
+    },
+    "59": {
+      "word": "busky",
+      "singletons": 7,
+      "candidates": 15,
+      "expectedRemaining": 4.733333333333333,
+      "maxBucket": 8
+    },
+    "60": {
+      "word": "wynds",
+      "singletons": 17,
+      "candidates": 115,
+      "expectedRemaining": 12.391304347826088,
+      "maxBucket": 27
+    },
+    "61": {
+      "word": "rossa",
+      "singletons": 3,
+      "candidates": 3,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "62": {
+      "word": "whups",
+      "singletons": 8,
+      "candidates": 18,
+      "expectedRemaining": 2.888888888888889,
+      "maxBucket": 6
+    },
+    "63": {
+      "word": "kumis",
+      "singletons": 20,
+      "candidates": 176,
+      "expectedRemaining": 18.602272727272727,
+      "maxBucket": 43
+    },
+    "64": {
+      "word": "leves",
+      "singletons": 13,
+      "candidates": 99,
+      "expectedRemaining": 25.08080808080808,
+      "maxBucket": 46
+    },
+    "65": {
+      "word": "minks",
+      "singletons": 12,
+      "candidates": 36,
+      "expectedRemaining": 6.055555555555555,
+      "maxBucket": 13
+    },
+    "66": {
+      "word": "sitar",
+      "singletons": 12,
+      "candidates": 23,
+      "expectedRemaining": 1.9565217391304348,
+      "maxBucket": 4
+    },
+    "67": {
+      "word": "tumps",
+      "singletons": 8,
+      "candidates": 26,
+      "expectedRemaining": 6.846153846153846,
+      "maxBucket": 11
+    },
+    "68": {
+      "word": "rathe",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "69": {
+      "word": "chins",
+      "singletons": 8,
+      "candidates": 10,
+      "expectedRemaining": 1.2,
+      "maxBucket": 2
+    },
+    "72": {
+      "word": "kinds",
+      "singletons": 19,
+      "candidates": 178,
+      "expectedRemaining": 19.853932584269664,
+      "maxBucket": 43
+    },
+    "73": {
+      "word": "dowps",
+      "singletons": 11,
+      "candidates": 40,
+      "expectedRemaining": 5.65,
+      "maxBucket": 11
+    },
+    "74": {
+      "word": "dbags",
+      "singletons": 7,
+      "candidates": 29,
+      "expectedRemaining": 6.379310344827586,
+      "maxBucket": 12
+    },
+    "75": {
+      "word": "kinos",
+      "singletons": 11,
+      "candidates": 18,
+      "expectedRemaining": 2,
+      "maxBucket": 4
+    },
+    "76": {
+      "word": "speed",
+      "singletons": 4,
+      "candidates": 4,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "77": {
+      "word": "gurks",
+      "singletons": 3,
+      "candidates": 3,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "78": {
+      "word": "whips",
+      "singletons": 8,
+      "candidates": 17,
+      "expectedRemaining": 2.8823529411764706,
+      "maxBucket": 5
+    },
+    "79": {
+      "word": "earth",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "80": {
+      "word": "parte",
+      "singletons": 2,
+      "candidates": 2,
+      "expectedRemaining": 1
+    },
+    "81": {
+      "word": "dinos",
+      "singletons": 39,
+      "candidates": 254,
+      "expectedRemaining": 10.527559055118111,
+      "maxBucket": 25
+    },
+    "82": {
+      "word": "sloid",
+      "singletons": 20,
+      "candidates": 105,
+      "expectedRemaining": 8.314285714285715,
+      "maxBucket": 18
+    },
+    "83": {
+      "word": "nouls",
+      "singletons": 18,
+      "candidates": 62,
+      "expectedRemaining": 3.6451612903225805,
+      "maxBucket": 8
+    },
+    "84": {
+      "word": "kinos",
+      "singletons": 27,
+      "candidates": 71,
+      "expectedRemaining": 5.422535211267606,
+      "maxBucket": 14
+    },
+    "85": {
+      "word": "locis",
+      "singletons": 14,
+      "candidates": 33,
+      "expectedRemaining": 3.1818181818181817,
+      "maxBucket": 7
+    },
+    "86": {
+      "word": "twice",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "87": {
+      "word": "ousts",
+      "singletons": 8,
+      "candidates": 8,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "88": {
+      "word": "sects",
+      "singletons": 2,
+      "candidates": 2,
+      "expectedRemaining": 1
+    },
+    "89": {
+      "word": "rossa",
+      "singletons": 3,
+      "candidates": 3,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "90": {
+      "word": "oinks",
+      "singletons": 19,
+      "candidates": 35,
+      "expectedRemaining": 1.8,
+      "maxBucket": 3
+    },
+    "91": {
+      "word": "dhikr",
+      "singletons": 14,
+      "candidates": 30,
+      "expectedRemaining": 2.8,
+      "maxBucket": 5
+    },
+    "92": {
+      "word": "hilus",
+      "singletons": 10,
+      "candidates": 18,
+      "expectedRemaining": 1.7777777777777777,
+      "maxBucket": 3
+    },
+    "93": {
+      "word": "hoick",
+      "singletons": 6,
+      "candidates": 6,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "94": {
+      "word": "queck",
+      "singletons": 6,
+      "candidates": 6,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "95": {
+      "word": "truce",
+      "singletons": 2,
+      "candidates": 2,
+      "expectedRemaining": 1
+    },
+    "97": {
+      "word": "recto",
+      "singletons": 2,
+      "candidates": 2,
+      "expectedRemaining": 1
+    },
+    "98": {
+      "word": "recte",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "99": {
+      "word": "misdo",
+      "singletons": 13,
+      "candidates": 21,
+      "expectedRemaining": 1.6666666666666667,
+      "maxBucket": 3
+    },
+    "100": {
+      "word": "hemps",
+      "singletons": 9,
+      "candidates": 9,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "101": {
+      "word": "rossa",
+      "singletons": 3,
+      "candidates": 3,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "102": {
+      "word": "beisa",
+      "singletons": 3,
+      "candidates": 3,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "104": {
+      "word": "terce",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "108": {
+      "word": "alias",
+      "singletons": 25,
+      "candidates": 125,
+      "expectedRemaining": 6.44,
+      "maxBucket": 16
+    },
+    "109": {
+      "word": "lends",
+      "singletons": 15,
+      "candidates": 37,
+      "expectedRemaining": 3.054054054054054,
+      "maxBucket": 7
+    },
+    "110": {
+      "word": "spelk",
+      "singletons": 10,
+      "candidates": 13,
+      "expectedRemaining": 1.4615384615384615,
+      "maxBucket": 3
+    },
+    "111": {
+      "word": "acais",
+      "singletons": 15,
+      "candidates": 22,
+      "expectedRemaining": 1.4545454545454546,
+      "maxBucket": 3
+    },
+    "112": {
+      "word": "planh",
+      "singletons": 6,
+      "candidates": 8,
+      "expectedRemaining": 1.25,
+      "maxBucket": 2
+    },
+    "114": {
+      "word": "khads",
+      "singletons": 6,
+      "candidates": 6,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "115": {
+      "word": "tecta",
+      "singletons": 2,
+      "candidates": 2,
+      "expectedRemaining": 1
+    },
+    "116": {
+      "word": "acute",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "117": {
+      "word": "opahs",
+      "singletons": 14,
+      "candidates": 31,
+      "expectedRemaining": 3.4516129032258065,
+      "maxBucket": 8
+    },
+    "118": {
+      "word": "eches",
+      "singletons": 9,
+      "candidates": 13,
+      "expectedRemaining": 1.9230769230769231,
+      "maxBucket": 4
+    },
+    "119": {
+      "word": "gurks",
+      "singletons": 3,
+      "candidates": 3,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "120": {
+      "word": "britt",
+      "singletons": 8,
+      "candidates": 8,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "121": {
+      "word": "react",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "122": {
+      "word": "trace",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "124": {
+      "word": "recta",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "126": {
+      "word": "mynas",
+      "singletons": 7,
+      "candidates": 14,
+      "expectedRemaining": 2.2857142857142856,
+      "maxBucket": 4
+    },
+    "127": {
+      "word": "squad",
+      "singletons": 4,
+      "candidates": 4,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "128": {
+      "word": "scrae",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "129": {
+      "word": "scrat",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "135": {
+      "word": "lysis",
+      "singletons": 17,
+      "candidates": 92,
+      "expectedRemaining": 14.73913043478261,
+      "maxBucket": 27
+    },
+    "136": {
+      "word": "sylph",
+      "singletons": 8,
+      "candidates": 13,
+      "expectedRemaining": 1.6153846153846154,
+      "maxBucket": 3
+    },
+    "137": {
+      "word": "linch",
+      "singletons": 11,
+      "candidates": 14,
+      "expectedRemaining": 1.4285714285714286,
+      "maxBucket": 3
+    },
+    "138": {
+      "word": "hicks",
+      "singletons": 11,
+      "candidates": 22,
+      "expectedRemaining": 3.090909090909091,
+      "maxBucket": 7
+    },
+    "139": {
+      "word": "flitt",
+      "singletons": 5,
+      "candidates": 5,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "140": {
+      "word": "tache",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "141": {
+      "word": "typos",
+      "singletons": 7,
+      "candidates": 7,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "143": {
+      "word": "macte",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "144": {
+      "word": "snool",
+      "singletons": 6,
+      "candidates": 6,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "145": {
+      "word": "damps",
+      "singletons": 4,
+      "candidates": 7,
+      "expectedRemaining": 1.8571428571428572,
+      "maxBucket": 3
+    },
+    "146": {
+      "word": "panes",
+      "singletons": 4,
+      "candidates": 4,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "147": {
+      "word": "ratch",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "153": {
+      "word": "bidon",
+      "singletons": 9,
+      "candidates": 15,
+      "expectedRemaining": 3,
+      "maxBucket": 6
+    },
+    "154": {
+      "word": "varec",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "155": {
+      "word": "farce",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "156": {
+      "word": "taroc",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "162": {
+      "word": "boils",
+      "singletons": 27,
+      "candidates": 189,
+      "expectedRemaining": 8.65079365079365,
+      "maxBucket": 21
+    },
+    "163": {
+      "word": "soily",
+      "singletons": 20,
+      "candidates": 98,
+      "expectedRemaining": 7.979591836734694,
+      "maxBucket": 17
+    },
+    "164": {
+      "word": "phons",
+      "singletons": 14,
+      "candidates": 45,
+      "expectedRemaining": 4.4222222222222225,
+      "maxBucket": 8
+    },
+    "165": {
+      "word": "bonus",
+      "singletons": 14,
+      "candidates": 22,
+      "expectedRemaining": 1.6363636363636365,
+      "maxBucket": 3
+    },
+    "166": {
+      "word": "dishy",
+      "singletons": 10,
+      "candidates": 18,
+      "expectedRemaining": 2.4444444444444446,
+      "maxBucket": 5
+    },
+    "167": {
+      "word": "wizzo",
+      "singletons": 3,
+      "candidates": 3,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "168": {
+      "word": "louis",
+      "singletons": 17,
+      "candidates": 24,
+      "expectedRemaining": 1.4166666666666667,
+      "maxBucket": 3
+    },
+    "169": {
+      "word": "snool",
+      "singletons": 6,
+      "candidates": 6,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "170": {
+      "word": "snool",
+      "singletons": 5,
+      "candidates": 5,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "171": {
+      "word": "pousy",
+      "singletons": 17,
+      "candidates": 59,
+      "expectedRemaining": 5.677966101694915,
+      "maxBucket": 14
+    },
+    "172": {
+      "word": "siped",
+      "singletons": 12,
+      "candidates": 34,
+      "expectedRemaining": 5.352941176470588,
+      "maxBucket": 12
+    },
+    "173": {
+      "word": "pions",
+      "singletons": 9,
+      "candidates": 18,
+      "expectedRemaining": 2.7777777777777777,
+      "maxBucket": 5
+    },
+    "174": {
+      "word": "mopus",
+      "singletons": 8,
+      "candidates": 8,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "175": {
+      "word": "plush",
+      "singletons": 6,
+      "candidates": 6,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "177": {
+      "word": "beisa",
+      "singletons": 3,
+      "candidates": 3,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "180": {
+      "word": "loins",
+      "singletons": 14,
+      "candidates": 31,
+      "expectedRemaining": 2.4193548387096775,
+      "maxBucket": 4
+    },
+    "181": {
+      "word": "sudor",
+      "singletons": 10,
+      "candidates": 14,
+      "expectedRemaining": 1.2857142857142858,
+      "maxBucket": 2
+    },
+    "182": {
+      "word": "nevus",
+      "singletons": 7,
+      "candidates": 7,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "183": {
+      "word": "curst",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "184": {
+      "word": "curet",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "187": {
+      "word": "certy",
+      "singletons": 2,
+      "candidates": 2,
+      "expectedRemaining": 1
+    },
+    "189": {
+      "word": "holms",
+      "singletons": 21,
+      "candidates": 87,
+      "expectedRemaining": 5.988505747126437,
+      "maxBucket": 15
+    },
+    "190": {
+      "word": "bleak",
+      "singletons": 10,
+      "candidates": 10,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "191": {
+      "word": "demos",
+      "singletons": 8,
+      "candidates": 13,
+      "expectedRemaining": 2.5384615384615383,
+      "maxBucket": 5
+    },
+    "192": {
+      "word": "opals",
+      "singletons": 9,
+      "candidates": 12,
+      "expectedRemaining": 1.5,
+      "maxBucket": 3
+    },
+    "193": {
+      "word": "cleat",
+      "singletons": 2,
+      "candidates": 2,
+      "expectedRemaining": 1
+    },
+    "195": {
+      "word": "lotus",
+      "singletons": 8,
+      "candidates": 8,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "196": {
+      "word": "cesta",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "197": {
+      "word": "coate",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "198": {
+      "word": "nimps",
+      "singletons": 13,
+      "candidates": 39,
+      "expectedRemaining": 7.769230769230769,
+      "maxBucket": 15
+    },
+    "199": {
+      "word": "melba",
+      "singletons": 6,
+      "candidates": 6,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "200": {
+      "word": "pharm",
+      "singletons": 4,
+      "candidates": 8,
+      "expectedRemaining": 2.5,
+      "maxBucket": 4
+    },
+    "201": {
+      "word": "fluyt",
+      "singletons": 3,
+      "candidates": 3,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "206": {
+      "word": "crate",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "207": {
+      "word": "dolie",
+      "singletons": 6,
+      "candidates": 6,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "208": {
+      "word": "ceria",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "210": {
+      "word": "curat",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "216": {
+      "word": "omuls",
+      "singletons": 16,
+      "candidates": 76,
+      "expectedRemaining": 7.2368421052631575,
+      "maxBucket": 15
+    },
+    "217": {
+      "word": "spend",
+      "singletons": 9,
+      "candidates": 25,
+      "expectedRemaining": 3.8,
+      "maxBucket": 6
+    },
+    "218": {
+      "word": "edile",
+      "singletons": 6,
+      "candidates": 13,
+      "expectedRemaining": 2.3846153846153846,
+      "maxBucket": 4
+    },
+    "219": {
+      "word": "shrug",
+      "singletons": 5,
+      "candidates": 5,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "220": {
+      "word": "cadet",
+      "singletons": 2,
+      "candidates": 2,
+      "expectedRemaining": 1
+    },
+    "222": {
+      "word": "yonic",
+      "singletons": 7,
+      "candidates": 7,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "224": {
+      "word": "caste",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "225": {
+      "word": "quink",
+      "singletons": 4,
+      "candidates": 4,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "226": {
+      "word": "vangs",
+      "singletons": 4,
+      "candidates": 6,
+      "expectedRemaining": 1.3333333333333333,
+      "maxBucket": 2
+    },
+    "227": {
+      "word": "cadre",
+      "singletons": 2,
+      "candidates": 2,
+      "expectedRemaining": 1
+    },
+    "229": {
+      "word": "cater",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "234": {
+      "word": "bison",
+      "singletons": 8,
+      "candidates": 21,
+      "expectedRemaining": 2.7142857142857144,
+      "maxBucket": 5
+    },
+    "235": {
+      "word": "oxids",
+      "singletons": 4,
+      "candidates": 4,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "236": {
+      "word": "plans",
+      "singletons": 5,
+      "candidates": 5,
+      "expectedRemaining": 1,
+      "maxBucket": 1
+    },
+    "237": {
+      "word": "carat",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "238": {
+      "word": "caret",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    },
+    "240": {
+      "word": "carts",
+      "singletons": 2,
+      "candidates": 2,
+      "expectedRemaining": 1
+    },
+    "242": {
+      "word": "carte",
+      "singletons": 1,
+      "candidates": 1,
+      "expectedRemaining": 1
+    }
+  }
+}
